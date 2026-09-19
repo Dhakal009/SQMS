@@ -27,6 +27,8 @@
     --red-bg:#f9e3e4;
     --radius:6px;
     --font: 'Noto Sans', 'Segoe UI', Arial, sans-serif;
+    /* Single source of truth for page side gutters */
+    --page-gutter: 10px;
   }
   html[data-theme="dark"]{
     --bg:#0e1320;
@@ -36,6 +38,8 @@
     --text-600:#a9b1c4;
     --text-400:#7b8399;
     --blue-50:#1a2438;
+    --navy-900:#0d1631;
+    --navy-800:#111d3e;
   }
   html[data-theme="dark"] .top-navbar{background:#070b15;}
   html[data-theme="dark"] .main-nav{background:#0b1120;}
@@ -49,6 +53,46 @@
   }
   a{color:inherit;text-decoration:none;}
   button{font-family:var(--font);cursor:pointer;}
+
+  /* ---------- Dark theme component fixes ---------- */
+  html[data-theme="dark"] .portal-intro h2,
+  html[data-theme="dark"] .queue-section-label,
+  html[data-theme="dark"] .stat-card .val,
+  html[data-theme="dark"] .queue-num .num,
+  html[data-theme="dark"] .login-title{
+    color: var(--text-900);
+  }
+  html[data-theme="dark"] .level-btn,
+  html[data-theme="dark"] .btn-secondary{
+    background: var(--surface);
+    color: var(--text-600);
+    border-color: var(--border);
+  }
+  html[data-theme="dark"] .btn-secondary:hover{background: var(--bg);}
+  html[data-theme="dark"] .login-logo{background: var(--bg);}
+  html[data-theme="dark"] input::placeholder,
+  html[data-theme="dark"] textarea::placeholder{color: var(--text-400);}
+  html[data-theme="dark"] .login-error{
+    background:#3a1a1e;
+    border-color:#5a2a2e;
+    color:#f0a0a8;
+  }
+  html[data-theme="dark"] .login-error svg{stroke:#f0a0a8;}
+  html[data-theme="dark"] select,
+  html[data-theme="dark"] input[type=text],
+  html[data-theme="dark"] input[type=number],
+  html[data-theme="dark"] input[type=date],
+  html[data-theme="dark"] input[type=password],
+  html[data-theme="dark"] textarea{
+    background: var(--surface);
+    color: var(--text-900);
+  }
+  html[data-theme="dark"] .login-queue-field select{
+    background-color: var(--surface);
+    background-image:url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a9b1c4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  }
+  html[data-theme="dark"] .minibar-track{background: #0d1320;border-color:#2a3244;}
+  html[data-theme="dark"] th{color: var(--text-400);}
 
   html.a11y-contrast body{background:#000 !important;color:#fff !important;}
   html.a11y-contrast .card,
@@ -65,28 +109,21 @@
   html.a11y-hideimages img,
   html.a11y-hideimages svg.illustration{display:none !important;}
 
-  .top-navbar{
-    background:var(--navy-900);
-  }
+  .top-navbar{background:var(--navy-900);}
   .top-navbar-inner{
-    max-width:1180px;
+    /* Widened container so the reduced gutter still leaves room for content */
+    max-width:1320px;
     margin:0 auto;
-    padding:22px 24px;
+    padding:22px var(--page-gutter);
     display:grid;
     grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
     align-items:center;
     gap:16px;
   }
   .nav-spacer{justify-self:start;}
-  .nav-controls-right{
-    justify-self:end;
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
+  .nav-controls-right{justify-self:end;display:flex;align-items:center;gap:10px;}
   .icon-circle-btn{
-    width:40px;height:40px;
-    border-radius:50%;
+    width:40px;height:40px;border-radius:50%;
     background:rgba(255,255,255,.08);
     border:1px solid rgba(255,255,255,.18);
     display:flex;align-items:center;justify-content:center;
@@ -94,117 +131,54 @@
   .icon-circle-btn:hover{background:rgba(255,255,255,.16);}
   .icon-circle-btn svg{width:18px;height:18px;stroke:#fff;fill:none;}
 
-  .brand-center{
-    justify-self:center;
-    display:flex;
-    align-items:center;
-    gap:14px;
-  }
+  .brand-center{justify-self:center;display:flex;align-items:center;gap:14px;}
   .emblem-lg{
-    width:58px;height:58px;flex:none;
-    border-radius:50%;
-    background:#fff;
-    display:flex;align-items:center;justify-content:center;
-    box-shadow:0 0 0 1px rgba(255,255,255,.5);
-    overflow:hidden;
+    width:58px;height:58px;flex:none;border-radius:50%;
+    background:#fff;display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 0 1px rgba(255,255,255,.5);overflow:hidden;
   }
   .emblem-lg img{max-width:82%;max-height:82%;object-fit:contain;}
-  .brand-text h1{
-    margin:0;
-    font-size:19px;
-    font-weight:700;
-    color:#fff;
-  }
-  .brand-text .subtitle{
-    margin:2px 0 8px;
-    font-size:13px;
-    color:#aab4cf;
-  }
+  .brand-text h1{margin:0;font-size:19px;font-weight:700;color:#fff;}
+  .brand-text .subtitle{margin:2px 0 8px;font-size:13px;color:#aab4cf;}
   .pill-badge{
-    display:inline-block;
-    border:1px solid rgba(255,255,255,.32);
-    background:rgba(255,255,255,.05);
-    border-radius:20px;
-    padding:5px 14px;
-    font-size:11px;
-    font-weight:700;
-    letter-spacing:.2px;
-    color:#fff;
+    display:inline-block;border:1px solid rgba(255,255,255,.32);
+    background:rgba(255,255,255,.05);border-radius:20px;
+    padding:5px 14px;font-size:11px;font-weight:700;letter-spacing:.2px;color:#fff;
   }
-
   .lang-pill{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.18);
-    border-radius:20px;
-    padding:9px 14px;
-    font-size:13px;
-    font-weight:700;
-    color:#fff;
+    display:inline-flex;align-items:center;gap:6px;
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
+    border-radius:20px;padding:9px 14px;font-size:13px;font-weight:700;color:#fff;
   }
   .lang-pill:hover{background:rgba(255,255,255,.16);}
   .lang-pill svg{width:12px;height:12px;stroke:#fff;fill:none;}
 
-  .main-nav{
-    background:var(--navy-800);
-    border-top:1px solid rgba(255,255,255,.08);
-  }
+  .main-nav{background:var(--navy-800);border-top:1px solid rgba(255,255,255,.08);}
   .main-nav-inner{
-    max-width:1180px;
-    margin:0 auto;
-    padding:0 24px;
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
+    max-width:1320px;margin:0 auto;
+    padding:0 var(--page-gutter);
+    display:flex;flex-wrap:wrap;justify-content:center;
   }
-  .main-nav a{
-    color:#e4eaf8;
-    font-size:13px;
-    font-weight:600;
-    padding:12px 16px;
-    display:inline-block;
-  }
+  .main-nav a{color:#e4eaf8;font-size:13px;font-weight:600;padding:12px 16px;display:inline-block;}
   .main-nav a:hover{background:rgba(255,255,255,.06);}
 
   .a11y-fab{
-    position:fixed;
-    right:24px;
-    bottom:24px;
-    width:56px;height:56px;
-    border-radius:50%;
-    background:#0a0a0a;
-    border:3px solid #e7e7ea;
+    position:fixed;right:24px;bottom:24px;width:56px;height:56px;
+    border-radius:50%;background:#0a0a0a;border:3px solid #e7e7ea;
     box-shadow:0 4px 14px rgba(0,0,0,.35);
-    display:flex;align-items:center;justify-content:center;
-    z-index:60;
+    display:flex;align-items:center;justify-content:center;z-index:60;
   }
   .a11y-fab:hover{background:#1a1a1a;}
   .a11y-fab svg{width:26px;height:26px;}
-
   .a11y-panel{
-    position:fixed;
-    right:24px;
-    bottom:88px;
-    width:320px;
-    max-height:70vh;
-    overflow-y:auto;
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:10px;
-    box-shadow:0 8px 28px rgba(0,0,0,.28);
-    z-index:60;
-    display:none;
+    position:fixed;right:24px;bottom:88px;width:320px;max-height:70vh;
+    overflow-y:auto;background:var(--surface);border:1px solid var(--border);
+    border-radius:10px;box-shadow:0 8px 28px rgba(0,0,0,.28);z-index:60;display:none;
   }
   .a11y-panel.open{display:block;}
   .a11y-panel-head{
-    background:var(--blue-600);
-    color:#fff;
-    padding:14px 16px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
+    background:var(--blue-600);color:#fff;padding:14px 16px;
+    display:flex;align-items:center;justify-content:space-between;
     border-radius:10px 10px 0 0;
   }
   .a11y-panel-head h3{margin:0;font-size:15px;font-weight:700;}
@@ -213,26 +187,13 @@
   .a11y-head-icons svg{width:16px;height:16px;fill:#fff;}
   .a11y-lang{padding:12px 16px 4px;}
   .a11y-lang select{
-    width:100%;
-    border:1px solid var(--border);
-    border-radius:6px;
-    padding:8px 10px;
-    font-size:13px;
-    color:var(--text-900);
-    background:var(--surface);
+    width:100%;border:1px solid var(--border);border-radius:6px;
+    padding:8px 10px;font-size:13px;color:var(--text-900);background:var(--surface);
   }
-  .a11y-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-    padding:14px 16px 18px;
-  }
+  .a11y-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 16px 18px;}
   .a11y-tool{
-    border:1.5px solid var(--border);
-    background:var(--bg);
-    border-radius:8px;
-    padding:12px 8px 10px;
-    text-align:center;
+    border:1.5px solid var(--border);background:var(--bg);border-radius:8px;
+    padding:12px 8px 10px;text-align:center;
   }
   .a11y-tool.sel{border-color:var(--blue-600);background:var(--blue-50);}
   .a11y-tool .ic{font-size:16px;font-weight:700;color:var(--text-900);margin-bottom:6px;}
@@ -241,364 +202,133 @@
   .a11y-tool .bars span{width:12px;height:3px;background:var(--border);border-radius:2px;}
 
   .portal{
-    max-width:1180px;
-    margin:0 auto;
-    padding:28px 24px 60px;
+    max-width:1320px;margin:0 auto;
+    padding:28px var(--page-gutter) 60px;
   }
   .portal-intro{
-    display:flex;
-    align-items:flex-end;
-    justify-content:space-between;
-    gap:16px;
-    margin-bottom:18px;
-    flex-wrap:wrap;
+    display:flex;align-items:flex-end;justify-content:space-between;
+    gap:16px;margin-bottom:18px;flex-wrap:wrap;
   }
-  .portal-intro h2{
-    margin:0 0 4px;
-    font-size:24px;
-    font-weight:700;
-    color:var(--navy-900);
-  }
-  .portal-intro p{
-    margin:0;
-    font-size:14px;
-    color:var(--text-600);
-    max-width:520px;
-  }
+  .portal-intro h2{margin:0 0 4px;font-size:24px;font-weight:700;color:var(--navy-900);}
+  .portal-intro p{margin:0;font-size:14px;color:var(--text-600);max-width:520px;}
 
-  .portal-switch{
-    display:inline-flex;
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    overflow:hidden;
-    background:var(--surface);
-  }
-  .switch-btn{
-    border:none;
-    background:var(--surface);
-    color:var(--text-600);
-    font-size:13px;
-    font-weight:600;
-    padding:9px 18px;
-  }
-  .switch-btn + .switch-btn{border-left:1px solid var(--border);}
-  .switch-btn.active{
-    background:var(--navy-900);
-    color:#fff;
-  }
-
-  .page{display:none; margin-top:22px;}
-  .page.active{display:block;}
-
-  .card{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-  }
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);}
   .section-bar{
-    background:var(--navy-900);
-    color:#fff;
-    font-size:13px;
-    font-weight:600;
-    padding:11px 18px;
-    border-radius:var(--radius) var(--radius) 0 0;
+    background:var(--navy-900);color:#fff;font-size:13px;font-weight:600;
+    padding:11px 18px;border-radius:var(--radius) var(--radius) 0 0;
   }
   .section-body{padding:20px;}
   .label-sm{
-    font-size:11px;
-    font-weight:700;
-    color:var(--blue-600);
-    letter-spacing:.3px;
-    margin-bottom:6px;
+    font-size:11px;font-weight:700;color:var(--blue-600);
+    letter-spacing:.3px;margin-bottom:6px;
   }
 
-  .select-row{
-    display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    gap:14px;
-    margin-bottom:18px;
-  }
   .field{display:flex;flex-direction:column;gap:6px;}
   .field label{font-size:12px;color:var(--text-600);font-weight:600;}
   .field select{
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    padding:9px 10px;
-    font-size:13px;
-    color:var(--text-900);
-    background:var(--surface);
+    border:1px solid var(--border);border-radius:var(--radius);
+    padding:9px 10px;font-size:13px;color:var(--text-900);background:var(--surface);
   }
 
-  .queue-grid{
-    display:grid;
-    grid-template-columns:1.6fr 1fr;
-    gap:16px;
-    margin-bottom:16px;
-  }
-  .queue-main .section-body{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    flex-wrap:wrap;
-    gap:20px;
-  }
-  .queue-num{}
-  .queue-num .label-sm{margin-bottom:4px;}
-  .queue-num .num{font-size:34px;font-weight:700;color:var(--navy-900);}
-  .status-pill{
-    padding:10px 20px;
-    border-radius:var(--radius);
-    font-weight:700;
-    font-size:13px;
-    color:#fff;
-    background:var(--orange);
-  }
-  .legend{display:flex;flex-direction:column;gap:8px;}
-  .legend .section-body{padding:16px;display:flex;flex-direction:column;gap:8px;}
-  .legend-item{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:8px 12px;
-    border-radius:4px;
-    font-size:12px;
-    font-weight:700;
-    color:#fff;
-  }
-  .legend-item.low{background:var(--green);}
-  .legend-item.moderate{background:var(--yellow);}
-  .legend-item.high{background:var(--orange);}
-  .legend-item.veryhigh{background:var(--red);}
-
-  .notice-bar{
-    display:flex;
-    gap:10px;
-    align-items:flex-start;
-    background:var(--orange-bg);
-    border:1px solid #f0cfa8;
-    color:#7a4713;
-    border-radius:var(--radius);
-    padding:12px 16px;
-    font-size:13px;
-    margin-bottom:20px;
-  }
-  .notice-bar strong{font-weight:700;}
   .notice-sub{font-size:12px;color:var(--text-400);margin-top:2px;}
 
-  .quick-actions{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:12px;
-    margin-bottom:24px;
-  }
-  .qa-btn{
-    border:1px solid var(--blue-700);
-    background:var(--blue-600);
-    color:#fff;
-    border-radius:var(--radius);
-    padding:14px 12px;
-    font-size:13px;
-    font-weight:600;
-    text-align:center;
-  }
-  .qa-btn:hover{background:var(--blue-700);}
-
-  .cat-list{display:flex;flex-direction:column;gap:10px;}
-  .cat-item{
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    overflow:hidden;
-  }
-  .cat-head{
-    width:100%;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    background:var(--surface);
-    border:none;
-    padding:13px 16px;
-    font-size:13px;
-    font-weight:600;
-    color:var(--text-900);
-  }
-  .cat-head:hover{background:var(--blue-50);}
-  .cat-num{
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-  }
-  .cat-num span.n{
-    width:22px;height:22px;
-    border-radius:50%;
-    background:var(--blue-50);
-    color:var(--blue-600);
-    font-size:11px;
-    font-weight:700;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-  }
-  .chev{color:var(--text-400);font-size:12px;}
-  .cat-body{
-    display:none;
-    padding:4px 16px 16px 48px;
-    font-size:13px;
-    color:var(--text-600);
-  }
-  .cat-body.open{display:block;}
-  .cat-body ul{margin:6px 0 0;padding-left:18px;}
-  .cat-body li{margin-bottom:5px;}
-
-  .info-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:16px;
-    margin-top:24px;
-  }
-  .info-grid .section-body{font-size:13px;color:var(--text-600);line-height:1.7;}
-  .info-grid .section-body strong{color:var(--text-900);}
-
   /* ================= ADMIN PORTAL ================= */
-  .admin-shell{
-    display:grid;
-    grid-template-columns:220px 1fr;
-    gap:16px;
-  }
+  .admin-shell{display:grid;grid-template-columns:220px 1fr;gap:16px;}
   .admin-side{
-    background:var(--navy-900);
-    border-radius:var(--radius);
-    padding:14px 0;
-    height:fit-content;
+    background:var(--navy-900);border-radius:var(--radius);
+    padding:14px 0;height:fit-content;
   }
   .admin-user{
-    padding:0 16px 14px;
-    border-bottom:1px solid rgba(255,255,255,.12);
+    padding:0 16px 14px;border-bottom:1px solid rgba(255,255,255,.12);
     margin-bottom:8px;
   }
   .admin-user .name{color:#fff;font-size:13px;font-weight:700;}
   .admin-user .role{color:#9fb0d6;font-size:11px;margin-top:2px;}
   .admin-nav a{
-    display:block;
-    padding:10px 16px;
-    font-size:13px;
-    color:#c6d2ee;
+    display:block;padding:10px 16px;font-size:13px;
+    color:#c6d2ee;border-left:3px solid transparent;
   }
   .admin-nav a.active{
-    background:rgba(255,255,255,.08);
-    color:#fff;
-    font-weight:600;
+    background:rgba(255,255,255,.08);color:#fff;font-weight:600;
     border-left:3px solid #4d7bf3;
   }
   .admin-nav a:hover{color:#fff;}
-  .admin-nav .logout-link{
-    margin-top:8px;
-    padding-top:10px;
-    border-top:1px solid rgba(255,255,255,.12);
-    color:#e79a9a;
-  }
-  .admin-nav .logout-link:hover{color:#fff;}
 
-  .admin-main{
-    display:block;
+  .logout-btn{
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    width:calc(100% - 24px);
+    margin:10px 12px 4px;
+    background:linear-gradient(180deg,#e53935 0%,#c62828 100%);
+    color:#fff !important;
+    border:none;border-radius:6px;
+    padding:7px 12px;
+    font-size:12px;font-weight:700;
+    letter-spacing:.3px;
+    box-shadow:0 2px 6px rgba(198,40,40,.4), inset 0 1px 0 rgba(255,255,255,.15);
+    transition:transform .08s ease, box-shadow .12s ease, background .12s ease;
   }
+  .logout-btn:hover{
+    background:linear-gradient(180deg,#ef5350 0%,#b71c1c 100%);
+    box-shadow:0 3px 10px rgba(198,40,40,.55), inset 0 1px 0 rgba(255,255,255,.2);
+  }
+  .logout-btn:active{transform:translateY(1px);}
+  .logout-btn svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2.2;}
+
+  .admin-main{display:block;}
   .login-page-wrap{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-height:calc(100vh - 210px);
-    padding:24px 20px;
+    display:flex;align-items:center;justify-content:center;
+    min-height:calc(100vh - 210px);padding:24px var(--page-gutter);
   }
   .login-card{
-    width:100%;
-    max-width:340px;
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:10px;
+    width:100%;max-width:340px;background:var(--surface);
+    border:1px solid var(--border);border-radius:10px;
   }
   .login-card-body{padding:26px 24px;}
 
   .login-logo{
-    width:48px;height:48px;
-    border-radius:50%;
-    background:#fff;
+    width:48px;height:48px;border-radius:50%;background:#fff;
     border:1px solid var(--border);
     display:flex;align-items:center;justify-content:center;
-    margin:0 auto 12px;
-    overflow:hidden;
+    margin:0 auto 12px;overflow:hidden;
   }
   .login-logo img{max-width:78%;max-height:78%;object-fit:contain;}
 
-  .login-title{
-    text-align:center;
-    font-size:15px;
-    font-weight:700;
-    color:var(--navy-900);
-    margin-bottom:2px;
-  }
-  .login-office{
-    text-align:center;
-    font-size:11px;
-    color:var(--text-600);
-    margin-bottom:18px;
-  }
+  .login-title{text-align:center;font-size:15px;font-weight:700;color:var(--navy-900);margin-bottom:2px;}
+  .login-office{text-align:center;font-size:11px;color:var(--text-600);margin-bottom:18px;}
 
-  /* Queue picker on the login card (dropdown) */
   .login-queue-field{margin-bottom:16px;}
   .login-queue-field select{
-    width:100%;
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    padding:9px 34px 9px 34px;
-    font-size:13px;
-    font-family:var(--font);
-    color:var(--text-900);
-    background:var(--surface);
-    appearance:none;
-    -webkit-appearance:none;
+    width:100%;border:1px solid var(--border);border-radius:var(--radius);
+    padding:9px 34px 9px 34px;font-size:13px;font-family:var(--font);
+    color:var(--text-900);background:var(--surface);
+    appearance:none;-webkit-appearance:none;
     background-image:url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b93a4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat:no-repeat;
-    background-position:right 11px center;
-    background-size:14px;
+    background-repeat:no-repeat;background-position:right 11px center;background-size:14px;
   }
   .login-queue-field select:focus{
-    outline:none;
-    border-color:var(--blue-600);
+    outline:none;border-color:var(--blue-600);
     box-shadow:0 0 0 3px rgba(26,86,219,.12);
   }
 
   .login-card .field{margin-bottom:12px;}
-  .login-card .field label{
-    font-size:11px;
-    font-weight:700;
-    color:var(--text-900);
-    margin-bottom:6px;
-  }
+  .login-card .field label{font-size:11px;font-weight:700;color:var(--text-900);margin-bottom:6px;}
   .input-icon-wrap{position:relative;display:flex;align-items:center;}
   .input-icon-wrap svg.leading{
-    position:absolute;left:11px;
-    width:15px;height:15px;
-    stroke:var(--text-400);fill:none;
-    pointer-events:none;
+    position:absolute;left:11px;width:15px;height:15px;
+    stroke:var(--text-400);fill:none;pointer-events:none;
   }
   .login-card .field .input-icon-wrap input[type="text"],
   .login-card .field .input-icon-wrap input[type="password"]{
-    width:100%;
-    padding:9px 34px 9px 34px;
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    font-size:13px;
-    font-family:var(--font);
-    color:var(--text-900);
-    background:var(--surface);
+    width:100%;padding:9px 34px 9px 34px;border:1px solid var(--border);
+    border-radius:var(--radius);font-size:13px;font-family:var(--font);
+    color:var(--text-900);background:var(--surface);
   }
   .input-icon-wrap input:focus{
-    outline:none;
-    border-color:var(--blue-600);
+    outline:none;border-color:var(--blue-600);
     box-shadow:0 0 0 3px rgba(26,86,219,.12);
   }
   .pw-toggle{
-    position:absolute;right:9px;
-    background:none;border:none;padding:4px;
+    position:absolute;right:9px;background:none;border:none;padding:4px;
     display:flex;align-items:center;justify-content:center;
   }
   .pw-toggle svg{width:16px;height:16px;stroke:var(--text-400);fill:none;}
@@ -606,87 +336,45 @@
 
   .login-card .btn-primary{width:100%;text-align:center;padding:10px;font-size:13px;margin-top:4px;}
   .login-error{
-    display:none;
-    align-items:center;
-    gap:7px;
-    font-size:12px;
-    color:var(--red);
-    background:var(--red-bg);
-    border:1px solid #f0c2c6;
-    border-radius:6px;
-    padding:8px 10px;
-    margin-bottom:12px;
+    display:none;align-items:center;gap:7px;font-size:12px;color:var(--red);
+    background:var(--red-bg);border:1px solid #f0c2c6;border-radius:6px;
+    padding:8px 10px;margin-bottom:12px;
   }
   .login-error.show{display:flex;}
   .login-error svg{width:14px;height:14px;stroke:var(--red);fill:none;flex:none;}
 
-  .login-hint{
-    text-align:center;
-    font-size:10.5px;
-    color:var(--text-400);
-    margin-top:14px;
-  }
+  .login-hint{text-align:center;font-size:10.5px;color:var(--text-400);margin-top:14px;}
 
   .queue-section-label{
-    font-size:12px;
-    font-weight:700;
-    color:var(--navy-900);
-    text-transform:uppercase;
-    letter-spacing:.3px;
-    margin-bottom:10px;
+    font-size:12px;font-weight:700;color:var(--navy-900);
+    text-transform:uppercase;letter-spacing:.3px;margin-bottom:10px;
   }
-  .stat-grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:12px;
-    margin-bottom:20px;
-  }
+  .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
   .stat-card{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    padding:16px;
+    background:var(--surface);border:1px solid var(--border);
+    border-radius:var(--radius);padding:16px;
   }
   .stat-card .label-sm{margin-bottom:8px;}
   .stat-card .val{font-size:26px;font-weight:700;color:var(--navy-900);}
   .stat-card .sub{font-size:12px;color:var(--text-400);margin-top:2px;}
 
-  .form-row{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:14px;
-    margin-bottom:14px;
-  }
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
   .form-row.full{grid-template-columns:1fr;}
   .input-with-btn{display:flex;gap:8px;align-items:stretch;}
   .input-with-btn input{flex:1;min-width:0;}
-  .input-with-btn .btn-secondary{
-    flex:none;
-    padding:0 14px;
-    font-size:12px;
-    white-space:nowrap;
-  }
-  .field input[type=text], .field input[type=number], .field textarea{
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    padding:9px 10px;
-    font-size:13px;
-    font-family:var(--font);
-    color:var(--text-900);
+  .input-with-btn .btn-secondary{flex:none;padding:0 14px;font-size:12px;white-space:nowrap;}
+  .field input[type=text], .field input[type=number], .field input[type=date], .field textarea{
+    border:1px solid var(--border);border-radius:var(--radius);
+    padding:9px 10px;font-size:13px;font-family:var(--font);
+    color:var(--text-900);background:var(--surface);
   }
   .field textarea{resize:vertical;min-height:70px;}
 
   .level-btn-row{display:flex;gap:8px;margin-bottom:16px;}
   .level-btn{
-    flex:1;
-    border:1.5px solid var(--border);
-    background:#fff;
-    border-radius:var(--radius);
-    padding:10px;
-    font-size:12px;
-    font-weight:700;
-    color:var(--text-600);
-    text-align:center;
+    flex:1;border:1.5px solid var(--border);background:#fff;
+    border-radius:var(--radius);padding:10px;font-size:12px;
+    font-weight:700;color:var(--text-600);text-align:center;
   }
   .level-btn.low.sel{background:var(--green);border-color:var(--green);color:#fff;}
   .level-btn.moderate.sel{background:var(--yellow);border-color:var(--yellow);color:#fff;}
@@ -694,87 +382,62 @@
   .level-btn.veryhigh.sel{background:var(--red);border-color:var(--red);color:#fff;}
 
   .btn-primary{
-    background:var(--blue-600);
-    color:#fff;
-    border:1px solid var(--blue-700);
-    border-radius:var(--radius);
-    padding:10px 18px;
-    font-size:13px;
-    font-weight:600;
+    background:var(--blue-600);color:#fff;border:1px solid var(--blue-700);
+    border-radius:var(--radius);padding:10px 18px;font-size:13px;font-weight:600;
   }
   .btn-primary:hover{background:var(--blue-700);}
   .btn-secondary{
-    background:#fff;
-    color:var(--text-600);
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    padding:10px 18px;
-    font-size:13px;
-    font-weight:600;
+    background:#fff;color:var(--text-600);border:1px solid var(--border);
+    border-radius:var(--radius);padding:10px 18px;font-size:13px;font-weight:600;
   }
 
   table{width:100%;border-collapse:collapse;font-size:13px;}
   th{
-    text-align:left;
-    font-size:11px;
-    text-transform:none;
-    color:var(--text-400);
-    font-weight:700;
-    padding:10px 12px;
-    border-bottom:1px solid var(--border);
+    text-align:left;font-size:11px;text-transform:none;color:var(--text-400);
+    font-weight:700;padding:10px 12px;border-bottom:1px solid var(--border);
   }
-  td{
-    padding:11px 12px;
-    border-bottom:1px solid var(--border);
-    color:var(--text-900);
-  }
+  td{padding:11px 12px;border-bottom:1px solid var(--border);color:var(--text-900);}
   tr:last-child td{border-bottom:none;}
   .badge{
-    display:inline-block;
-    padding:4px 10px;
-    border-radius:4px;
-    font-size:11px;
-    font-weight:700;
-    color:#fff;
+    display:inline-block;padding:4px 10px;border-radius:4px;
+    font-size:11px;font-weight:700;color:#fff;
   }
   .badge.low{background:var(--green);}
   .badge.moderate{background:var(--yellow);}
   .badge.high{background:var(--orange);}
   .badge.veryhigh{background:var(--red);}
   .badge.published{background:var(--blue-600);}
-  .edit-link{color:var(--blue-600);font-size:12px;font-weight:600;}
+  .badge.draft{background:var(--text-400);}
+  .edit-link{color:var(--blue-600);font-size:12px;font-weight:600;cursor:pointer;}
+  .delete-link{color:var(--red);font-size:12px;font-weight:600;cursor:pointer;margin-left:10px;}
 
   .admin-two-col{
-    display:grid;
-    grid-template-columns:1.3fr 1fr;
-    gap:16px;
-    align-items:start;
+    display:grid;grid-template-columns:1.3fr 1fr;gap:16px;align-items:start;
   }
-  /* Only one queue card is ever visible now, so it uses the full width */
   .admin-two-col.single{grid-template-columns:1fr;}
 
-  /* ---- Queue view panels (Citizenship vs NID) ---- */
   .queue-panel{display:none;}
   .queue-panel.active{display:block;}
 
+  .admin-page{display:none;}
+  .admin-page.active{display:block;}
+
+  .minibar-row{display:grid;grid-template-columns:120px 1fr 60px;gap:12px;align-items:center;margin-bottom:10px;font-size:12px;}
+  .minibar-track{background:var(--bg);border-radius:4px;height:14px;overflow:hidden;border:1px solid var(--border);}
+  .minibar-fill{height:100%;background:var(--blue-600);border-radius:3px;}
+  .minibar-val{text-align:right;font-weight:700;color:var(--text-900);}
+
   footer{
-    border-top:1px solid var(--border);
-    background:var(--surface);
-    padding:14px 24px;
-    margin:0;
+    border-top:1px solid var(--border);background:var(--surface);
+    padding:14px var(--page-gutter);margin:0;
   }
   footer .footer-inner{
-    max-width:1180px;
-    margin:0 auto;
-    font-size:12px;
-    color:var(--text-400);
-    text-align:center;
+    max-width:1320px;margin:0 auto;font-size:12px;
+    color:var(--text-400);text-align:center;
   }
 
   @media (max-width:860px){
-    .select-row,.queue-grid,.quick-actions,.info-grid,.stat-grid,.admin-shell,.admin-two-col,.form-row{
-      grid-template-columns:1fr;
-    }
+    .admin-shell,.admin-two-col,.form-row,.stat-grid{grid-template-columns:1fr;}
   }
 </style>
 </head>
@@ -836,8 +499,6 @@
         </div>
 
         <form id="adminLoginForm">
-
-          <!-- Queue picker: dropdown instead of toggle buttons -->
           <div class="field login-queue-field">
             <label for="loginQueueSelect">Select Queue / Service</label>
             <div class="input-icon-wrap">
@@ -853,14 +514,14 @@
             <label>Username</label>
             <div class="input-icon-wrap">
               <svg class="leading" viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6"/></svg>
-              <input type="text" id="adminUser" autocomplete="username" placeholder="Enter username">
+              <input type="text" id="adminUser" autocomplete="username" placeholder="Enter username" value="admin">
             </div>
           </div>
           <div class="field">
             <label>Password</label>
             <div class="input-icon-wrap">
               <svg class="leading" viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
-              <input type="password" id="adminPass" autocomplete="current-password" placeholder="Enter password">
+              <input type="password" id="adminPass" autocomplete="current-password" placeholder="Enter password" value="admin">
               <button type="button" class="pw-toggle" id="pwToggle" aria-label="Show password">
                 <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
               </button>
@@ -882,8 +543,6 @@
         <h2>Admin Portal</h2>
         <p id="portalSubtitle">Manage queue status, requirements and announcements.</p>
       </div>
-      <!-- NOTE: the dashboard queue-switch toggle has been removed.
-           The queue shown is decided by the dropdown on the login page. -->
     </div>
 
 
@@ -894,182 +553,438 @@
           <div class="role">Information Officer</div>
         </div>
         <nav class="admin-nav">
-          <a href="#" class="active">Dashboard</a>
-          <a href="#">Queue Management</a>
-          <a href="#">Requirements</a>
-          <a href="#">Announcements</a>
-          <a href="#">Statistics</a>
-          <a href="#" class="logout-link" id="adminLogout">Log Out</a>
+          <a href="#" class="active" data-page="dashboard">Dashboard</a>
+          <a href="#" data-page="queue">Queue Management</a>
+          <a href="#" data-page="requirements">Requirements</a>
+          <a href="#" data-page="announcements">Announcements</a>
+          <a href="#" data-page="statistics">Statistics</a>
         </nav>
+
+        <button class="logout-btn" id="adminLogout">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 3v9"/>
+            <path d="M6.5 6.5a8 8 0 1011 0"/>
+          </svg>
+          Log Out
+        </button>
       </aside>
 
       <div>
-        <!-- ===== Citizenship queue panel ===== -->
-        <div class="queue-panel active" data-view="citizen">
-          <div class="queue-section-label">Citizen Token — Citizenship Service</div>
-          <div class="stat-grid">
-            <div class="stat-card">
-              <div class="label-sm">CURRENTLY SERVING</div>
-              <div class="val" id="statServingValCitizen">C-118</div>
-              <div class="sub">Citizenship Service</div>
+
+        <!-- ===================================================== -->
+        <!-- PAGE: DASHBOARD                                        -->
+        <!-- ===================================================== -->
+        <div class="admin-page active" data-page="dashboard">
+
+          <div class="queue-panel active" data-view="citizen">
+            <div class="queue-section-label">Citizen Token — Citizenship Service</div>
+            <div class="stat-grid">
+              <div class="stat-card">
+                <div class="label-sm">CURRENTLY SERVING</div>
+                <div class="val" id="statServingValCitizen">C-118</div>
+                <div class="sub">Citizenship Service</div>
+              </div>
+              <div class="stat-card">
+                <div class="label-sm">LATEST TOKEN</div>
+                <div class="val" id="statLatestValCitizen">C-125</div>
+                <div class="sub" id="statWaitingSubCitizen">7 waiting</div>
+              </div>
+              <div class="stat-card">
+                <div class="label-sm">TOKENS ISSUED TODAY</div>
+                <div class="val">142</div>
+                <div class="sub">as of 12:18 PM</div>
+              </div>
+              <div class="stat-card">
+                <div class="label-sm">CURRENT CROWD LEVEL</div>
+                <div class="val" id="statCrowdValCitizen" style="color:var(--orange);">High</div>
+                <div class="sub" id="statCrowdSubCitizen">Updated 6 min ago</div>
+              </div>
             </div>
-            <div class="stat-card">
-              <div class="label-sm">LATEST TOKEN</div>
-              <div class="val" id="statLatestValCitizen">C-125</div>
-              <div class="sub" id="statWaitingSubCitizen">7 waiting</div>
+          </div>
+
+          <div class="queue-panel" data-view="nid">
+            <div class="queue-section-label">NID Token — National Identity Card</div>
+            <div class="stat-grid">
+              <div class="stat-card">
+                <div class="label-sm">CURRENTLY SERVING</div>
+                <div class="val" id="statServingValNid">N-042</div>
+                <div class="sub">National Identity Card</div>
+              </div>
+              <div class="stat-card">
+                <div class="label-sm">LATEST TOKEN</div>
+                <div class="val" id="statLatestValNid">N-050</div>
+                <div class="sub" id="statWaitingSubNid">8 waiting</div>
+              </div>
+              <div class="stat-card">
+                <div class="label-sm">TOKENS ISSUED TODAY</div>
+                <div class="val">96</div>
+                <div class="sub">as of 12:18 PM</div>
+              </div>
+              <div class="stat-card">
+                <div class="label-sm">CURRENT CROWD LEVEL</div>
+                <div class="val" id="statCrowdValNid" style="color:var(--yellow);">Moderate</div>
+                <div class="sub" id="statCrowdSubNid">Updated 6 min ago</div>
+              </div>
             </div>
-            <div class="stat-card">
-              <div class="label-sm">TOKENS ISSUED TODAY</div>
-              <div class="val">142</div>
-              <div class="sub">as of 12:18 PM</div>
+          </div>
+
+          <div class="admin-two-col single">
+            <div class="card queue-panel active" data-view="citizen">
+              <div class="section-bar">Update Queue Status — Citizen Token (Citizenship Service)</div>
+              <div class="section-body">
+                <div class="form-row">
+                  <div class="field">
+                    <label>Currently Serving Token</label>
+                    <input type="text" id="servingInputCitizen" value="C-118">
+                  </div>
+                  <div class="field">
+                    <label>Latest Token Issued</label>
+                    <div class="input-with-btn">
+                      <input type="text" id="latestInputCitizen" value="C-125">
+                      <button type="button" class="btn-secondary" id="issueTokenBtnCitizen">+ Issue</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="field" style="margin-bottom:10px;"><label>Crowd Level</label></div>
+                <div class="level-btn-row" id="levelRowCitizen">
+                  <div class="level-btn low" data-level="low">Low</div>
+                  <div class="level-btn moderate" data-level="moderate">Moderate</div>
+                  <div class="level-btn high sel" data-level="high">High</div>
+                  <div class="level-btn veryhigh" data-level="veryhigh">Very High</div>
+                </div>
+                <button class="btn-primary" type="button" id="callNextBtnCitizen">Call Next Token</button>
+                <button class="btn-secondary" type="button" id="saveUpdateBtnCitizen" style="margin-left:8px;">Save Manually</button>
+                <div class="notice-sub" style="margin-top:10px;">Citizen tokens always start with <strong>C</strong>. "Call Next Token" auto-advances the queue.</div>
+              </div>
             </div>
-            <div class="stat-card">
-              <div class="label-sm">CURRENT CROWD LEVEL</div>
-              <div class="val" id="statCrowdValCitizen" style="color:var(--orange);">High</div>
-              <div class="sub" id="statCrowdSubCitizen">Updated 6 min ago</div>
+
+            <div class="card queue-panel" data-view="nid">
+              <div class="section-bar">Update Queue Status — NID Token</div>
+              <div class="section-body">
+                <div class="form-row">
+                  <div class="field">
+                    <label>Currently Serving Token</label>
+                    <input type="text" id="servingInputNid" value="N-042">
+                  </div>
+                  <div class="field">
+                    <label>Latest Token Issued</label>
+                    <div class="input-with-btn">
+                      <input type="text" id="latestInputNid" value="N-050">
+                      <button type="button" class="btn-secondary" id="issueTokenBtnNid">+ Issue</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="field" style="margin-bottom:10px;"><label>Crowd Level</label></div>
+                <div class="level-btn-row" id="levelRowNid">
+                  <div class="level-btn low" data-level="low">Low</div>
+                  <div class="level-btn moderate sel" data-level="moderate">Moderate</div>
+                  <div class="level-btn high" data-level="high">High</div>
+                  <div class="level-btn veryhigh" data-level="veryhigh">Very High</div>
+                </div>
+                <button class="btn-primary" type="button" id="callNextBtnNid">Call Next Token</button>
+                <button class="btn-secondary" type="button" id="saveUpdateBtnNid" style="margin-left:8px;">Save Manually</button>
+                <div class="notice-sub" style="margin-top:10px;">NID tokens always start with <strong>N</strong>. Fully separate from the citizen queue.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="section-bar">Recent Activity</div>
+            <div class="section-body" style="padding:0;">
+              <table>
+                <thead>
+                  <tr><th>Time</th><th>Action</th><th>Officer</th><th>Status</th></tr>
+                </thead>
+                <tbody id="activityBody">
+                  <tr><td>12:12 PM</td><td>Crowd level set to High</td><td>K. Bhusal</td><td><span class="badge high">High</span></td></tr>
+                  <tr><td>11:40 AM</td><td>Latest token updated to A-125</td><td>K. Bhusal</td><td><span class="badge published">Saved</span></td></tr>
+                  <tr><td>09:05 AM</td><td>Announcement published</td><td>M. Rijal</td><td><span class="badge published">Live</span></td></tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
 
-        <!-- ===== NID queue panel ===== -->
-        <div class="queue-panel" data-view="nid">
-          <div class="queue-section-label">NID Token — National Identity Card</div>
-          <div class="stat-grid">
-            <div class="stat-card">
-              <div class="label-sm">CURRENTLY SERVING</div>
-              <div class="val" id="statServingValNid">N-042</div>
-              <div class="sub">National Identity Card</div>
+        <!-- ===================================================== -->
+        <!-- PAGE: QUEUE MANAGEMENT                                 -->
+        <!-- ===================================================== -->
+        <div class="admin-page" data-page="queue">
+          <div class="queue-section-label">Queue Controls</div>
+
+          <div class="queue-panel active" data-view="citizen">
+            <div class="card">
+              <div class="section-bar">Citizenship Service — Live Queue Control</div>
+              <div class="section-body">
+                <div class="form-row">
+                  <div class="field">
+                    <label>Currently Serving</label>
+                    <input type="text" id="qmServingCitizen" value="C-118" readonly>
+                  </div>
+                  <div class="field">
+                    <label>Latest Issued</label>
+                    <input type="text" id="qmLatestCitizen" value="C-125" readonly>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="field">
+                    <label>Counter / Desk</label>
+                    <select>
+                      <option>Counter 1 — Citizenship</option>
+                      <option>Counter 2 — Citizenship</option>
+                      <option>Counter 3 — Citizenship</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label>Service Rate (avg. minutes per citizen)</label>
+                    <input type="number" value="6" min="1" max="30">
+                  </div>
+                </div>
+                <div class="form-row full">
+                  <div class="field">
+                    <label>Internal Note (visible to staff only)</label>
+                    <textarea placeholder="e.g. One counter temporarily closed for system maintenance."></textarea>
+                  </div>
+                </div>
+                <button class="btn-primary">Apply Settings</button>
+                <button class="btn-secondary" style="margin-left:8px;">Reset</button>
+              </div>
             </div>
-            <div class="stat-card">
-              <div class="label-sm">LATEST TOKEN</div>
-              <div class="val" id="statLatestValNid">N-050</div>
-              <div class="sub" id="statWaitingSubNid">8 waiting</div>
+          </div>
+
+          <div class="queue-panel" data-view="nid">
+            <div class="card">
+              <div class="section-bar">National Identity Card — Live Queue Control</div>
+              <div class="section-body">
+                <div class="form-row">
+                  <div class="field">
+                    <label>Currently Serving</label>
+                    <input type="text" id="qmServingNid" value="N-042" readonly>
+                  </div>
+                  <div class="field">
+                    <label>Latest Issued</label>
+                    <input type="text" id="qmLatestNid" value="N-050" readonly>
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="field">
+                    <label>Counter / Desk</label>
+                    <select>
+                      <option>Counter 4 — NID</option>
+                      <option>Counter 5 — NID</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label>Service Rate (avg. minutes per citizen)</label>
+                    <input type="number" value="8" min="1" max="30">
+                  </div>
+                </div>
+                <div class="form-row full">
+                  <div class="field">
+                    <label>Internal Note (visible to staff only)</label>
+                    <textarea placeholder="e.g. Biometric device being recalibrated."></textarea>
+                  </div>
+                </div>
+                <button class="btn-primary">Apply Settings</button>
+                <button class="btn-secondary" style="margin-left:8px;">Reset</button>
+              </div>
             </div>
-            <div class="stat-card">
-              <div class="label-sm">TOKENS ISSUED TODAY</div>
-              <div class="val">96</div>
-              <div class="sub">as of 12:18 PM</div>
-            </div>
-            <div class="stat-card">
-              <div class="label-sm">CURRENT CROWD LEVEL</div>
-              <div class="val" id="statCrowdValNid" style="color:var(--yellow);">Moderate</div>
-              <div class="sub" id="statCrowdSubNid">Updated 6 min ago</div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="section-bar">Today's Hourly Throughput</div>
+            <div class="section-body" style="padding:0;">
+              <table>
+                <thead>
+                  <tr><th>Time Slot</th><th>Citizenship Tokens</th><th>NID Tokens</th><th>Peak Crowd</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>10:00 – 11:00 AM</td><td>38</td><td>24</td><td><span class="badge high">High</span></td></tr>
+                  <tr><td>11:00 – 12:00 PM</td><td>42</td><td>31</td><td><span class="badge veryhigh">Very High</span></td></tr>
+                  <tr><td>12:00 – 01:00 PM</td><td>35</td><td>22</td><td><span class="badge high">High</span></td></tr>
+                  <tr><td>01:00 – 02:00 PM</td><td>27</td><td>19</td><td><span class="badge moderate">Moderate</span></td></tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
 
-        <!-- ===== Update card: only the selected queue is shown ===== -->
-        <div class="admin-two-col single" id="queueCardsRow">
-          <div class="card queue-panel active" data-view="citizen">
-            <div class="section-bar">Update Queue Status — Citizen Token (Citizenship Service)</div>
+        <!-- ===================================================== -->
+        <!-- PAGE: REQUIREMENTS                                     -->
+        <!-- ===================================================== -->
+        <div class="admin-page" data-page="requirements">
+          <div class="card">
+            <div class="section-bar">Category Requirement Management</div>
+            <div class="section-body" style="padding:0;">
+              <table>
+                <thead>
+                  <tr><th>Category</th><th>Documents Listed</th><th>Last Updated</th><th>Status</th><th></th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>By Descent</td><td>4</td><td>2083-05-10</td><td><span class="badge published">Published</span></td><td><a class="edit-link">Edit</a></td></tr>
+                  <tr><td>Naturalized</td><td>4</td><td>2083-04-28</td><td><span class="badge published">Published</span></td><td><a class="edit-link">Edit</a></td></tr>
+                  <tr><td>Marriage-based</td><td>4</td><td>2083-04-28</td><td><span class="badge published">Published</span></td><td><a class="edit-link">Edit</a></td></tr>
+                  <tr><td>Non-Resident Nepali</td><td>4</td><td>2083-03-15</td><td><span class="badge published">Published</span></td><td><a class="edit-link">Edit</a></td></tr>
+                  <tr><td>Honorary</td><td>3</td><td>2083-03-15</td><td><span class="badge draft">Draft</span></td><td><a class="edit-link">Edit</a></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="section-bar">Add / Edit Requirement — By Descent</div>
             <div class="section-body">
               <div class="form-row">
                 <div class="field">
-                  <label>Currently Serving Token</label>
-                  <input type="text" id="servingInputCitizen" value="C-118">
+                  <label>Document Name</label>
+                  <input type="text" placeholder="e.g. Citizenship certificate of father/mother">
                 </div>
                 <div class="field">
-                  <label>Latest Token Issued</label>
-                  <div class="input-with-btn">
-                    <input type="text" id="latestInputCitizen" value="C-125">
-                    <button type="button" class="btn-secondary" id="issueTokenBtnCitizen">+ Issue</button>
-                  </div>
+                  <label>Mandatory?</label>
+                  <select>
+                    <option>Yes — required</option>
+                    <option>No — optional</option>
+                  </select>
                 </div>
               </div>
-              <div class="field" style="margin-bottom:10px;">
-                <label>Crowd Level</label>
+              <div class="form-row full">
+                <div class="field">
+                  <label>Additional Notes</label>
+                  <textarea placeholder="Any clarification shown to the citizen on the portal."></textarea>
+                </div>
               </div>
-              <div class="level-btn-row" id="levelRowCitizen">
-                <div class="level-btn low" data-level="low">Low</div>
-                <div class="level-btn moderate" data-level="moderate">Moderate</div>
-                <div class="level-btn high sel" data-level="high">High</div>
-                <div class="level-btn veryhigh" data-level="veryhigh">Very High</div>
-              </div>
-              <button class="btn-primary" type="button" id="callNextBtnCitizen">Call Next Token</button>
-              <button class="btn-secondary" type="button" id="saveUpdateBtnCitizen" style="margin-left:8px;">Save Manually</button>
-              <div class="notice-sub" style="margin-top:10px;">Citizen tokens always start with <strong>C</strong>. "Call Next Token" auto-advances the queue and recalculates the crowd level — one click, no typing.</div>
+              <button class="btn-primary">Save Requirement</button>
+              <button class="btn-secondary" style="margin-left:8px;">Cancel</button>
             </div>
           </div>
+        </div>
 
-          <div class="card queue-panel" data-view="nid">
-            <div class="section-bar">Update Queue Status — NID Token</div>
+        <!-- ===================================================== -->
+        <!-- PAGE: ANNOUNCEMENTS                                    -->
+        <!-- ===================================================== -->
+        <div class="admin-page" data-page="announcements">
+          <div class="card">
+            <div class="section-bar">Publish Announcement</div>
             <div class="section-body">
               <div class="form-row">
                 <div class="field">
-                  <label>Currently Serving Token</label>
-                  <input type="text" id="servingInputNid" value="N-042">
+                  <label>Headline</label>
+                  <input type="text" placeholder="e.g. Counter closure for public holiday">
                 </div>
                 <div class="field">
-                  <label>Latest Token Issued</label>
-                  <div class="input-with-btn">
-                    <input type="text" id="latestInputNid" value="N-050">
-                    <button type="button" class="btn-secondary" id="issueTokenBtnNid">+ Issue</button>
-                  </div>
+                  <label>Publish Date</label>
+                  <input type="date">
                 </div>
               </div>
-              <div class="field" style="margin-bottom:10px;">
-                <label>Crowd Level</label>
+              <div class="form-row full">
+                <div class="field">
+                  <label>Message</label>
+                  <textarea placeholder="e.g. High visitor volume expected after SEE examination results.">High visitor volume expected after SEE examination results.</textarea>
+                </div>
               </div>
-              <div class="level-btn-row" id="levelRowNid">
-                <div class="level-btn low" data-level="low">Low</div>
-                <div class="level-btn moderate sel" data-level="moderate">Moderate</div>
-                <div class="level-btn high" data-level="high">High</div>
-                <div class="level-btn veryhigh" data-level="veryhigh">Very High</div>
-              </div>
-              <button class="btn-primary" type="button" id="callNextBtnNid">Call Next Token</button>
-              <button class="btn-secondary" type="button" id="saveUpdateBtnNid" style="margin-left:8px;">Save Manually</button>
-              <div class="notice-sub" style="margin-top:10px;">NID tokens always start with <strong>N</strong>. Kept fully separate from the citizen queue above.</div>
+              <button class="btn-primary">Publish</button>
+              <button class="btn-secondary" style="margin-left:8px;">Save Draft</button>
+              <button class="btn-secondary" style="margin-left:8px;">Clear</button>
+            </div>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="section-bar">Active Announcements</div>
+            <div class="section-body" style="padding:0;">
+              <table>
+                <thead>
+                  <tr><th>Headline</th><th>Published</th><th>By</th><th>Status</th><th></th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>High visitor volume expected after SEE results</td><td>2083-05-10</td><td>M. Rijal</td><td><span class="badge published">Live</span></td><td><a class="edit-link">Edit</a><a class="delete-link">Remove</a></td></tr>
+                  <tr><td>NID biometric counter 5 temporarily closed</td><td>2083-05-08</td><td>K. Bhusal</td><td><span class="badge published">Live</span></td><td><a class="edit-link">Edit</a><a class="delete-link">Remove</a></td></tr>
+                  <tr><td>Extended service hours for the coming week</td><td>2083-05-02</td><td>K. Bhusal</td><td><span class="badge draft">Draft</span></td><td><a class="edit-link">Edit</a><a class="delete-link">Remove</a></td></tr>
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
 
-        <div class="card" style="margin-top:16px;">
-          <div class="section-bar">Publish Announcement</div>
-          <div class="section-body">
-            <div class="form-row full">
-              <div class="field">
-                <label>Notice</label>
-                <textarea placeholder="e.g. High visitor volume expected after SEE examination results.">High visitor volume expected after SEE examination results.</textarea>
+        <!-- ===================================================== -->
+        <!-- PAGE: STATISTICS                                       -->
+        <!-- ===================================================== -->
+        <div class="admin-page" data-page="statistics">
+          <div class="stat-grid">
+            <div class="stat-card">
+              <div class="label-sm">TOTAL TOKENS TODAY</div>
+              <div class="val">238</div>
+              <div class="sub">+12% vs. yesterday</div>
+            </div>
+            <div class="stat-card">
+              <div class="label-sm">AVG. WAIT TIME</div>
+              <div class="val">18m</div>
+              <div class="sub">across both queues</div>
+            </div>
+            <div class="stat-card">
+              <div class="label-sm">SERVED TODAY</div>
+              <div class="val">186</div>
+              <div class="sub">78% of issued tokens</div>
+            </div>
+            <div class="stat-card">
+              <div class="label-sm">PEAK HOUR</div>
+              <div class="val">11 AM</div>
+              <div class="sub">73 tokens issued</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="section-bar">Weekly Token Volume — Citizenship vs NID</div>
+            <div class="section-body">
+              <div class="minibar-row">
+                <span>Sun — Citizenship</span>
+                <div class="minibar-track"><div class="minibar-fill" style="width:72%"></div></div>
+                <span class="minibar-val">142</span>
+              </div>
+              <div class="minibar-row">
+                <span>Sun — NID</span>
+                <div class="minibar-track"><div class="minibar-fill" style="width:48%;background:var(--green);"></div></div>
+                <span class="minibar-val">96</span>
+              </div>
+              <div class="minibar-row">
+                <span>Mon — Citizenship</span>
+                <div class="minibar-track"><div class="minibar-fill" style="width:80%"></div></div>
+                <span class="minibar-val">158</span>
+              </div>
+              <div class="minibar-row">
+                <span>Mon — NID</span>
+                <div class="minibar-track"><div class="minibar-fill" style="width:55%;background:var(--green);"></div></div>
+                <span class="minibar-val">110</span>
+              </div>
+              <div class="minibar-row">
+                <span>Tue — Citizenship</span>
+                <div class="minibar-track"><div class="minibar-fill" style="width:65%"></div></div>
+                <span class="minibar-val">129</span>
+              </div>
+              <div class="minibar-row">
+                <span>Tue — NID</span>
+                <div class="minibar-track"><div class="minibar-fill" style="width:42%;background:var(--green);"></div></div>
+                <span class="minibar-val">84</span>
               </div>
             </div>
-            <button class="btn-primary">Publish</button>
-            <button class="btn-secondary" style="margin-left:8px;">Clear</button>
+          </div>
+
+          <div class="card" style="margin-top:16px;">
+            <div class="section-bar">Crowd Level Distribution — Last 30 Days</div>
+            <div class="section-body" style="padding:0;">
+              <table>
+                <thead>
+                  <tr><th>Level</th><th>Days</th><th>Share</th><th>Note</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td><span class="badge low">Low</span></td><td>6</td><td>20%</td><td>Mostly early mornings</td></tr>
+                  <tr><td><span class="badge moderate">Moderate</span></td><td>9</td><td>30%</td><td>Steady flow</td></tr>
+                  <tr><td><span class="badge high">High</span></td><td>11</td><td>37%</td><td>Peak mid-week</td></tr>
+                  <tr><td><span class="badge veryhigh">Very High</span></td><td>4</td><td>13%</td><td>Post-holiday spikes</td></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
-        <div class="card" style="margin-top:16px;">
-          <div class="section-bar">Category Requirement Management</div>
-          <div class="section-body" style="padding:0;">
-            <table>
-              <thead>
-                <tr><th>Category</th><th>Documents Listed</th><th>Last Updated</th><th></th></tr>
-              </thead>
-              <tbody>
-                <tr><td>By Descent</td><td>4</td><td>2083-05-10</td><td><a class="edit-link" href="#">Edit</a></td></tr>
-                <tr><td>Naturalized</td><td>4</td><td>2083-04-28</td><td><a class="edit-link" href="#">Edit</a></td></tr>
-                <tr><td>Marriage-based</td><td>4</td><td>2083-04-28</td><td><a class="edit-link" href="#">Edit</a></td></tr>
-                <tr><td>Non-Resident Nepali</td><td>4</td><td>2083-03-15</td><td><a class="edit-link" href="#">Edit</a></td></tr>
-                <tr><td>Honorary</td><td>3</td><td>2083-03-15</td><td><a class="edit-link" href="#">Edit</a></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="card" style="margin-top:16px;">
-          <div class="section-bar">Recent Activity</div>
-          <div class="section-body" style="padding:0;">
-            <table>
-              <thead>
-                <tr><th>Time</th><th>Action</th><th>Officer</th><th>Status</th></tr>
-              </thead>
-              <tbody id="activityBody">
-                <tr><td>12:12 PM</td><td>Crowd level set to High</td><td>K. Bhusal</td><td><span class="badge high">High</span></td></tr>
-                <tr><td>11:40 AM</td><td>Latest token updated to A-125</td><td>K. Bhusal</td><td><span class="badge published">Saved</span></td></tr>
-                <tr><td>09:05 AM</td><td>Announcement published</td><td>M. Rijal</td><td><span class="badge published">Live</span></td></tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -1123,8 +1038,7 @@
 </div>
 
 <script>
-  // Admin: manual crowd-level selection (scoped to whichever row was clicked,
-  // so picking a level for Citizen never affects the NID row or vice versa)
+  // Admin: manual crowd-level selection
   document.querySelectorAll('.level-btn-row .level-btn').forEach(function(btn){
     btn.addEventListener('click', function(){
       btn.parentElement.querySelectorAll('.level-btn').forEach(function(b){b.classList.remove('sel');});
@@ -1133,10 +1047,6 @@
   });
 
   // ---- Queue view (Citizenship vs NID) ----
-  // Every block that belongs to a queue carries class="queue-panel" + data-view.
-  // Only the panels matching the selected view get .active.
-  // NOTE: there is no longer an on-dashboard toggle — the view is chosen
-  // from the dropdown on the login page and applied after a successful sign-in.
   var queuePanels = document.querySelectorAll('.queue-panel');
   var portalSubtitle = document.getElementById('portalSubtitle');
 
@@ -1161,7 +1071,7 @@
     }
   }
 
-  // ---- Login-page queue dropdown (which portal you sign in to) ----
+  // ---- Login-page queue dropdown ----
   var loginQueueSelect = document.getElementById('loginQueueSelect');
   var loginOffice = document.getElementById('loginOffice');
   var loginView = 'citizen';
@@ -1181,9 +1091,21 @@
   }
   setLoginView('citizen');
 
-  // ---- One-click queue auto-update (shared logic, one instance per token type) ----
-  var activityBody = document.getElementById('activityBody');
+  // ---- Admin sidebar page switching ----
+  var navLinks = document.querySelectorAll('.admin-nav a[data-page]');
+  var adminPages = document.querySelectorAll('.admin-page');
 
+  navLinks.forEach(function(link){
+    link.addEventListener('click', function(e){
+      e.preventDefault();
+      var target = link.dataset.page;
+      navLinks.forEach(function(l){ l.classList.toggle('active', l === link); });
+      adminPages.forEach(function(p){ p.classList.toggle('active', p.dataset.page === target); });
+    });
+  });
+
+  // ---- One-click queue auto-update ----
+  var activityBody = document.getElementById('activityBody');
   var LEVEL_COLORS = { low:'var(--green)', moderate:'var(--yellow)', high:'var(--orange)', veryhigh:'var(--red)' };
   var LEVEL_LABELS = { low:'Low', moderate:'Moderate', high:'High', veryhigh:'Very High' };
 
@@ -1224,6 +1146,8 @@
     var statWaitingSub = document.getElementById(cfg.statWaitingId);
     var statCrowdVal = document.getElementById(cfg.statCrowdValId);
     var statCrowdSub = document.getElementById(cfg.statCrowdSubId);
+    var qmServing = document.getElementById(cfg.qmServingId);
+    var qmLatest = document.getElementById(cfg.qmLatestId);
 
     function selectLevelBtn(level){
       levelRow.querySelectorAll('.level-btn').forEach(function(b){
@@ -1233,6 +1157,8 @@
     function refreshStats(level){
       statServingVal.textContent = servingInput.value;
       statLatestVal.textContent = latestInput.value;
+      if(qmServing) qmServing.value = servingInput.value;
+      if(qmLatest) qmLatest.value = latestInput.value;
       var s = parseToken(servingInput.value), l = parseToken(latestInput.value);
       var waiting = (s && l) ? Math.max(0, l.num - s.num) : 0;
       statWaitingSub.textContent = waiting + ' waiting';
@@ -1245,23 +1171,19 @@
       var s = parseToken(servingInput.value);
       var l = parseToken(latestInput.value);
       if(!s || !l){ return; }
-
       if(s.num >= l.num){
         l.num += 1;
         latestInput.value = formatToken(l.prefix, l.num, l.digits);
-        logActivity(cfg.label, 'Latest token auto-issued to ' + latestInput.value + ' to keep the queue moving', 'moderate', 'Issued');
+        logActivity(cfg.label, 'Latest token auto-issued to ' + latestInput.value, 'moderate', 'Issued');
       }
-
       s.num += 1;
       var newServing = formatToken(s.prefix, s.num, s.digits);
       servingInput.value = newServing;
-
       if(s.num === l.num){
         l.num += 1;
         latestInput.value = formatToken(l.prefix, l.num, l.digits);
         logActivity(cfg.label, 'Latest token auto-advanced to ' + latestInput.value, 'moderate', 'Issued');
       }
-
       var waiting = Math.max(0, l.num - s.num);
       var level = levelForWaiting(waiting);
       selectLevelBtn(level);
@@ -1276,7 +1198,6 @@
       l.num += 1;
       var newLatest = formatToken(l.prefix, l.num, l.digits);
       latestInput.value = newLatest;
-
       var waiting = s ? Math.max(0, l.num - s.num) : 0;
       var level = levelForWaiting(waiting);
       selectLevelBtn(level);
@@ -1288,7 +1209,7 @@
       var selectedBtn = levelRow.querySelector('.level-btn.sel');
       var level = selectedBtn ? selectedBtn.dataset.level : 'moderate';
       refreshStats(level);
-      logActivity(cfg.label, 'Queue status saved manually — serving ' + servingInput.value + ', latest ' + latestInput.value, level, LEVEL_LABELS[level]);
+      logActivity(cfg.label, 'Queue status saved manually', level, LEVEL_LABELS[level]);
     });
   }
 
@@ -1298,7 +1219,8 @@
     issueId: 'issueTokenBtnCitizen', saveId: 'saveUpdateBtnCitizen',
     statServingId: 'statServingValCitizen', statLatestId: 'statLatestValCitizen',
     statWaitingId: 'statWaitingSubCitizen', statCrowdValId: 'statCrowdValCitizen',
-    statCrowdSubId: 'statCrowdSubCitizen'
+    statCrowdSubId: 'statCrowdSubCitizen',
+    qmServingId: 'qmServingCitizen', qmLatestId: 'qmLatestCitizen'
   });
 
   setupQueueManager({
@@ -1307,7 +1229,8 @@
     issueId: 'issueTokenBtnNid', saveId: 'saveUpdateBtnNid',
     statServingId: 'statServingValNid', statLatestId: 'statLatestValNid',
     statWaitingId: 'statWaitingSubNid', statCrowdValId: 'statCrowdValNid',
-    statCrowdSubId: 'statCrowdSubNid'
+    statCrowdSubId: 'statCrowdSubNid',
+    qmServingId: 'qmServingNid', qmLatestId: 'qmLatestNid'
   });
 
   // ---- Theme toggle ----
@@ -1319,13 +1242,13 @@
     themeBtn.setAttribute('aria-label', dark ? 'Switch to dark mode' : 'Switch to light mode');
   });
 
-  // ---- Language toggle (label only — no translation logic in this prototype) ----
+  // ---- Language toggle ----
   var langLabel = document.getElementById('langLabel');
   document.getElementById('langToggle').addEventListener('click', function(){
     langLabel.textContent = langLabel.textContent === 'EN' ? 'NE' : 'EN';
   });
 
-  // ---- Accessibility Tools panel ----
+  // ---- Accessibility Tools ----
   var fab = document.getElementById('a11yFab');
   var panel = document.getElementById('a11yPanel');
   fab.addEventListener('click', function(){ panel.classList.toggle('open'); });
@@ -1385,9 +1308,10 @@
       loginError.classList.remove('show');
       loginOuter.style.display = 'none';
       dashboardWrap.style.display = 'block';
-      // Open the dashboard on whichever queue was picked from the dropdown
       setLoginView(loginQueueSelect.value);
       setQueueView(loginQueueSelect.value);
+      navLinks.forEach(function(l){ l.classList.toggle('active', l.dataset.page === 'dashboard'); });
+      adminPages.forEach(function(p){ p.classList.toggle('active', p.dataset.page === 'dashboard'); });
     } else {
       loginError.classList.add('show');
     }
@@ -1397,9 +1321,10 @@
     e.preventDefault();
     dashboardWrap.style.display = 'none';
     loginForm.reset();
+    document.getElementById('adminUser').value = 'admin';
+    document.getElementById('adminPass').value = 'admin';
     loginError.classList.remove('show');
     loginOuter.style.display = 'flex';
-    // keep the dropdown on the queue that was last used
     setLoginView(loginView);
   });
 
