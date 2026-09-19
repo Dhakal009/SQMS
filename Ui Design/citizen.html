@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Admin Portal — e-Queue, District Administration Office, Kathmandu</title>
+<title>Citizen Portal — e-Queue, District Administration Office, Kathmandu</title>
 <style>
   :root{
     --navy-900:#0b1f45;
@@ -28,6 +28,8 @@
     --radius:6px;
     --font: 'Noto Sans', 'Segoe UI', Arial, sans-serif;
   }
+  /* Dark theme: overriding the surface/text tokens is enough since every
+     component below is built on these variables (navy bars stay navy). */
   html[data-theme="dark"]{
     --bg:#0e1320;
     --surface:#171d2c;
@@ -50,6 +52,7 @@
   a{color:inherit;text-decoration:none;}
   button{font-family:var(--font);cursor:pointer;}
 
+  /* Accessibility state hooks (functional demo effects for the tools panel) */
   html.a11y-contrast body{background:#000 !important;color:#fff !important;}
   html.a11y-contrast .card,
   html.a11y-contrast .stat-card{background:#000 !important;border-color:#fff !important;color:#fff !important;}
@@ -65,6 +68,7 @@
   html.a11y-hideimages img,
   html.a11y-hideimages svg.illustration{display:none !important;}
 
+  /* ---------- Context chrome: mimics the existing site so the portal reads as an embedded section ---------- */
   .top-navbar{
     background:var(--navy-900);
   }
@@ -147,6 +151,9 @@
   .lang-pill:hover{background:rgba(255,255,255,.16);}
   .lang-pill svg{width:12px;height:12px;stroke:#fff;fill:none;}
 
+
+  /* Secondary navigation row, styled after the provincial-portal
+     convention: solid navy bar, white links, directly under the brand bar. */
   .main-nav{
     background:var(--navy-800);
     border-top:1px solid rgba(255,255,255,.08);
@@ -168,6 +175,7 @@
   }
   .main-nav a:hover{background:rgba(255,255,255,.06);}
 
+  /* ---------- Floating accessibility widget ---------- */
   .a11y-fab{
     position:fixed;
     right:24px;
@@ -240,6 +248,7 @@
   .a11y-tool .bars{display:flex;gap:3px;justify-content:center;margin-top:6px;}
   .a11y-tool .bars span{width:12px;height:3px;background:var(--border);border-radius:2px;}
 
+  /* ---------- Portal shell ---------- */
   .portal{
     max-width:1180px;
     margin:0 auto;
@@ -290,6 +299,7 @@
   .page{display:none; margin-top:22px;}
   .page.active{display:block;}
 
+  /* ---------- Shared card / section primitives ---------- */
   .card{
     background:var(--surface);
     border:1px solid var(--border);
@@ -312,6 +322,7 @@
     margin-bottom:6px;
   }
 
+  /* ================= CITIZEN PORTAL ================= */
   .select-row{
     display:grid;
     grid-template-columns:1fr 1fr 1fr;
@@ -327,6 +338,11 @@
     font-size:13px;
     color:var(--text-900);
     background:var(--surface);
+  }
+  .field select:disabled{
+    background:var(--bg);
+    color:var(--text-400);
+    cursor:not-allowed;
   }
 
   .queue-grid{
@@ -353,6 +369,10 @@
     color:#fff;
     background:var(--orange);
   }
+  .status-pill.low{background:var(--green);}
+  .status-pill.moderate{background:var(--yellow);}
+  .status-pill.high{background:var(--orange);}
+  .status-pill.veryhigh{background:var(--red);}
   .legend{display:flex;flex-direction:column;gap:8px;}
   .legend .section-body{padding:16px;display:flex;flex-direction:column;gap:8px;}
   .legend-item{
@@ -498,80 +518,51 @@
   }
   .admin-nav .logout-link:hover{color:#fff;}
 
-  .admin-main{
-    display:block;
-  }
-  .login-page-wrap{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    min-height:calc(100vh - 210px);
-    padding:24px 20px;
-  }
-  .login-card{
-    width:100%;
-    max-width:340px;
-    background:var(--surface);
-    border:1px solid var(--border);
+  /* Admin login gate */
+  .admin-login-outer{
+    background:var(--blue-50);
     border-radius:10px;
+    padding:48px 20px;
   }
-  .login-card-body{padding:26px 24px;}
+  .admin-login-wrap{
+    max-width:380px;
+    margin:0 auto;
+    box-shadow:0 10px 30px rgba(11,31,69,.08);
+  }
+  .admin-login-wrap .section-bar{display:none;}
+  .admin-login-wrap .section-body{padding:30px 28px 26px;}
 
-  .login-logo{
-    width:48px;height:48px;
+  .admin-login-logo{
+    width:56px;height:56px;
     border-radius:50%;
     background:#fff;
     border:1px solid var(--border);
     display:flex;align-items:center;justify-content:center;
-    margin:0 auto 12px;
+    margin:0 auto 16px;
     overflow:hidden;
   }
-  .login-logo img{max-width:78%;max-height:78%;object-fit:contain;}
+  .admin-login-logo img{max-width:78%;max-height:78%;object-fit:contain;}
 
-  .login-title{
+  .admin-login-title{
     text-align:center;
-    font-size:15px;
+    font-size:16px;
     font-weight:700;
     color:var(--navy-900);
-    margin-bottom:2px;
+    margin-bottom:3px;
   }
-  .login-office{
+  .admin-login-office{
     text-align:center;
-    font-size:11px;
+    font-size:12px;
     color:var(--text-600);
-    margin-bottom:18px;
+    margin-bottom:22px;
   }
 
-  /* Queue picker on the login card (dropdown) */
-  .login-queue-field{margin-bottom:16px;}
-  .login-queue-field select{
-    width:100%;
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    padding:9px 34px 9px 34px;
-    font-size:13px;
-    font-family:var(--font);
-    color:var(--text-900);
-    background:var(--surface);
-    appearance:none;
-    -webkit-appearance:none;
-    background-image:url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238b93a4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat:no-repeat;
-    background-position:right 11px center;
-    background-size:14px;
-  }
-  .login-queue-field select:focus{
-    outline:none;
-    border-color:var(--blue-600);
-    box-shadow:0 0 0 3px rgba(26,86,219,.12);
-  }
-
-  .login-card .field{margin-bottom:12px;}
-  .login-card .field label{
-    font-size:11px;
+  .admin-login-wrap .field{margin-bottom:16px;}
+  .admin-login-wrap .field label{
+    font-size:12px;
     font-weight:700;
     color:var(--text-900);
-    margin-bottom:6px;
+    margin-bottom:7px;
   }
   .input-icon-wrap{position:relative;display:flex;align-items:center;}
   .input-icon-wrap svg.leading{
@@ -580,10 +571,9 @@
     stroke:var(--text-400);fill:none;
     pointer-events:none;
   }
-  .login-card .field .input-icon-wrap input[type="text"],
-  .login-card .field .input-icon-wrap input[type="password"]{
+  .input-icon-wrap input{
     width:100%;
-    padding:9px 34px 9px 34px;
+    padding:10px 12px 10px 34px;
     border:1px solid var(--border);
     border-radius:var(--radius);
     font-size:13px;
@@ -604,37 +594,47 @@
   .pw-toggle svg{width:16px;height:16px;stroke:var(--text-400);fill:none;}
   .pw-toggle:hover svg{stroke:var(--text-600);}
 
-  .login-card .btn-primary{width:100%;text-align:center;padding:10px;font-size:13px;margin-top:4px;}
-  .login-error{
+  .admin-login-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin:2px 0 18px;
+    font-size:12px;
+    color:var(--text-600);
+  }
+  .admin-login-row label{display:flex;align-items:center;gap:7px;cursor:pointer;}
+  .admin-login-row input[type=checkbox]{
+    width:14px;height:14px;
+    accent-color:var(--blue-600);
+  }
+
+  .admin-login-wrap .btn-primary{width:100%;text-align:center;padding:11px;font-size:13px;}
+  .admin-login-error{
     display:none;
     align-items:center;
-    gap:7px;
+    gap:8px;
     font-size:12px;
     color:var(--red);
     background:var(--red-bg);
     border:1px solid #f0c2c6;
     border-radius:6px;
-    padding:8px 10px;
-    margin-bottom:12px;
+    padding:9px 11px;
+    margin-bottom:16px;
   }
-  .login-error.show{display:flex;}
-  .login-error svg{width:14px;height:14px;stroke:var(--red);fill:none;flex:none;}
+  .admin-login-error.show{display:flex;}
+  .admin-login-error svg{width:14px;height:14px;stroke:var(--red);fill:none;flex:none;}
 
-  .login-hint{
+  .admin-login-divider{
+    border-top:1px solid var(--border);
+    margin:20px 0 14px;
+  }
+  .admin-login-hint{
     text-align:center;
-    font-size:10.5px;
+    font-size:11px;
     color:var(--text-400);
-    margin-top:14px;
+    margin-top:16px;
   }
 
-  .queue-section-label{
-    font-size:12px;
-    font-weight:700;
-    color:var(--navy-900);
-    text-transform:uppercase;
-    letter-spacing:.3px;
-    margin-bottom:10px;
-  }
   .stat-grid{
     display:grid;
     grid-template-columns:repeat(4,1fr);
@@ -658,14 +658,6 @@
     margin-bottom:14px;
   }
   .form-row.full{grid-template-columns:1fr;}
-  .input-with-btn{display:flex;gap:8px;align-items:stretch;}
-  .input-with-btn input{flex:1;min-width:0;}
-  .input-with-btn .btn-secondary{
-    flex:none;
-    padding:0 14px;
-    font-size:12px;
-    white-space:nowrap;
-  }
   .field input[type=text], .field input[type=number], .field textarea{
     border:1px solid var(--border);
     border-radius:var(--radius);
@@ -750,25 +742,13 @@
     gap:16px;
     align-items:start;
   }
-  /* Only one queue card is ever visible now, so it uses the full width */
-  .admin-two-col.single{grid-template-columns:1fr;}
-
-  /* ---- Queue view panels (Citizenship vs NID) ---- */
-  .queue-panel{display:none;}
-  .queue-panel.active{display:block;}
 
   footer{
-    border-top:1px solid var(--border);
-    background:var(--surface);
-    padding:14px 24px;
-    margin:0;
-  }
-  footer .footer-inner{
     max-width:1180px;
-    margin:0 auto;
+    margin:10px auto 40px;
+    padding:0 24px;
     font-size:12px;
     color:var(--text-400);
-    text-align:center;
   }
 
   @media (max-width:860px){
@@ -818,266 +798,190 @@
   </div>
 </nav>
 
-<main class="admin-main">
-
-  <!-- Login gate -->
-  <div class="login-page-wrap" id="adminLoginOuter">
-    <div class="login-card" id="adminLogin">
-      <div class="login-card-body">
-        <div class="login-logo">
-          <img src="https://edlvrs.bagamati.gov.np/edl/assets/img/nepal.png" alt="Government of Nepal emblem">
-        </div>
-        <div class="login-title">Admin Portal</div>
-        <div class="login-office" id="loginOffice">Citizenship Service — District Administration Office, Kathmandu</div>
-
-        <div class="login-error" id="loginError">
-          <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
-          Incorrect username or password.
-        </div>
-
-        <form id="adminLoginForm">
-
-          <!-- Queue picker: dropdown instead of toggle buttons -->
-          <div class="field login-queue-field">
-            <label for="loginQueueSelect">Select Queue / Service</label>
-            <div class="input-icon-wrap">
-              <svg class="leading" viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
-              <select id="loginQueueSelect">
-                <option value="citizen">Citizenship Service</option>
-                <option value="nid">National Identity Card (NID)</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="field">
-            <label>Username</label>
-            <div class="input-icon-wrap">
-              <svg class="leading" viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6"/></svg>
-              <input type="text" id="adminUser" autocomplete="username" placeholder="Enter username" value="admin">
-            </div>
-          </div>
-          <div class="field">
-            <label>Password</label>
-            <div class="input-icon-wrap">
-              <svg class="leading" viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
-              <input type="password" id="adminPass" autocomplete="current-password" placeholder="Enter password" value="admin">
-              <button type="button" class="pw-toggle" id="pwToggle" aria-label="Show password">
-                <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
-              </button>
-            </div>
-          </div>
-
-          <button type="submit" class="btn-primary">Sign In</button>
-        </form>
-
-        <div class="login-hint">Demo credentials — username: admin · password: admin</div>
-      </div>
+<main class="portal">
+  <div class="portal-intro">
+    <div>
+      <h2>e-Queue Portal</h2>
+      <p>Check requirements, live queue status and crowd levels before visiting the office.</p>
     </div>
   </div>
 
-  <!-- Dashboard (shown after sign in) -->
-  <div class="portal" id="adminDashboardWrap" style="display:none;">
-    <div class="portal-intro">
-      <div>
-        <h2>Admin Portal</h2>
-        <p id="portalSubtitle">Manage queue status, requirements and announcements.</p>
+  <!-- ============ CITIZEN PORTAL ============ -->
+  <section id="citizen" class="page active">
+
+    <div class="select-row">
+      <div class="field">
+        <label>Office</label>
+        <select><option>District Administration Office — Kathmandu</option></select>
       </div>
-      <!-- NOTE: the dashboard queue-switch toggle has been removed.
-           The queue shown is decided by the dropdown on the login page. -->
+      <div class="field">
+        <label>Service</label>
+        <select id="serviceSelect">
+          <option value="citizenship">Citizenship Service</option>
+          <option value="nid">National Identity Card</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Category</label>
+        <select id="categorySelect">
+          <option value="6">New</option>
+          <option value="7">Duplicate (Lost Certificate)</option>
+        </select>
+      </div>
     </div>
 
-
-    <div class="admin-shell" id="adminDashboard">
-      <aside class="admin-side">
-        <div class="admin-user">
-          <div class="name">Khimraj Bhusal</div>
-          <div class="role">Information Officer</div>
+    <div class="queue-grid">
+      <div class="card queue-main">
+        <div class="section-bar" id="queueTitle">Citizenship Service — New — Live Status</div>
+        <div class="section-body">
+          <div class="queue-num">
+            <div class="label-sm">CURRENTLY SERVING</div>
+            <div class="num" id="servingNum">C-175</div>
+          </div>
+          <div class="queue-num">
+            <div class="label-sm">LATEST TOKEN</div>
+            <div class="num" id="latestNum">C-189</div>
+          </div>
+          <div class="status-pill veryhigh" id="statusPill">VERY HIGH</div>
         </div>
-        <nav class="admin-nav">
-          <a href="#" class="active">Dashboard</a>
-          <a href="#">Queue Management</a>
-          <a href="#">Requirements</a>
-          <a href="#">Announcements</a>
-          <a href="#">Statistics</a>
-          <a href="#" class="logout-link" id="adminLogout">Log Out</a>
-        </nav>
-      </aside>
+      </div>
+      <div class="card legend">
+        <div class="section-bar">Crowd Level</div>
+        <div class="section-body">
+          <div class="legend-item low">Low</div>
+          <div class="legend-item moderate">Moderate</div>
+          <div class="legend-item high">High</div>
+          <div class="legend-item veryhigh">Very High</div>
+        </div>
+      </div>
+    </div>
 
+    <div class="notice-bar" id="noticeBar">
       <div>
-        <!-- ===== Citizenship queue panel ===== -->
-        <div class="queue-panel active" data-view="citizen">
-          <div class="queue-section-label">Citizen Token — Citizenship Service</div>
-          <div class="stat-grid">
-            <div class="stat-card">
-              <div class="label-sm">CURRENTLY SERVING</div>
-              <div class="val" id="statServingValCitizen">C-118</div>
-              <div class="sub">Citizenship Service</div>
-            </div>
-            <div class="stat-card">
-              <div class="label-sm">LATEST TOKEN</div>
-              <div class="val" id="statLatestValCitizen">C-125</div>
-              <div class="sub" id="statWaitingSubCitizen">7 waiting</div>
-            </div>
-            <div class="stat-card">
-              <div class="label-sm">TOKENS ISSUED TODAY</div>
-              <div class="val">142</div>
-              <div class="sub">as of 12:18 PM</div>
-            </div>
-            <div class="stat-card">
-              <div class="label-sm">CURRENT CROWD LEVEL</div>
-              <div class="val" id="statCrowdValCitizen" style="color:var(--orange);">High</div>
-              <div class="sub" id="statCrowdSubCitizen">Updated 6 min ago</div>
-            </div>
-          </div>
+        <strong id="noticeText">High visitor volume expected after SEE examination results.</strong>
+        <div class="notice-sub">Queue information supports planning; actual waiting time may vary.</div>
+      </div>
+    </div>
+
+    <div class="quick-actions">
+      <div class="qa-btn" id="qaDocs">Required Documents</div>
+      <div class="qa-btn" id="qaToken">Current Token</div>
+      <div class="qa-btn" id="qaCrowd">Crowd Status</div>
+      <div class="qa-btn" id="qaNid">NID Requirements</div>
+    </div>
+
+    <div class="card" id="checklistCard">
+      <div class="section-bar">Document Checklist by Category</div>
+      <div class="section-body">
+        <div class="notice-sub" id="checklistPlaceholder" style="display:none;margin-bottom:4px;">
+          A category-wise document checklist isn't published for this service yet. Please check the Required Documents quick action or contact the office directly.
         </div>
-
-        <!-- ===== NID queue panel ===== -->
-        <div class="queue-panel" data-view="nid">
-          <div class="queue-section-label">NID Token — National Identity Card</div>
-          <div class="stat-grid">
-            <div class="stat-card">
-              <div class="label-sm">CURRENTLY SERVING</div>
-              <div class="val" id="statServingValNid">N-042</div>
-              <div class="sub">National Identity Card</div>
-            </div>
-            <div class="stat-card">
-              <div class="label-sm">LATEST TOKEN</div>
-              <div class="val" id="statLatestValNid">N-050</div>
-              <div class="sub" id="statWaitingSubNid">8 waiting</div>
-            </div>
-            <div class="stat-card">
-              <div class="label-sm">TOKENS ISSUED TODAY</div>
-              <div class="val">96</div>
-              <div class="sub">as of 12:18 PM</div>
-            </div>
-            <div class="stat-card">
-              <div class="label-sm">CURRENT CROWD LEVEL</div>
-              <div class="val" id="statCrowdValNid" style="color:var(--yellow);">Moderate</div>
-              <div class="sub" id="statCrowdSubNid">Updated 6 min ago</div>
+        <div class="cat-list" id="catList">
+          <div class="cat-item">
+            <button class="cat-head" data-cat="6"><span class="cat-num"><span class="n">1</span>New</span><span class="chev">＋</span></button>
+            <div class="cat-body">
+              <ul>
+                <li>Original and copy of applicant's birth certificate</li>
+                <li>Parents' citizenship certificates (original + copy)</li>
+                <li>Ward recommendation letter</li>
+                <li>Two passport-size photos</li>
+              </ul>
             </div>
           </div>
-        </div>
-
-        <!-- ===== Update card: only the selected queue is shown ===== -->
-        <div class="admin-two-col single" id="queueCardsRow">
-          <div class="card queue-panel active" data-view="citizen">
-            <div class="section-bar">Update Queue Status — Citizen Token (Citizenship Service)</div>
-            <div class="section-body">
-              <div class="form-row">
-                <div class="field">
-                  <label>Currently Serving Token</label>
-                  <input type="text" id="servingInputCitizen" value="C-118">
-                </div>
-                <div class="field">
-                  <label>Latest Token Issued</label>
-                  <div class="input-with-btn">
-                    <input type="text" id="latestInputCitizen" value="C-125">
-                    <button type="button" class="btn-secondary" id="issueTokenBtnCitizen">+ Issue</button>
-                  </div>
-                </div>
-              </div>
-              <div class="field" style="margin-bottom:10px;">
-                <label>Crowd Level</label>
-              </div>
-              <div class="level-btn-row" id="levelRowCitizen">
-                <div class="level-btn low" data-level="low">Low</div>
-                <div class="level-btn moderate" data-level="moderate">Moderate</div>
-                <div class="level-btn high sel" data-level="high">High</div>
-                <div class="level-btn veryhigh" data-level="veryhigh">Very High</div>
-              </div>
-              <button class="btn-primary" type="button" id="callNextBtnCitizen">Call Next Token</button>
-              <button class="btn-secondary" type="button" id="saveUpdateBtnCitizen" style="margin-left:8px;">Save Manually</button>
-              <div class="notice-sub" style="margin-top:10px;">Citizen tokens always start with <strong>C</strong>. "Call Next Token" auto-advances the queue and recalculates the crowd level — one click, no typing.</div>
+          <div class="cat-item">
+            <button class="cat-head" data-cat="1"><span class="cat-num"><span class="n">2</span>By Descent</span><span class="chev">＋</span></button>
+            <div class="cat-body">
+              <ul>
+                <li>Original and copy of applicant's birth certificate</li>
+                <li>Parents' citizenship certificates (original + copy)</li>
+                <li>Ward recommendation letter</li>
+                <li>Two passport-size photos</li>
+              </ul>
             </div>
           </div>
-
-          <div class="card queue-panel" data-view="nid">
-            <div class="section-bar">Update Queue Status — NID Token</div>
-            <div class="section-body">
-              <div class="form-row">
-                <div class="field">
-                  <label>Currently Serving Token</label>
-                  <input type="text" id="servingInputNid" value="N-042">
-                </div>
-                <div class="field">
-                  <label>Latest Token Issued</label>
-                  <div class="input-with-btn">
-                    <input type="text" id="latestInputNid" value="N-050">
-                    <button type="button" class="btn-secondary" id="issueTokenBtnNid">+ Issue</button>
-                  </div>
-                </div>
-              </div>
-              <div class="field" style="margin-bottom:10px;">
-                <label>Crowd Level</label>
-              </div>
-              <div class="level-btn-row" id="levelRowNid">
-                <div class="level-btn low" data-level="low">Low</div>
-                <div class="level-btn moderate sel" data-level="moderate">Moderate</div>
-                <div class="level-btn high" data-level="high">High</div>
-                <div class="level-btn veryhigh" data-level="veryhigh">Very High</div>
-              </div>
-              <button class="btn-primary" type="button" id="callNextBtnNid">Call Next Token</button>
-              <button class="btn-secondary" type="button" id="saveUpdateBtnNid" style="margin-left:8px;">Save Manually</button>
-              <div class="notice-sub" style="margin-top:10px;">NID tokens always start with <strong>N</strong>. Kept fully separate from the citizen queue above.</div>
+          <div class="cat-item">
+            <button class="cat-head" data-cat="2"><span class="cat-num"><span class="n">3</span>Naturalized</span><span class="chev">＋</span></button>
+            <div class="cat-body">
+              <ul>
+                <li>Proof of residency (minimum period as required by law)</li>
+                <li>Renunciation of prior citizenship, if applicable</li>
+                <li>Ward recommendation letter</li>
+                <li>Two passport-size photos</li>
+              </ul>
             </div>
           </div>
-        </div>
-
-        <div class="card" style="margin-top:16px;">
-          <div class="section-bar">Publish Announcement</div>
-          <div class="section-body">
-            <div class="form-row full">
-              <div class="field">
-                <label>Notice</label>
-                <textarea placeholder="e.g. High visitor volume expected after SEE examination results.">High visitor volume expected after SEE examination results.</textarea>
-              </div>
+          <div class="cat-item">
+            <button class="cat-head" data-cat="3"><span class="cat-num"><span class="n">4</span>Marriage-based</span><span class="chev">＋</span></button>
+            <div class="cat-body">
+              <ul>
+                <li>Marriage registration certificate</li>
+                <li>Spouse's citizenship certificate (original + copy)</li>
+                <li>Ward recommendation letter</li>
+                <li>Two passport-size photos</li>
+              </ul>
             </div>
-            <button class="btn-primary">Publish</button>
-            <button class="btn-secondary" style="margin-left:8px;">Clear</button>
           </div>
-        </div>
-
-        <div class="card" style="margin-top:16px;">
-          <div class="section-bar">Category Requirement Management</div>
-          <div class="section-body" style="padding:0;">
-            <table>
-              <thead>
-                <tr><th>Category</th><th>Documents Listed</th><th>Last Updated</th><th></th></tr>
-              </thead>
-              <tbody>
-                <tr><td>By Descent</td><td>4</td><td>2083-05-10</td><td><a class="edit-link" href="#">Edit</a></td></tr>
-                <tr><td>Naturalized</td><td>4</td><td>2083-04-28</td><td><a class="edit-link" href="#">Edit</a></td></tr>
-                <tr><td>Marriage-based</td><td>4</td><td>2083-04-28</td><td><a class="edit-link" href="#">Edit</a></td></tr>
-                <tr><td>Non-Resident Nepali</td><td>4</td><td>2083-03-15</td><td><a class="edit-link" href="#">Edit</a></td></tr>
-                <tr><td>Honorary</td><td>3</td><td>2083-03-15</td><td><a class="edit-link" href="#">Edit</a></td></tr>
-              </tbody>
-            </table>
+          <div class="cat-item">
+            <button class="cat-head" data-cat="4"><span class="cat-num"><span class="n">5</span>Non-Resident Nepali</span><span class="chev">＋</span></button>
+            <div class="cat-body">
+              <ul>
+                <li>Proof of Nepali origin (parent/grandparent citizenship record)</li>
+                <li>Valid foreign passport and residency proof</li>
+                <li>Ward recommendation letter</li>
+                <li>Two passport-size photos</li>
+              </ul>
+            </div>
           </div>
-        </div>
-
-        <div class="card" style="margin-top:16px;">
-          <div class="section-bar">Recent Activity</div>
-          <div class="section-body" style="padding:0;">
-            <table>
-              <thead>
-                <tr><th>Time</th><th>Action</th><th>Officer</th><th>Status</th></tr>
-              </thead>
-              <tbody id="activityBody">
-                <tr><td>12:12 PM</td><td>Crowd level set to High</td><td>K. Bhusal</td><td><span class="badge high">High</span></td></tr>
-                <tr><td>11:40 AM</td><td>Latest token updated to A-125</td><td>K. Bhusal</td><td><span class="badge published">Saved</span></td></tr>
-                <tr><td>09:05 AM</td><td>Announcement published</td><td>M. Rijal</td><td><span class="badge published">Live</span></td></tr>
-              </tbody>
-            </table>
+          <div class="cat-item">
+            <button class="cat-head" data-cat="5"><span class="cat-num"><span class="n">6</span>Honorary</span><span class="chev">＋</span></button>
+            <div class="cat-body">
+              <ul>
+                <li>Government decision letter / recommendation</li>
+                <li>Valid passport and supporting identity documents</li>
+                <li>Two passport-size photos</li>
+              </ul>
+            </div>
+          </div>
+          <div class="cat-item">
+            <button class="cat-head" data-cat="7"><span class="cat-num"><span class="n">7</span>Duplicate (Lost Certificate)</span><span class="chev">＋</span></button>
+            <div class="cat-body">
+              <ul>
+                <li>Police report (FIR) confirming the certificate was lost</li>
+                <li>Original citizenship certificate number, if known</li>
+                <li>Photocopy of the lost certificate, if available</li>
+                <li>Ward recommendation letter</li>
+                <li>Two passport-size photos</li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+
+    <div class="info-grid">
+      <div class="card">
+        <div class="section-bar">Office Information</div>
+        <div class="section-body">
+          <strong>District Administration Office, Kathmandu</strong><br>
+          Babarmahal, Kathmandu, Nepal<br><br>
+          <strong>Office Hours:</strong> 09:00 AM – 5:00 PM (Sunday to Friday)<br>
+          <strong>Citizenship record enquiries:</strong> 015971880
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-bar">Frequently Asked Questions</div>
+        <div class="section-body">
+          <strong>Do I need an appointment?</strong> No, tokens are issued on a walk-in basis.<br><br>
+          <strong>What if I'm missing a document?</strong> Incomplete applications may require a repeat visit — check the checklist above before travelling.
+        </div>
+      </div>
+    </div>
+  </section>
 
 </main>
 
 <footer>
-  <div class="footer-inner">© District Administration Office, Kathmandu — e-Queue Portal (prototype interface, sample data shown for design purposes only)</div>
+  © District Administration Office, Kathmandu — e-Queue Portal (prototype interface, sample data shown for design purposes only)
 </footer>
 
 <!-- Floating accessibility tools -->
@@ -1123,192 +1027,131 @@
 </div>
 
 <script>
-  // Admin: manual crowd-level selection (scoped to whichever row was clicked,
-  // so picking a level for Citizen never affects the NID row or vice versa)
-  document.querySelectorAll('.level-btn-row .level-btn').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      btn.parentElement.querySelectorAll('.level-btn').forEach(function(b){b.classList.remove('sel');});
-      btn.classList.add('sel');
+  // Citizen: document checklist accordion
+  function openCategory(catId, focusScroll){
+    document.querySelectorAll('.cat-item').forEach(function(item){
+      var head = item.querySelector('.cat-head');
+      var body = item.querySelector('.cat-body');
+      var chev = item.querySelector('.chev');
+      var isMatch = head.dataset.cat === String(catId);
+      body.classList.toggle('open', isMatch);
+      chev.textContent = isMatch ? '−' : '＋';
+    });
+    if(focusScroll){
+      var target = document.querySelector('.cat-head[data-cat="' + catId + '"]');
+      if(target){ target.scrollIntoView({block:'center'}); }
+    }
+  }
+
+  document.querySelectorAll('.cat-head').forEach(function(head){
+    head.addEventListener('click', function(){
+      var body = head.nextElementSibling;
+      var chev = head.querySelector('.chev');
+      var open = body.classList.toggle('open');
+      chev.textContent = open ? '−' : '＋';
     });
   });
 
-  // ---- Queue view (Citizenship vs NID) ----
-  // Every block that belongs to a queue carries class="queue-panel" + data-view.
-  // Only the panels matching the selected view get .active.
-  // NOTE: there is no longer an on-dashboard toggle — the view is chosen
-  // from the dropdown on the login page and applied after a successful sign-in.
-  var queuePanels = document.querySelectorAll('.queue-panel');
-  var portalSubtitle = document.getElementById('portalSubtitle');
-
-  var VIEW_TEXT = {
-    citizen: {
-      long: 'Citizenship Service',
-      subtitle: 'Manage the Citizenship Service queue, requirements and announcements.'
+  // ---- Service + Category dropdowns: swap queue numbers, status, notice ----
+  var SERVICES = {
+    citizenship: {
+      title: 'Citizenship Service',
+      notice: 'High visitor volume expected after SEE examination results.',
+      hasChecklist: true
     },
     nid: {
-      long: 'National Identity Card (NID)',
-      subtitle: 'Manage the National Identity Card (NID) queue, requirements and announcements.'
+      title: 'National Identity Card — Live Status',
+      serving: 'N-042', latest: 'N-050',
+      level: 'moderate', levelText: 'MODERATE',
+      notice: 'NID enrolment desks close at 3:00 PM — please arrive early.',
+      hasChecklist: false
     }
   };
 
-  function setQueueView(view){
-    if(!VIEW_TEXT[view]) view = 'citizen';
-    queuePanels.forEach(function(panel){
-      panel.classList.toggle('active', panel.dataset.view === view);
-    });
-    if(portalSubtitle){
-      portalSubtitle.textContent = VIEW_TEXT[view].subtitle;
+  // Each citizenship category runs its own token counter and crowd level.
+  // All citizen tokens start with "C" (NID tokens separately start with "N").
+  var CATEGORY_QUEUE = {
+    6: { name: 'New',                          serving: 'C-175', latest: 'C-189', level: 'veryhigh', levelText: 'VERY HIGH' },
+    1: { name: 'By Descent',                   serving: 'C-118', latest: 'C-125', level: 'high',      levelText: 'HIGH' },
+    2: { name: 'Naturalized',                  serving: 'C-242', latest: 'C-247', level: 'moderate',  levelText: 'MODERATE' },
+    3: { name: 'Marriage-based',                serving: 'C-330', latest: 'C-334', level: 'low',       levelText: 'LOW' },
+    4: { name: 'Non-Resident Nepali',          serving: 'C-415', latest: 'C-418', level: 'moderate',  levelText: 'MODERATE' },
+    5: { name: 'Honorary',                     serving: 'C-506', latest: 'C-507', level: 'low',       levelText: 'LOW' },
+    7: { name: 'Duplicate (Lost Certificate)', serving: 'C-621', latest: 'C-625', level: 'moderate',  levelText: 'MODERATE' }
+  };
+
+  var serviceSelect = document.getElementById('serviceSelect');
+  var categorySelect = document.getElementById('categorySelect');
+  var queueTitle = document.getElementById('queueTitle');
+  var servingNum = document.getElementById('servingNum');
+  var latestNum = document.getElementById('latestNum');
+  var statusPill = document.getElementById('statusPill');
+  var noticeText = document.getElementById('noticeText');
+  var checklistCard = document.getElementById('checklistCard');
+  var checklistPlaceholder = document.getElementById('checklistPlaceholder');
+  var catList = document.getElementById('catList');
+
+  function setQueueDisplay(title, serving, latest, level, levelText){
+    queueTitle.textContent = title;
+    servingNum.textContent = serving;
+    latestNum.textContent = latest;
+    statusPill.textContent = levelText;
+    statusPill.classList.remove('low','moderate','high','veryhigh');
+    statusPill.classList.add(level);
+  }
+
+  function applyService(key){
+    var s = SERVICES[key];
+    if(!s) return;
+    noticeText.textContent = s.notice;
+    catList.style.display = s.hasChecklist ? '' : 'none';
+    checklistPlaceholder.style.display = s.hasChecklist ? 'none' : 'block';
+    categorySelect.disabled = !s.hasChecklist;
+
+    if(s.hasChecklist){
+      applyCategory(categorySelect.value);
+    } else {
+      setQueueDisplay(s.title, s.serving, s.latest, s.level, s.levelText);
     }
   }
 
-  // ---- Login-page queue dropdown (which portal you sign in to) ----
-  var loginQueueSelect = document.getElementById('loginQueueSelect');
-  var loginOffice = document.getElementById('loginOffice');
-  var loginView = 'citizen';
-
-  function setLoginView(view){
-    if(!VIEW_TEXT[view]) view = 'citizen';
-    loginView = view;
-    if(loginQueueSelect) loginQueueSelect.value = view;
-    if(loginOffice){
-      loginOffice.textContent = VIEW_TEXT[view].long +
-        ' — District Administration Office, Kathmandu';
-    }
+  function applyCategory(catId){
+    var c = CATEGORY_QUEUE[catId];
+    if(!c) return;
+    setQueueDisplay('Citizenship Service — ' + c.name + ' — Live Status', c.serving, c.latest, c.level, c.levelText);
   }
 
-  if(loginQueueSelect){
-    loginQueueSelect.addEventListener('change', function(){ setLoginView(this.value); });
-  }
-  setLoginView('citizen');
-
-  // ---- One-click queue auto-update (shared logic, one instance per token type) ----
-  var activityBody = document.getElementById('activityBody');
-
-  var LEVEL_COLORS = { low:'var(--green)', moderate:'var(--yellow)', high:'var(--orange)', veryhigh:'var(--red)' };
-  var LEVEL_LABELS = { low:'Low', moderate:'Moderate', high:'High', veryhigh:'Very High' };
-
-  function parseToken(str){
-    var m = /^([A-Za-z]*-?)(\d+)$/.exec(str.trim());
-    if(!m) return null;
-    return { prefix: m[1], num: parseInt(m[2], 10), digits: m[2].length };
-  }
-  function formatToken(prefix, num, digits){
-    var s = String(num);
-    while(s.length < digits) s = '0' + s;
-    return prefix + s;
-  }
-  function levelForWaiting(waiting){
-    if(waiting <= 2) return 'low';
-    if(waiting <= 5) return 'moderate';
-    if(waiting <= 9) return 'high';
-    return 'veryhigh';
-  }
-  function logActivity(label, action, badgeClass, badgeText){
-    var now = new Date();
-    var h = now.getHours(), m = now.getMinutes();
-    var ampm = h >= 12 ? 'PM' : 'AM';
-    var h12 = h % 12 || 12;
-    var time = h12 + ':' + (m < 10 ? '0' + m : m) + ' ' + ampm;
-    var row = document.createElement('tr');
-    row.innerHTML = '<td>' + time + '</td><td>[' + label + '] ' + action + '</td><td>K. Bhusal</td>' +
-      '<td><span class="badge ' + badgeClass + '">' + badgeText + '</span></td>';
-    activityBody.insertBefore(row, activityBody.firstChild);
-  }
-
-  function setupQueueManager(cfg){
-    var servingInput = document.getElementById(cfg.servingId);
-    var latestInput = document.getElementById(cfg.latestId);
-    var levelRow = document.getElementById(cfg.levelRowId);
-    var statServingVal = document.getElementById(cfg.statServingId);
-    var statLatestVal = document.getElementById(cfg.statLatestId);
-    var statWaitingSub = document.getElementById(cfg.statWaitingId);
-    var statCrowdVal = document.getElementById(cfg.statCrowdValId);
-    var statCrowdSub = document.getElementById(cfg.statCrowdSubId);
-
-    function selectLevelBtn(level){
-      levelRow.querySelectorAll('.level-btn').forEach(function(b){
-        b.classList.toggle('sel', b.dataset.level === level);
-      });
-    }
-    function refreshStats(level){
-      statServingVal.textContent = servingInput.value;
-      statLatestVal.textContent = latestInput.value;
-      var s = parseToken(servingInput.value), l = parseToken(latestInput.value);
-      var waiting = (s && l) ? Math.max(0, l.num - s.num) : 0;
-      statWaitingSub.textContent = waiting + ' waiting';
-      statCrowdVal.textContent = LEVEL_LABELS[level];
-      statCrowdVal.style.color = LEVEL_COLORS[level];
-      statCrowdSub.textContent = 'Updated just now';
-    }
-
-    document.getElementById(cfg.callNextId).addEventListener('click', function(){
-      var s = parseToken(servingInput.value);
-      var l = parseToken(latestInput.value);
-      if(!s || !l){ return; }
-
-      if(s.num >= l.num){
-        l.num += 1;
-        latestInput.value = formatToken(l.prefix, l.num, l.digits);
-        logActivity(cfg.label, 'Latest token auto-issued to ' + latestInput.value + ' to keep the queue moving', 'moderate', 'Issued');
-      }
-
-      s.num += 1;
-      var newServing = formatToken(s.prefix, s.num, s.digits);
-      servingInput.value = newServing;
-
-      if(s.num === l.num){
-        l.num += 1;
-        latestInput.value = formatToken(l.prefix, l.num, l.digits);
-        logActivity(cfg.label, 'Latest token auto-advanced to ' + latestInput.value, 'moderate', 'Issued');
-      }
-
-      var waiting = Math.max(0, l.num - s.num);
-      var level = levelForWaiting(waiting);
-      selectLevelBtn(level);
-      refreshStats(level);
-      logActivity(cfg.label, 'Called next token — now serving ' + newServing, level, LEVEL_LABELS[level]);
-    });
-
-    document.getElementById(cfg.issueId).addEventListener('click', function(){
-      var l = parseToken(latestInput.value);
-      var s = parseToken(servingInput.value);
-      if(!l){ return; }
-      l.num += 1;
-      var newLatest = formatToken(l.prefix, l.num, l.digits);
-      latestInput.value = newLatest;
-
-      var waiting = s ? Math.max(0, l.num - s.num) : 0;
-      var level = levelForWaiting(waiting);
-      selectLevelBtn(level);
-      refreshStats(level);
-      logActivity(cfg.label, 'New token issued — latest is now ' + newLatest, level, LEVEL_LABELS[level]);
-    });
-
-    document.getElementById(cfg.saveId).addEventListener('click', function(){
-      var selectedBtn = levelRow.querySelector('.level-btn.sel');
-      var level = selectedBtn ? selectedBtn.dataset.level : 'moderate';
-      refreshStats(level);
-      logActivity(cfg.label, 'Queue status saved manually — serving ' + servingInput.value + ', latest ' + latestInput.value, level, LEVEL_LABELS[level]);
-    });
-  }
-
-  setupQueueManager({
-    label: 'Citizen', servingId: 'servingInputCitizen', latestId: 'latestInputCitizen',
-    levelRowId: 'levelRowCitizen', callNextId: 'callNextBtnCitizen',
-    issueId: 'issueTokenBtnCitizen', saveId: 'saveUpdateBtnCitizen',
-    statServingId: 'statServingValCitizen', statLatestId: 'statLatestValCitizen',
-    statWaitingId: 'statWaitingSubCitizen', statCrowdValId: 'statCrowdValCitizen',
-    statCrowdSubId: 'statCrowdSubCitizen'
+  serviceSelect.addEventListener('change', function(){
+    applyService(this.value);
   });
 
-  setupQueueManager({
-    label: 'NID', servingId: 'servingInputNid', latestId: 'latestInputNid',
-    levelRowId: 'levelRowNid', callNextId: 'callNextBtnNid',
-    issueId: 'issueTokenBtnNid', saveId: 'saveUpdateBtnNid',
-    statServingId: 'statServingValNid', statLatestId: 'statLatestValNid',
-    statWaitingId: 'statWaitingSubNid', statCrowdValId: 'statCrowdValNid',
-    statCrowdSubId: 'statCrowdSubNid'
+  categorySelect.addEventListener('change', function(){
+    if(serviceSelect.value !== 'citizenship') return;
+    applyCategory(this.value);
+    openCategory(this.value, true);
   });
+
+  // Quick actions: jump to the relevant section instead of sitting inert
+  document.getElementById('qaDocs').addEventListener('click', function(){
+    serviceSelect.value = 'citizenship';
+    applyService('citizenship');
+    checklistCard.scrollIntoView({block:'start'});
+  });
+  document.getElementById('qaToken').addEventListener('click', function(){
+    document.querySelector('.queue-main').scrollIntoView({block:'center'});
+  });
+  document.getElementById('qaCrowd').addEventListener('click', function(){
+    document.querySelector('.legend').scrollIntoView({block:'center'});
+  });
+  document.getElementById('qaNid').addEventListener('click', function(){
+    serviceSelect.value = 'nid';
+    applyService('nid');
+    document.querySelector('.queue-main').scrollIntoView({block:'center'});
+  });
+
+  // Sync the displayed queue numbers with the dropdowns' actual default
+  // selection on load (Category defaults to "New", not "By Descent").
+  applyService(serviceSelect.value);
 
   // ---- Theme toggle ----
   var html = document.documentElement;
@@ -1367,48 +1210,9 @@
         tool.classList.toggle('sel');
         return;
       }
+      // Screen reader / voice command — demo selection state only
       tool.classList.toggle('sel');
     });
-  });
-
-  // ---- Admin login gate ----
-  var loginForm = document.getElementById('adminLoginForm');
-  var loginOuter = document.getElementById('adminLoginOuter');
-  var dashboardWrap = document.getElementById('adminDashboardWrap');
-  var loginError = document.getElementById('loginError');
-
-  loginForm.addEventListener('submit', function(e){
-    e.preventDefault();
-    var user = document.getElementById('adminUser').value.trim();
-    var pass = document.getElementById('adminPass').value;
-    if(user === 'admin' && pass === 'admin'){
-      loginError.classList.remove('show');
-      loginOuter.style.display = 'none';
-      dashboardWrap.style.display = 'block';
-      // Open the dashboard on whichever queue was picked from the dropdown
-      setLoginView(loginQueueSelect.value);
-      setQueueView(loginQueueSelect.value);
-    } else {
-      loginError.classList.add('show');
-    }
-  });
-
-  document.getElementById('adminLogout').addEventListener('click', function(e){
-    e.preventDefault();
-    dashboardWrap.style.display = 'none';
-    loginForm.reset();
-    loginError.classList.remove('show');
-    loginOuter.style.display = 'flex';
-    // keep the dropdown on the queue that was last used
-    setLoginView(loginView);
-  });
-
-  // Password visibility toggle
-  var pwInput = document.getElementById('adminPass');
-  document.getElementById('pwToggle').addEventListener('click', function(){
-    var showing = pwInput.type === 'text';
-    pwInput.type = showing ? 'password' : 'text';
-    this.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
   });
 </script>
 

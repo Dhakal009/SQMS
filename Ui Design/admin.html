@@ -27,7 +27,6 @@
     --red-bg:#f9e3e4;
     --radius:6px;
     --font: 'Noto Sans', 'Segoe UI', Arial, sans-serif;
-    /* Single source of truth for page side gutters */
     --page-gutter: 10px;
   }
   html[data-theme="dark"]{
@@ -40,6 +39,7 @@
     --blue-50:#1a2438;
     --navy-900:#0d1631;
     --navy-800:#111d3e;
+    color-scheme: dark;
   }
   html[data-theme="dark"] .top-navbar{background:#070b15;}
   html[data-theme="dark"] .main-nav{background:#0b1120;}
@@ -87,9 +87,23 @@
     background: var(--surface);
     color: var(--text-900);
   }
+  html[data-theme="dark"] select option{
+    background-color: #171d2c;
+    color: #edf0f7;
+  }
+  html[data-theme="dark"] select option:checked,
+  html[data-theme="dark"] select option:hover{
+    background-color: #1a56db;
+    color: #ffffff;
+  }
   html[data-theme="dark"] .login-queue-field select{
     background-color: var(--surface);
+    color: var(--text-900);
     background-image:url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a9b1c4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  }
+  html[data-theme="dark"] .login-queue-field select:focus{
+    border-color: var(--blue-600);
+    box-shadow:0 0 0 3px rgba(26,86,219,.28);
   }
   html[data-theme="dark"] .minibar-track{background: #0d1320;border-color:#2a3244;}
   html[data-theme="dark"] th{color: var(--text-400);}
@@ -111,7 +125,6 @@
 
   .top-navbar{background:var(--navy-900);}
   .top-navbar-inner{
-    /* Widened container so the reduced gutter still leaves room for content */
     max-width:1320px;
     margin:0 auto;
     padding:22px var(--page-gutter);
@@ -145,13 +158,37 @@
     background:rgba(255,255,255,.05);border-radius:20px;
     padding:5px 14px;font-size:11px;font-weight:700;letter-spacing:.2px;color:#fff;
   }
+
+  /* Language dropdown pill */
   .lang-pill{
-    display:inline-flex;align-items:center;gap:6px;
-    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
-    border-radius:20px;padding:9px 14px;font-size:13px;font-weight:700;color:#fff;
+    display:inline-flex;align-items:center;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:20px;
+    padding:0 10px 0 12px;
+    height:38px;
   }
   .lang-pill:hover{background:rgba(255,255,255,.16);}
-  .lang-pill svg{width:12px;height:12px;stroke:#fff;fill:none;}
+  .lang-pill select{
+    background:transparent;
+    border:none;
+    color:#fff;
+    font-family:var(--font);
+    font-size:13px;
+    font-weight:700;
+    appearance:none;
+    -webkit-appearance:none;
+    padding:0 16px 0 0;
+    height:100%;
+    cursor:pointer;
+    outline:none;
+    background-image:url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right center;
+    background-size:11px;
+  }
+  .lang-pill select option{background:#0b1f45;color:#fff;font-weight:600;}
+  html[data-theme="dark"] .lang-pill select option{background:#0d1631;}
 
   .main-nav{background:var(--navy-800);border-top:1px solid rgba(255,255,255,.08);}
   .main-nav-inner{
@@ -459,10 +496,13 @@
     </div>
 
     <div class="nav-controls-right">
-      <button class="lang-pill" id="langToggle">
-        <span id="langLabel">EN</span>
-        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-      </button>
+      <!-- Language dropdown -->
+      <div class="lang-pill" data-no-i18n>
+        <select id="langSelect" aria-label="Select language">
+          <option value="en">English</option>
+          <option value="ne">नेपाली</option>
+        </select>
+      </div>
       <button class="icon-circle-btn" id="themeToggle" aria-label="Toggle dark mode">
         <svg id="themeIcon" viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round"><path d="M12 4V2m0 20v-2M4 12H2m20 0h-2M5.6 5.6L4.2 4.2m15.6 15.6l-1.4-1.4M18.4 5.6l1.4-1.4M4.2 19.8l1.4-1.4M12 7a5 5 0 100 10 5 5 0 000-10z"/></svg>
       </button>
@@ -571,9 +611,7 @@
 
       <div>
 
-        <!-- ===================================================== -->
-        <!-- PAGE: DASHBOARD                                        -->
-        <!-- ===================================================== -->
+        <!-- PAGE: DASHBOARD -->
         <div class="admin-page active" data-page="dashboard">
 
           <div class="queue-panel active" data-view="citizen">
@@ -654,7 +692,7 @@
                 </div>
                 <button class="btn-primary" type="button" id="callNextBtnCitizen">Call Next Token</button>
                 <button class="btn-secondary" type="button" id="saveUpdateBtnCitizen" style="margin-left:8px;">Save Manually</button>
-                <div class="notice-sub" style="margin-top:10px;">Citizen tokens always start with <strong>C</strong>. "Call Next Token" auto-advances the queue.</div>
+                <div class="notice-sub" id="noticeCitizen" style="margin-top:10px;">Citizen tokens always start with <strong>C</strong>. "Call Next Token" auto-advances the queue.</div>
               </div>
             </div>
 
@@ -683,7 +721,7 @@
                 </div>
                 <button class="btn-primary" type="button" id="callNextBtnNid">Call Next Token</button>
                 <button class="btn-secondary" type="button" id="saveUpdateBtnNid" style="margin-left:8px;">Save Manually</button>
-                <div class="notice-sub" style="margin-top:10px;">NID tokens always start with <strong>N</strong>. Fully separate from the citizen queue.</div>
+                <div class="notice-sub" id="noticeNid" style="margin-top:10px;">NID tokens always start with <strong>N</strong>. Fully separate from the citizen queue.</div>
               </div>
             </div>
           </div>
@@ -705,9 +743,7 @@
           </div>
         </div>
 
-        <!-- ===================================================== -->
-        <!-- PAGE: QUEUE MANAGEMENT                                 -->
-        <!-- ===================================================== -->
+        <!-- PAGE: QUEUE MANAGEMENT -->
         <div class="admin-page" data-page="queue">
           <div class="queue-section-label">Queue Controls</div>
 
@@ -808,9 +844,7 @@
           </div>
         </div>
 
-        <!-- ===================================================== -->
-        <!-- PAGE: REQUIREMENTS                                     -->
-        <!-- ===================================================== -->
+        <!-- PAGE: REQUIREMENTS -->
         <div class="admin-page" data-page="requirements">
           <div class="card">
             <div class="section-bar">Category Requirement Management</div>
@@ -858,9 +892,7 @@
           </div>
         </div>
 
-        <!-- ===================================================== -->
-        <!-- PAGE: ANNOUNCEMENTS                                    -->
-        <!-- ===================================================== -->
+        <!-- PAGE: ANNOUNCEMENTS -->
         <div class="admin-page" data-page="announcements">
           <div class="card">
             <div class="section-bar">Publish Announcement</div>
@@ -904,9 +936,7 @@
           </div>
         </div>
 
-        <!-- ===================================================== -->
-        <!-- PAGE: STATISTICS                                       -->
-        <!-- ===================================================== -->
+        <!-- PAGE: STATISTICS -->
         <div class="admin-page" data-page="statistics">
           <div class="stat-grid">
             <div class="stat-card">
@@ -996,7 +1026,7 @@
 </footer>
 
 <!-- Floating accessibility tools -->
-<button class="a11y-fab" id="a11yFab" aria-label="Open accessibility tools">
+<button class="a11y-fab" id="a11yFab" aria-label="Open accessibility tools" data-no-i18n>
   <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="12" cy="12" r="10.5"/>
     <circle cx="12" cy="7.2" r="1.6" fill="#fff" stroke="none"/>
@@ -1005,7 +1035,7 @@
   </svg>
 </button>
 
-<div class="a11y-panel" id="a11yPanel">
+<div class="a11y-panel" id="a11yPanel" data-no-i18n>
   <div class="a11y-panel-head">
     <h3>Accessibility Tools</h3>
     <div class="a11y-head-icons">
@@ -1038,40 +1068,299 @@
 </div>
 
 <script>
-  // Admin: manual crowd-level selection
-  document.querySelectorAll('.level-btn-row .level-btn').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      btn.parentElement.querySelectorAll('.level-btn').forEach(function(b){b.classList.remove('sel');});
-      btn.classList.add('sel');
-    });
-  });
+  /* =========================================================
+     1. Nepali translation dictionary  (key = exact English text)
+     ========================================================= */
+  var NE = {
+    /* Brand & top nav */
+    "District Administration Office": "जिल्ला प्रशासन कार्यालय",
+    "Ministry of Home Affairs, Government of Nepal": "गृह मन्त्रालय, नेपाल सरकार",
+    "e-Queue Portal": "ई-क्यू पोर्टल",
+    "Home": "गृहपृष्ठ",
+    "Introduction of Office": "कार्यालयको परिचय",
+    "Citizen Charter": "नागरिक बडापत्र",
+    "Notices": "सूचनाहरू",
+    "Download": "डाउनलोड",
+    "Gallery": "ग्यालरी",
+    "Contact": "सम्पर्क",
 
-  // ---- Queue view (Citizenship vs NID) ----
+    /* Login */
+    "Admin Portal": "प्रशासक पोर्टल",
+    "Select Queue / Service": "लाइन / सेवा छान्नुहोस्",
+    "Citizenship Service": "नागरिकता सेवा",
+    "National Identity Card (NID)": "राष्ट्रिय परिचयपत्र (एनआईडी)",
+    "Username": "प्रयोगकर्ता नाम",
+    "Password": "पासवर्ड",
+    "Enter username": "प्रयोगकर्ता नाम लेख्नुहोस्",
+    "Enter password": "पासवर्ड लेख्नुहोस्",
+    "Sign In": "साइन इन गर्नुहोस्",
+    "Incorrect username or password.": "प्रयोगकर्ता नाम वा पासवर्ड मिलेन।",
+    "Demo credentials — username: admin · password: admin": "डेमो प्रमाण — प्रयोगकर्ता नाम: admin · पासवर्ड: admin",
+
+    /* Sidebar */
+    "Khimraj Bhusal": "खिमराज भुसाल",
+    "Information Officer": "सूचना अधिकृत",
+    "Dashboard": "ड्यासबोर्ड",
+    "Queue Management": "लाइन व्यवस्थापन",
+    "Requirements": "आवश्यक कागजात",
+    "Announcements": "घोषणाहरू",
+    "Statistics": "तथ्याङ्क",
+    "Log Out": "लगआउट",
+
+    /* Queue headings */
+    "Citizen Token — Citizenship Service": "नागरिक टोकन — नागरिकता सेवा",
+    "NID Token — National Identity Card": "एनआईडी टोकन — राष्ट्रिय परिचयपत्र",
+
+    /* Stat cards */
+    "CURRENTLY SERVING": "हाल सेवा दिइँदै",
+    "LATEST TOKEN": "पछिल्लो टोकन",
+    "TOKENS ISSUED TODAY": "आज जारी टोकन",
+    "CURRENT CROWD LEVEL": "हालको भीड स्तर",
+    "National Identity Card": "राष्ट्रिय परिचयपत्र",
+    "as of 12:18 PM": "१२:१८ बजेसम्म",
+
+    /* Crowd levels */
+    "Low": "कम",
+    "Moderate": "मध्यम",
+    "High": "उच्च",
+    "Very High": "अति उच्च",
+
+    /* Update cards */
+    "Update Queue Status — Citizen Token (Citizenship Service)": "लाइन स्थिति अद्यावधिक — नागरिक टोकन (नागरिकता सेवा)",
+    "Update Queue Status — NID Token": "लाइन स्थिति अद्यावधिक — एनआईडी टोकन",
+    "Currently Serving Token": "हाल सेवा दिइँदै टोकन",
+    "Latest Token Issued": "पछिल्लो जारी टोकन",
+    "+ Issue": "+ जारी",
+    "Crowd Level": "भीड स्तर",
+    "Call Next Token": "अर्को टोकन बोलाउनुहोस्",
+    "Save Manually": "म्यानुअल सुरक्षित गर्नुहोस्",
+
+    /* Recent activity */
+    "Recent Activity": "पछिल्ला गतिविधिहरू",
+    "Time": "समय",
+    "Action": "कार्य",
+    "Officer": "अधिकृत",
+    "Status": "स्थिति",
+    "Crowd level set to High": "भीड स्तर उच्च राखियो",
+    "Latest token updated to A-125": "पछिल्लो टोकन A-125 मा अद्यावधिक गरियो",
+    "Announcement published": "घोषणा प्रकाशित भयो",
+    "Saved": "सुरक्षित",
+    "Live": "प्रत्यक्ष",
+
+    /* Queue Management page */
+    "Queue Controls": "लाइन नियन्त्रण",
+    "Citizenship Service — Live Queue Control": "नागरिकता सेवा — प्रत्यक्ष लाइन नियन्त्रण",
+    "National Identity Card — Live Queue Control": "राष्ट्रिय परिचयपत्र — प्रत्यक्ष लाइन नियन्त्रण",
+    "Currently Serving": "हाल सेवा दिइँदै",
+    "Latest Issued": "पछिल्लो जारी",
+    "Counter / Desk": "काउन्टर / डेस्क",
+    "Counter 1 — Citizenship": "काउन्टर १ — नागरिकता",
+    "Counter 2 — Citizenship": "काउन्टर २ — नागरिकता",
+    "Counter 3 — Citizenship": "काउन्टर ३ — नागरिकता",
+    "Counter 4 — NID": "काउन्टर ४ — एनआईडी",
+    "Counter 5 — NID": "काउन्टर ५ — एनआईडी",
+    "Service Rate (avg. minutes per citizen)": "सेवा दर (प्रति नागरिक औसत मिनेट)",
+    "Internal Note (visible to staff only)": "आन्तरिक टिप्पणी (कर्मचारीलाई मात्र देखिने)",
+    "e.g. One counter temporarily closed for system maintenance.": "जस्तै: प्रणाली मर्मतका लागि एउटा काउन्टर अस्थायी रूपमा बन्द।",
+    "e.g. Biometric device being recalibrated.": "जस्तै: बायोमेट्रिक उपकरण पुनः क्यालिब्रेट गरिँदै।",
+    "Apply Settings": "सेटिङ लागू गर्नुहोस्",
+    "Reset": "रिसेट",
+    "Today's Hourly Throughput": "आजको प्रतिघण्टा थ्रुपुट",
+    "Time Slot": "समय खण्ड",
+    "Citizenship Tokens": "नागरिकता टोकन",
+    "NID Tokens": "एनआईडी टोकन",
+    "Peak Crowd": "उच्चतम भीड",
+
+    /* Requirements page */
+    "Category Requirement Management": "श्रेणी आवश्यकता व्यवस्थापन",
+    "Category": "श्रेणी",
+    "Documents Listed": "सूचीबद्ध कागजात",
+    "Last Updated": "पछिल्लो अद्यावधिक",
+    "By Descent": "वंशजद्वारा",
+    "Naturalized": "अङ्गीकृत नागरिकता",
+    "Marriage-based": "विवाहमा आधारित",
+    "Non-Resident Nepali": "गैरआवासीय नेपाली",
+    "Honorary": "मानार्थ",
+    "Published": "प्रकाशित",
+    "Draft": "मस्यौदा",
+    "Edit": "सम्पादन",
+    "Add / Edit Requirement — By Descent": "आवश्यकता थप्नुहोस् / सम्पादन — वंशजद्वारा",
+    "Document Name": "कागजातको नाम",
+    "Mandatory?": "अनिवार्य?",
+    "Yes — required": "हो — आवश्यक",
+    "No — optional": "होइन — वैकल्पिक",
+    "Additional Notes": "थप टिप्पणी",
+    "e.g. Citizenship certificate of father/mother": "जस्तै: बाबु/आमाको नागरिकता प्रमाणपत्र",
+    "Any clarification shown to the citizen on the portal.": "पोर्टलमा नागरिकलाई देखाइने कुनै स्पष्टीकरण।",
+    "Save Requirement": "आवश्यकता सुरक्षित गर्नुहोस्",
+    "Cancel": "रद्द गर्नुहोस्",
+
+    /* Announcements page */
+    "Publish Announcement": "घोषणा प्रकाशित गर्नुहोस्",
+    "Headline": "शीर्षक",
+    "Publish Date": "प्रकाशन मिति",
+    "Message": "सन्देश",
+    "e.g. Counter closure for public holiday": "जस्तै: सार्वजनिक बिदाका लागि काउन्टर बन्द",
+    "e.g. High visitor volume expected after SEE examination results.": "जस्तै: एसईई परीक्षाको नतिजापछि उच्च आगन्तुक चाप अपेक्षित।",
+    "High visitor volume expected after SEE examination results.": "एसईई परीक्षाको नतिजापछि उच्च आगन्तुक चाप अपेक्षित।",
+    "Publish": "प्रकाशित गर्नुहोस्",
+    "Save Draft": "मस्यौदा सुरक्षित गर्नुहोस्",
+    "Clear": "खाली गर्नुहोस्",
+    "Active Announcements": "सक्रिय घोषणाहरू",
+    "By": "द्वारा",
+    "High visitor volume expected after SEE results": "एसईई नतिजापछि उच्च आगन्तुक चाप अपेक्षित",
+    "NID biometric counter 5 temporarily closed": "एनआईडी बायोमेट्रिक काउन्टर ५ अस्थायी रूपमा बन्द",
+    "Extended service hours for the coming week": "आउँदो हप्ता सेवा समय विस्तार",
+    "Remove": "हटाउनुहोस्",
+
+    /* Statistics page */
+    "TOTAL TOKENS TODAY": "आजका कुल टोकन",
+    "AVG. WAIT TIME": "औसत प्रतीक्षा समय",
+    "SERVED TODAY": "आज सेवा दिइयो",
+    "PEAK HOUR": "व्यस्त घण्टा",
+    "+12% vs. yesterday": "हिजोको तुलनामा +१२%",
+    "across both queues": "दुवै लाइनमा",
+    "78% of issued tokens": "जारी टोकनको ७८%",
+    "73 tokens issued": "७३ टोकन जारी",
+    "Weekly Token Volume — Citizenship vs NID": "साप्ताहिक टोकन मात्रा — नागरिकता र एनआईडी",
+    "Sun — Citizenship": "आइत — नागरिकता",
+    "Sun — NID": "आइत — एनआईडी",
+    "Mon — Citizenship": "सोम — नागरिकता",
+    "Mon — NID": "सोम — एनआईडी",
+    "Tue — Citizenship": "मङ्गल — नागरिकता",
+    "Tue — NID": "मङ्गल — एनआईडी",
+    "Crowd Level Distribution — Last 30 Days": "भीड स्तर वितरण — पछिल्लो ३० दिन",
+    "Level": "स्तर",
+    "Days": "दिन",
+    "Share": "अनुपात",
+    "Note": "टिप्पणी",
+    "Mostly early mornings": "प्रायः बिहान सबेरै",
+    "Steady flow": "समान प्रवाह",
+    "Peak mid-week": "हप्ताको बीचमा व्यस्त",
+    "Post-holiday spikes": "बिदापछिको वृद्धि",
+
+    /* Footer */
+    "© District Administration Office, Kathmandu — e-Queue Portal (prototype interface, sample data shown for design purposes only)":
+      "© जिल्ला प्रशासन कार्यालय, काठमाडौं — ई-क्यू पोर्टल (नमुना अन्तरमुख, डिजाइन प्रयोजनका लागि मात्र नमुना डाटा देखाइएको)"
+  };
+
+  /* =========================================================
+     2. Language state + helpers
+     ========================================================= */
+  var currentLang = 'en';
+
+  function L(en, ne){ return currentLang === 'ne' ? ne : en; }
+
+  var NE_DIGITS = ['०','१','२','३','४','५','६','७','८','९'];
+  function neDigits(n){
+    return String(n).replace(/\d/g, function(d){ return NE_DIGITS[+d]; });
+  }
+
+  var LEVEL_LABELS = {
+    en: { low:'Low', moderate:'Moderate', high:'High', veryhigh:'Very High' },
+    ne: { low:'कम', moderate:'मध्यम', high:'उच्च', veryhigh:'अति उच्च' }
+  };
+  function levelLabel(level){ return LEVEL_LABELS[currentLang][level]; }
+
+  /* =========================================================
+     3. Collect every static text node + placeholder once
+     ========================================================= */
+  var textRecords = [];
+  var placeholderRecords = [];
+
+  function collectTranslatables(){
+    var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode: function(node){
+        if(!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        var p = node.parentElement;
+        if(!p) return NodeFilter.FILTER_REJECT;
+        var tag = p.tagName;
+        if(tag === 'SCRIPT' || tag === 'STYLE' || tag === 'NOSCRIPT') return NodeFilter.FILTER_REJECT;
+        if(p.closest('[data-no-i18n]')) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    var n;
+    while((n = walker.nextNode())){
+      textRecords.push({ node: n, original: n.nodeValue });
+    }
+
+    document.querySelectorAll('input[placeholder], textarea[placeholder]').forEach(function(el){
+      if(el.closest('[data-no-i18n]')) return;
+      placeholderRecords.push({ el: el, original: el.placeholder });
+    });
+  }
+  collectTranslatables();
+
+  /* =========================================================
+     4. Apply language to the whole page
+     ========================================================= */
+  function applyLanguage(lang){
+    currentLang = (lang === 'ne') ? 'ne' : 'en';
+    var map = (currentLang === 'ne') ? NE : null;
+
+    // Static text nodes
+    textRecords.forEach(function(rec){
+      var original = rec.original;
+      var trimmed = original.trim();
+      var translated = map ? map[trimmed] : null;
+      if(translated){
+        var lead = original.match(/^\s*/)[0];
+        var trail = original.match(/\s*$/)[0];
+        rec.node.nodeValue = lead + translated + trail;
+      } else {
+        rec.node.nodeValue = original;
+      }
+    });
+
+    // Placeholders
+    placeholderRecords.forEach(function(rec){
+      var t = map ? map[rec.original.trim()] : null;
+      rec.el.placeholder = t ? t : rec.original;
+    });
+
+    // Dynamic sections that JS controls
+    renderNotices();
+    setLoginView(loginView);
+    setQueueView(currentQueueView);
+    statRefreshers.forEach(function(fn){ fn(); });
+
+    document.documentElement.lang = currentLang;
+    document.title = L(
+      'Admin Portal — e-Queue, District Administration Office, Kathmandu',
+      'प्रशासक पोर्टल — ई-क्यू, जिल्ला प्रशासन कार्यालय, काठमाडौं'
+    );
+  }
+
+  /* =========================================================
+     5. Queue view / login view (language aware)
+     ========================================================= */
   var queuePanels = document.querySelectorAll('.queue-panel');
   var portalSubtitle = document.getElementById('portalSubtitle');
+  var currentQueueView = 'citizen';
 
   var VIEW_TEXT = {
     citizen: {
-      long: 'Citizenship Service',
-      subtitle: 'Manage the Citizenship Service queue, requirements and announcements.'
+      en: { long:'Citizenship Service', subtitle:'Manage the Citizenship Service queue, requirements and announcements.' },
+      ne: { long:'नागरिकता सेवा', subtitle:'नागरिकता सेवा लाइन, आवश्यक कागजात र घोषणाहरू व्यवस्थापन गर्नुहोस्।' }
     },
     nid: {
-      long: 'National Identity Card (NID)',
-      subtitle: 'Manage the National Identity Card (NID) queue, requirements and announcements.'
+      en: { long:'National Identity Card (NID)', subtitle:'Manage the National Identity Card (NID) queue, requirements and announcements.' },
+      ne: { long:'राष्ट्रिय परिचयपत्र (एनआईडी)', subtitle:'राष्ट्रिय परिचयपत्र (एनआईडी) लाइन, आवश्यक कागजात र घोषणाहरू व्यवस्थापन गर्नुहोस्।' }
     }
   };
 
   function setQueueView(view){
     if(!VIEW_TEXT[view]) view = 'citizen';
+    currentQueueView = view;
     queuePanels.forEach(function(panel){
       panel.classList.toggle('active', panel.dataset.view === view);
     });
     if(portalSubtitle){
-      portalSubtitle.textContent = VIEW_TEXT[view].subtitle;
+      portalSubtitle.textContent = VIEW_TEXT[view][currentLang].subtitle;
     }
   }
 
-  // ---- Login-page queue dropdown ----
   var loginQueueSelect = document.getElementById('loginQueueSelect');
   var loginOffice = document.getElementById('loginOffice');
   var loginView = 'citizen';
@@ -1081,17 +1370,46 @@
     loginView = view;
     if(loginQueueSelect) loginQueueSelect.value = view;
     if(loginOffice){
-      loginOffice.textContent = VIEW_TEXT[view].long +
-        ' — District Administration Office, Kathmandu';
+      loginOffice.textContent = VIEW_TEXT[view][currentLang].long + ' — ' +
+        L('District Administration Office, Kathmandu', 'जिल्ला प्रशासन कार्यालय, काठमाडौं');
     }
   }
 
   if(loginQueueSelect){
     loginQueueSelect.addEventListener('change', function(){ setLoginView(this.value); });
   }
-  setLoginView('citizen');
 
-  // ---- Admin sidebar page switching ----
+  /* Notice paragraphs (contain <strong>, so handled in JS) */
+  function renderNotices(){
+    var nc = document.getElementById('noticeCitizen');
+    var nn = document.getElementById('noticeNid');
+    if(nc){
+      nc.innerHTML = L(
+        'Citizen tokens always start with <strong>C</strong>. "Call Next Token" auto-advances the queue.',
+        'नागरिक टोकन सधैं <strong>C</strong> बाट सुरु हुन्छ। "अर्को टोकन बोलाउनुहोस्" ले लाइन स्वतः अगाडि बढाउँछ।'
+      );
+    }
+    if(nn){
+      nn.innerHTML = L(
+        'NID tokens always start with <strong>N</strong>. Fully separate from the citizen queue.',
+        'एनआईडी टोकन सधैं <strong>N</strong> बाट सुरु हुन्छ। नागरिक लाइनबाट पूर्ण रूपमा अलग राखिएको।'
+      );
+    }
+  }
+
+  /* =========================================================
+     6. Crowd-level buttons
+     ========================================================= */
+  document.querySelectorAll('.level-btn-row .level-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      btn.parentElement.querySelectorAll('.level-btn').forEach(function(b){b.classList.remove('sel');});
+      btn.classList.add('sel');
+    });
+  });
+
+  /* =========================================================
+     7. Sidebar page switching
+     ========================================================= */
   var navLinks = document.querySelectorAll('.admin-nav a[data-page]');
   var adminPages = document.querySelectorAll('.admin-page');
 
@@ -1104,10 +1422,13 @@
     });
   });
 
-  // ---- One-click queue auto-update ----
+  /* =========================================================
+     8. Queue managers (token logic + language-aware stat refresh)
+     ========================================================= */
   var activityBody = document.getElementById('activityBody');
+  var statRefreshers = [];
+
   var LEVEL_COLORS = { low:'var(--green)', moderate:'var(--yellow)', high:'var(--orange)', veryhigh:'var(--red)' };
-  var LEVEL_LABELS = { low:'Low', moderate:'Moderate', high:'High', veryhigh:'Very High' };
 
   function parseToken(str){
     var m = /^([A-Za-z]*-?)(\d+)$/.exec(str.trim());
@@ -1125,14 +1446,15 @@
     if(waiting <= 9) return 'high';
     return 'veryhigh';
   }
-  function logActivity(label, action, badgeClass, badgeText){
+  function logActivity(queueLabel, actionText, badgeClass, badgeText){
     var now = new Date();
     var h = now.getHours(), m = now.getMinutes();
     var ampm = h >= 12 ? 'PM' : 'AM';
     var h12 = h % 12 || 12;
     var time = h12 + ':' + (m < 10 ? '0' + m : m) + ' ' + ampm;
     var row = document.createElement('tr');
-    row.innerHTML = '<td>' + time + '</td><td>[' + label + '] ' + action + '</td><td>K. Bhusal</td>' +
+    row.innerHTML = '<td>' + time + '</td><td>[' + queueLabel + '] ' + actionText + '</td><td>' +
+      L('K. Bhusal','के. भुसाल') + '</td>' +
       '<td><span class="badge ' + badgeClass + '">' + badgeText + '</span></td>';
     activityBody.insertBefore(row, activityBody.firstChild);
   }
@@ -1161,34 +1483,53 @@
       if(qmLatest) qmLatest.value = latestInput.value;
       var s = parseToken(servingInput.value), l = parseToken(latestInput.value);
       var waiting = (s && l) ? Math.max(0, l.num - s.num) : 0;
-      statWaitingSub.textContent = waiting + ' waiting';
-      statCrowdVal.textContent = LEVEL_LABELS[level];
+      statWaitingSub.textContent = L(waiting + ' waiting', neDigits(waiting) + ' जना प्रतीक्षामा');
+      statCrowdVal.textContent = levelLabel(level);
       statCrowdVal.style.color = LEVEL_COLORS[level];
-      statCrowdSub.textContent = 'Updated just now';
+      statCrowdSub.textContent = L('Updated just now', 'भर्खरै अद्यावधिक');
     }
+    statRefreshers.push(function(){
+      var sel = levelRow.querySelector('.level-btn.sel');
+      refreshStats(sel ? sel.dataset.level : 'moderate');
+    });
+
+    var queueLabel = function(){ return L(cfg.label, cfg.labelNe); };
 
     document.getElementById(cfg.callNextId).addEventListener('click', function(){
       var s = parseToken(servingInput.value);
       var l = parseToken(latestInput.value);
       if(!s || !l){ return; }
+
       if(s.num >= l.num){
         l.num += 1;
         latestInput.value = formatToken(l.prefix, l.num, l.digits);
-        logActivity(cfg.label, 'Latest token auto-issued to ' + latestInput.value, 'moderate', 'Issued');
+        logActivity(queueLabel(),
+          L('Latest token auto-issued to ' + latestInput.value,
+            'लाइन अगाडि बढाउन पछिल्लो टोकन ' + latestInput.value + ' स्वतः जारी गरियो'),
+          'moderate', L('Issued','जारी'));
       }
+
       s.num += 1;
       var newServing = formatToken(s.prefix, s.num, s.digits);
       servingInput.value = newServing;
+
       if(s.num === l.num){
         l.num += 1;
         latestInput.value = formatToken(l.prefix, l.num, l.digits);
-        logActivity(cfg.label, 'Latest token auto-advanced to ' + latestInput.value, 'moderate', 'Issued');
+        logActivity(queueLabel(),
+          L('Latest token auto-advanced to ' + latestInput.value,
+            'पछिल्लो टोकन स्वतः ' + latestInput.value + ' मा अगाडि बढाइयो'),
+          'moderate', L('Issued','जारी'));
       }
+
       var waiting = Math.max(0, l.num - s.num);
       var level = levelForWaiting(waiting);
       selectLevelBtn(level);
       refreshStats(level);
-      logActivity(cfg.label, 'Called next token — now serving ' + newServing, level, LEVEL_LABELS[level]);
+      logActivity(queueLabel(),
+        L('Called next token — now serving ' + newServing,
+          'अर्को टोकन बोलाइयो — हाल सेवा दिइँदै ' + newServing),
+        level, levelLabel(level));
     });
 
     document.getElementById(cfg.issueId).addEventListener('click', function(){
@@ -1198,23 +1539,31 @@
       l.num += 1;
       var newLatest = formatToken(l.prefix, l.num, l.digits);
       latestInput.value = newLatest;
+
       var waiting = s ? Math.max(0, l.num - s.num) : 0;
       var level = levelForWaiting(waiting);
       selectLevelBtn(level);
       refreshStats(level);
-      logActivity(cfg.label, 'New token issued — latest is now ' + newLatest, level, LEVEL_LABELS[level]);
+      logActivity(queueLabel(),
+        L('New token issued — latest is now ' + newLatest,
+          'नयाँ टोकन जारी भयो — पछिल्लो अब ' + newLatest),
+        level, levelLabel(level));
     });
 
     document.getElementById(cfg.saveId).addEventListener('click', function(){
       var selectedBtn = levelRow.querySelector('.level-btn.sel');
       var level = selectedBtn ? selectedBtn.dataset.level : 'moderate';
       refreshStats(level);
-      logActivity(cfg.label, 'Queue status saved manually', level, LEVEL_LABELS[level]);
+      logActivity(queueLabel(),
+        L('Queue status saved manually — serving ' + servingInput.value + ', latest ' + latestInput.value,
+          'लाइन स्थिति म्यानुअल सुरक्षित — सेवा दिइँदै ' + servingInput.value + ', पछिल्लो ' + latestInput.value),
+        level, levelLabel(level));
     });
   }
 
   setupQueueManager({
-    label: 'Citizen', servingId: 'servingInputCitizen', latestId: 'latestInputCitizen',
+    label: 'Citizen', labelNe: 'नागरिक',
+    servingId: 'servingInputCitizen', latestId: 'latestInputCitizen',
     levelRowId: 'levelRowCitizen', callNextId: 'callNextBtnCitizen',
     issueId: 'issueTokenBtnCitizen', saveId: 'saveUpdateBtnCitizen',
     statServingId: 'statServingValCitizen', statLatestId: 'statLatestValCitizen',
@@ -1224,7 +1573,8 @@
   });
 
   setupQueueManager({
-    label: 'NID', servingId: 'servingInputNid', latestId: 'latestInputNid',
+    label: 'NID', labelNe: 'एनआईडी',
+    servingId: 'servingInputNid', latestId: 'latestInputNid',
     levelRowId: 'levelRowNid', callNextId: 'callNextBtnNid',
     issueId: 'issueTokenBtnNid', saveId: 'saveUpdateBtnNid',
     statServingId: 'statServingValNid', statLatestId: 'statLatestValNid',
@@ -1233,7 +1583,19 @@
     qmServingId: 'qmServingNid', qmLatestId: 'qmLatestNid'
   });
 
-  // ---- Theme toggle ----
+  /* =========================================================
+     9. Language dropdown handler
+     ========================================================= */
+  var langSelect = document.getElementById('langSelect');
+  if(langSelect){
+    langSelect.addEventListener('change', function(){
+      applyLanguage(this.value);
+    });
+  }
+
+  /* =========================================================
+     10. Theme toggle
+     ========================================================= */
   var html = document.documentElement;
   var themeBtn = document.getElementById('themeToggle');
   themeBtn.addEventListener('click', function(){
@@ -1242,13 +1604,9 @@
     themeBtn.setAttribute('aria-label', dark ? 'Switch to dark mode' : 'Switch to light mode');
   });
 
-  // ---- Language toggle ----
-  var langLabel = document.getElementById('langLabel');
-  document.getElementById('langToggle').addEventListener('click', function(){
-    langLabel.textContent = langLabel.textContent === 'EN' ? 'NE' : 'EN';
-  });
-
-  // ---- Accessibility Tools ----
+  /* =========================================================
+     11. Accessibility Tools panel
+     ========================================================= */
   var fab = document.getElementById('a11yFab');
   var panel = document.getElementById('a11yPanel');
   fab.addEventListener('click', function(){ panel.classList.toggle('open'); });
@@ -1294,7 +1652,9 @@
     });
   });
 
-  // ---- Admin login gate ----
+  /* =========================================================
+     12. Admin login gate
+     ========================================================= */
   var loginForm = document.getElementById('adminLoginForm');
   var loginOuter = document.getElementById('adminLoginOuter');
   var dashboardWrap = document.getElementById('adminDashboardWrap');
@@ -1335,6 +1695,11 @@
     pwInput.type = showing ? 'password' : 'text';
     this.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
   });
+
+  /* =========================================================
+     13. Initial render
+     ========================================================= */
+  applyLanguage('en');
 </script>
 
 </body>
