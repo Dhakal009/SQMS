@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>e-Queue Portal — District Administration Office, Kathmandu</title>
+<style>
+  :root{
+    --navy-900:#0b1f45;
+    --navy-800:#132a5c;
+    --blue-600:#1a56db;
+    --blue-700:#1546b3;
+    --blue-50:#eaf1fd;
+    --bg:#eef1f6;
+    --surface:#ffffff;
+    --border:#dbe1ec;
+    --text-900:#101a2e;
+    --text-600:#5a6478;
+    --text-400:#8b93a4;
+    --green:#1f9d55;
+    --green-bg:#e7f6ed;
+    --yellow:#c9970f;
+    --yellow-bg:#fbf1dc;
+    --orange:#d9721f;
+    --orange-bg:#fbebdb;
+    --red:#c9333f;
+    --red-bg:#f9e3e4;
+    --radius:6px;
+    --font: 'Noto Sans', 'Segoe UI', Arial, sans-serif;
+  }
+  /* Dark theme: overriding the surface/text tokens is enough since every
+     component below is built on these variables (navy bars stay navy). */
+  html[data-theme="dark"]{
+    --bg:#0e1320;
+    --surface:#171d2c;
+    --border:#2a3244;
+    --text-900:#edf0f7;
+    --text-600:#a9b1c4;
+    --text-400:#7b8399;
+    --blue-50:#1a2438;
+  }
+  html[data-theme="dark"] .top-navbar{background:#070b15;}
+  html[data-theme="dark"] .main-nav{background:#0b1120;}
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:var(--font);
+    background:var(--bg);
+    color:var(--text-900);
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  button{font-family:var(--font);cursor:pointer;}
+
+  /* Accessibility state hooks (functional demo effects for the tools panel) */
+  html.a11y-contrast body{background:#000 !important;color:#fff !important;}
+  html.a11y-contrast .card,
+  html.a11y-contrast .stat-card{background:#000 !important;border-color:#fff !important;color:#fff !important;}
+  html.a11y-contrast a{color:#ffe600 !important;}
+  html.a11y-grayscale{filter:grayscale(1);}
+  html.a11y-saturate{filter:saturate(1.8);}
+  html.a11y-justify body{text-align:justify;}
+  html.a11y-spacing body{letter-spacing:.06em;word-spacing:.15em;}
+  html.a11y-lineheight body{line-height:1.9;}
+  html.a11y-dyslexia body{font-family:'Comic Sans MS','Segoe UI',sans-serif;letter-spacing:.03em;}
+  html.a11y-cursor body{cursor:crosshair;}
+  html.a11y-noanim *{transition:none !important;animation:none !important;}
+  html.a11y-hideimages img,
+  html.a11y-hideimages svg.illustration{display:none !important;}
+
+  /* ---------- Context chrome: mimics the existing site so the portal reads as an embedded section ---------- */
+  .top-navbar{
+    background:var(--navy-900);
+  }
+  .top-navbar-inner{
+    max-width:1180px;
+    margin:0 auto;
+    padding:22px 24px;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+    align-items:center;
+    gap:16px;
+  }
+  .nav-spacer{justify-self:start;}
+  .nav-controls-right{
+    justify-self:end;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .icon-circle-btn{
+    width:40px;height:40px;
+    border-radius:50%;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.18);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .icon-circle-btn:hover{background:rgba(255,255,255,.16);}
+  .icon-circle-btn svg{width:18px;height:18px;stroke:#fff;fill:none;}
+
+  .brand-center{
+    justify-self:center;
+    display:flex;
+    align-items:center;
+    gap:14px;
+  }
+  .emblem-lg{
+    width:58px;height:58px;flex:none;
+    border-radius:50%;
+    background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 0 0 1px rgba(255,255,255,.5);
+    overflow:hidden;
+  }
+  .emblem-lg img{max-width:82%;max-height:82%;object-fit:contain;}
+  .brand-text h1{
+    margin:0;
+    font-size:19px;
+    font-weight:700;
+    color:#fff;
+  }
+  .brand-text .subtitle{
+    margin:2px 0 8px;
+    font-size:13px;
+    color:#aab4cf;
+  }
+  .pill-badge{
+    display:inline-block;
+    border:1px solid rgba(255,255,255,.32);
+    background:rgba(255,255,255,.05);
+    border-radius:20px;
+    padding:5px 14px;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:.2px;
+    color:#fff;
+  }
+
+  .lang-pill{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:rgba(255,255,255,.08);
+    border:1px solid rgba(255,255,255,.18);
+    border-radius:20px;
+    padding:9px 14px;
+    font-size:13px;
+    font-weight:700;
+    color:#fff;
+  }
+  .lang-pill:hover{background:rgba(255,255,255,.16);}
+  .lang-pill svg{width:12px;height:12px;stroke:#fff;fill:none;}
+
+
+  /* Secondary navigation row, styled after the provincial-portal
+     convention: solid navy bar, white links, directly under the brand bar. */
+  .main-nav{
+    background:var(--navy-800);
+    border-top:1px solid rgba(255,255,255,.08);
+  }
+  .main-nav-inner{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 24px;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+  .main-nav a{
+    color:#e4eaf8;
+    font-size:13px;
+    font-weight:600;
+    padding:12px 16px;
+    display:inline-block;
+  }
+  .main-nav a:hover{background:rgba(255,255,255,.06);}
+
+  /* ---------- Floating accessibility widget ---------- */
+  .a11y-fab{
+    position:fixed;
+    right:24px;
+    bottom:24px;
+    width:56px;height:56px;
+    border-radius:50%;
+    background:#0a0a0a;
+    border:3px solid #e7e7ea;
+    box-shadow:0 4px 14px rgba(0,0,0,.35);
+    display:flex;align-items:center;justify-content:center;
+    z-index:60;
+  }
+  .a11y-fab:hover{background:#1a1a1a;}
+  .a11y-fab svg{width:26px;height:26px;}
+
+  .a11y-panel{
+    position:fixed;
+    right:24px;
+    bottom:88px;
+    width:320px;
+    max-height:70vh;
+    overflow-y:auto;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    box-shadow:0 8px 28px rgba(0,0,0,.28);
+    z-index:60;
+    display:none;
+  }
+  .a11y-panel.open{display:block;}
+  .a11y-panel-head{
+    background:var(--blue-600);
+    color:#fff;
+    padding:14px 16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-radius:10px 10px 0 0;
+  }
+  .a11y-panel-head h3{margin:0;font-size:15px;font-weight:700;}
+  .a11y-head-icons{display:flex;gap:12px;}
+  .a11y-head-icons button{background:none;border:none;padding:0;}
+  .a11y-head-icons svg{width:16px;height:16px;fill:#fff;}
+  .a11y-lang{padding:12px 16px 4px;}
+  .a11y-lang select{
+    width:100%;
+    border:1px solid var(--border);
+    border-radius:6px;
+    padding:8px 10px;
+    font-size:13px;
+    color:var(--text-900);
+    background:var(--surface);
+  }
+  .a11y-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    padding:14px 16px 18px;
+  }
+  .a11y-tool{
+    border:1.5px solid var(--border);
+    background:var(--bg);
+    border-radius:8px;
+    padding:12px 8px 10px;
+    text-align:center;
+  }
+  .a11y-tool.sel{border-color:var(--blue-600);background:var(--blue-50);}
+  .a11y-tool .ic{font-size:16px;font-weight:700;color:var(--text-900);margin-bottom:6px;}
+  .a11y-tool .lb{font-size:11px;font-weight:600;color:var(--text-900);}
+  .a11y-tool .bars{display:flex;gap:3px;justify-content:center;margin-top:6px;}
+  .a11y-tool .bars span{width:12px;height:3px;background:var(--border);border-radius:2px;}
+
+  /* ---------- Portal shell ---------- */
+  .portal{
+    max-width:1180px;
+    margin:0 auto;
+    padding:28px 24px 60px;
+  }
+  .portal-intro{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:16px;
+    margin-bottom:18px;
+    flex-wrap:wrap;
+  }
+  .portal-intro h2{
+    margin:0 0 4px;
+    font-size:24px;
+    font-weight:700;
+    color:var(--navy-900);
+  }
+  .portal-intro p{
+    margin:0;
+    font-size:14px;
+    color:var(--text-600);
+    max-width:520px;
+  }
+
+  .portal-switch{
+    display:inline-flex;
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    overflow:hidden;
+    background:var(--surface);
+  }
+  .switch-btn{
+    border:none;
+    background:var(--surface);
+    color:var(--text-600);
+    font-size:13px;
+    font-weight:600;
+    padding:9px 18px;
+  }
+  .switch-btn + .switch-btn{border-left:1px solid var(--border);}
+  .switch-btn.active{
+    background:var(--navy-900);
+    color:#fff;
+  }
+
+  .page{display:none; margin-top:22px;}
+  .page.active{display:block;}
+
+  /* ---------- Shared card / section primitives ---------- */
+  .card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+  }
+  .section-bar{
+    background:var(--navy-900);
+    color:#fff;
+    font-size:13px;
+    font-weight:600;
+    padding:11px 18px;
+    border-radius:var(--radius) var(--radius) 0 0;
+  }
+  .section-body{padding:20px;}
+  .label-sm{
+    font-size:11px;
+    font-weight:700;
+    color:var(--blue-600);
+    letter-spacing:.3px;
+    margin-bottom:6px;
+  }
+
+  /* ================= CITIZEN PORTAL ================= */
+  .select-row{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:14px;
+    margin-bottom:18px;
+  }
+  .field{display:flex;flex-direction:column;gap:6px;}
+  .field label{font-size:12px;color:var(--text-600);font-weight:600;}
+  .field select{
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:9px 10px;
+    font-size:13px;
+    color:var(--text-900);
+    background:var(--surface);
+  }
+
+  .queue-grid{
+    display:grid;
+    grid-template-columns:1.6fr 1fr;
+    gap:16px;
+    margin-bottom:16px;
+  }
+  .queue-main .section-body{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:20px;
+  }
+  .queue-num{}
+  .queue-num .label-sm{margin-bottom:4px;}
+  .queue-num .num{font-size:34px;font-weight:700;color:var(--navy-900);}
+  .status-pill{
+    padding:10px 20px;
+    border-radius:var(--radius);
+    font-weight:700;
+    font-size:13px;
+    color:#fff;
+    background:var(--orange);
+  }
+  .legend{display:flex;flex-direction:column;gap:8px;}
+  .legend .section-body{padding:16px;display:flex;flex-direction:column;gap:8px;}
+  .legend-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:8px 12px;
+    border-radius:4px;
+    font-size:12px;
+    font-weight:700;
+    color:#fff;
+  }
+  .legend-item.low{background:var(--green);}
+  .legend-item.moderate{background:var(--yellow);}
+  .legend-item.high{background:var(--orange);}
+  .legend-item.veryhigh{background:var(--red);}
+
+  .notice-bar{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    background:var(--orange-bg);
+    border:1px solid #f0cfa8;
+    color:#7a4713;
+    border-radius:var(--radius);
+    padding:12px 16px;
+    font-size:13px;
+    margin-bottom:20px;
+  }
+  .notice-bar strong{font-weight:700;}
+  .notice-sub{font-size:12px;color:var(--text-400);margin-top:2px;}
+
+  .quick-actions{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-bottom:24px;
+  }
+  .qa-btn{
+    border:1px solid var(--blue-700);
+    background:var(--blue-600);
+    color:#fff;
+    border-radius:var(--radius);
+    padding:14px 12px;
+    font-size:13px;
+    font-weight:600;
+    text-align:center;
+  }
+  .qa-btn:hover{background:var(--blue-700);}
+
+  .cat-list{display:flex;flex-direction:column;gap:10px;}
+  .cat-item{
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    overflow:hidden;
+  }
+  .cat-head{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:var(--surface);
+    border:none;
+    padding:13px 16px;
+    font-size:13px;
+    font-weight:600;
+    color:var(--text-900);
+  }
+  .cat-head:hover{background:var(--blue-50);}
+  .cat-num{
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+  }
+  .cat-num span.n{
+    width:22px;height:22px;
+    border-radius:50%;
+    background:var(--blue-50);
+    color:var(--blue-600);
+    font-size:11px;
+    font-weight:700;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .chev{color:var(--text-400);font-size:12px;}
+  .cat-body{
+    display:none;
+    padding:4px 16px 16px 48px;
+    font-size:13px;
+    color:var(--text-600);
+  }
+  .cat-body.open{display:block;}
+  .cat-body ul{margin:6px 0 0;padding-left:18px;}
+  .cat-body li{margin-bottom:5px;}
+
+  .info-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+    margin-top:24px;
+  }
+  .info-grid .section-body{font-size:13px;color:var(--text-600);line-height:1.7;}
+  .info-grid .section-body strong{color:var(--text-900);}
+
+  /* ================= ADMIN PORTAL ================= */
+  .admin-shell{
+    display:grid;
+    grid-template-columns:220px 1fr;
+    gap:16px;
+  }
+  .admin-side{
+    background:var(--navy-900);
+    border-radius:var(--radius);
+    padding:14px 0;
+    height:fit-content;
+  }
+  .admin-user{
+    padding:0 16px 14px;
+    border-bottom:1px solid rgba(255,255,255,.12);
+    margin-bottom:8px;
+  }
+  .admin-user .name{color:#fff;font-size:13px;font-weight:700;}
+  .admin-user .role{color:#9fb0d6;font-size:11px;margin-top:2px;}
+  .admin-nav a{
+    display:block;
+    padding:10px 16px;
+    font-size:13px;
+    color:#c6d2ee;
+  }
+  .admin-nav a.active{
+    background:rgba(255,255,255,.08);
+    color:#fff;
+    font-weight:600;
+    border-left:3px solid #4d7bf3;
+  }
+  .admin-nav a:hover{color:#fff;}
+  .admin-nav .logout-link{
+    margin-top:8px;
+    padding-top:10px;
+    border-top:1px solid rgba(255,255,255,.12);
+    color:#e79a9a;
+  }
+  .admin-nav .logout-link:hover{color:#fff;}
+
+  /* Admin login gate */
+  .admin-login-outer{
+    background:var(--blue-50);
+    border-radius:10px;
+    padding:48px 20px;
+  }
+  .admin-login-wrap{
+    max-width:380px;
+    margin:0 auto;
+    box-shadow:0 10px 30px rgba(11,31,69,.08);
+  }
+  .admin-login-wrap .section-bar{display:none;}
+  .admin-login-wrap .section-body{padding:30px 28px 26px;}
+
+  .admin-login-logo{
+    width:56px;height:56px;
+    border-radius:50%;
+    background:#fff;
+    border:1px solid var(--border);
+    display:flex;align-items:center;justify-content:center;
+    margin:0 auto 16px;
+    overflow:hidden;
+  }
+  .admin-login-logo img{max-width:78%;max-height:78%;object-fit:contain;}
+
+  .admin-login-title{
+    text-align:center;
+    font-size:16px;
+    font-weight:700;
+    color:var(--navy-900);
+    margin-bottom:3px;
+  }
+  .admin-login-office{
+    text-align:center;
+    font-size:12px;
+    color:var(--text-600);
+    margin-bottom:22px;
+  }
+
+  .admin-login-wrap .field{margin-bottom:16px;}
+  .admin-login-wrap .field label{
+    font-size:12px;
+    font-weight:700;
+    color:var(--text-900);
+    margin-bottom:7px;
+  }
+  .input-icon-wrap{position:relative;display:flex;align-items:center;}
+  .input-icon-wrap svg.leading{
+    position:absolute;left:11px;
+    width:15px;height:15px;
+    stroke:var(--text-400);fill:none;
+    pointer-events:none;
+  }
+  .input-icon-wrap input{
+    width:100%;
+    padding:10px 12px 10px 34px;
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    font-size:13px;
+    font-family:var(--font);
+    color:var(--text-900);
+    background:var(--surface);
+  }
+  .input-icon-wrap input:focus{
+    outline:none;
+    border-color:var(--blue-600);
+    box-shadow:0 0 0 3px rgba(26,86,219,.12);
+  }
+  .pw-toggle{
+    position:absolute;right:9px;
+    background:none;border:none;padding:4px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .pw-toggle svg{width:16px;height:16px;stroke:var(--text-400);fill:none;}
+  .pw-toggle:hover svg{stroke:var(--text-600);}
+
+  .admin-login-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin:2px 0 18px;
+    font-size:12px;
+    color:var(--text-600);
+  }
+  .admin-login-row label{display:flex;align-items:center;gap:7px;cursor:pointer;}
+  .admin-login-row input[type=checkbox]{
+    width:14px;height:14px;
+    accent-color:var(--blue-600);
+  }
+
+  .admin-login-wrap .btn-primary{width:100%;text-align:center;padding:11px;font-size:13px;}
+  .admin-login-error{
+    display:none;
+    align-items:center;
+    gap:8px;
+    font-size:12px;
+    color:var(--red);
+    background:var(--red-bg);
+    border:1px solid #f0c2c6;
+    border-radius:6px;
+    padding:9px 11px;
+    margin-bottom:16px;
+  }
+  .admin-login-error.show{display:flex;}
+  .admin-login-error svg{width:14px;height:14px;stroke:var(--red);fill:none;flex:none;}
+
+  .admin-login-divider{
+    border-top:1px solid var(--border);
+    margin:20px 0 14px;
+  }
+  .admin-login-hint{
+    text-align:center;
+    font-size:11px;
+    color:var(--text-400);
+    margin-top:16px;
+  }
+
+  .stat-grid{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:12px;
+    margin-bottom:20px;
+  }
+  .stat-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:16px;
+  }
+  .stat-card .label-sm{margin-bottom:8px;}
+  .stat-card .val{font-size:26px;font-weight:700;color:var(--navy-900);}
+  .stat-card .sub{font-size:12px;color:var(--text-400);margin-top:2px;}
+
+  .form-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin-bottom:14px;
+  }
+  .form-row.full{grid-template-columns:1fr;}
+  .field input[type=text], .field input[type=number], .field textarea{
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:9px 10px;
+    font-size:13px;
+    font-family:var(--font);
+    color:var(--text-900);
+  }
+  .field textarea{resize:vertical;min-height:70px;}
+
+  .level-btn-row{display:flex;gap:8px;margin-bottom:16px;}
+  .level-btn{
+    flex:1;
+    border:1.5px solid var(--border);
+    background:#fff;
+    border-radius:var(--radius);
+    padding:10px;
+    font-size:12px;
+    font-weight:700;
+    color:var(--text-600);
+    text-align:center;
+  }
+  .level-btn.low.sel{background:var(--green);border-color:var(--green);color:#fff;}
+  .level-btn.moderate.sel{background:var(--yellow);border-color:var(--yellow);color:#fff;}
+  .level-btn.high.sel{background:var(--orange);border-color:var(--orange);color:#fff;}
+  .level-btn.veryhigh.sel{background:var(--red);border-color:var(--red);color:#fff;}
+
+  .btn-primary{
+    background:var(--blue-600);
+    color:#fff;
+    border:1px solid var(--blue-700);
+    border-radius:var(--radius);
+    padding:10px 18px;
+    font-size:13px;
+    font-weight:600;
+  }
+  .btn-primary:hover{background:var(--blue-700);}
+  .btn-secondary{
+    background:#fff;
+    color:var(--text-600);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:10px 18px;
+    font-size:13px;
+    font-weight:600;
+  }
+
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th{
+    text-align:left;
+    font-size:11px;
+    text-transform:none;
+    color:var(--text-400);
+    font-weight:700;
+    padding:10px 12px;
+    border-bottom:1px solid var(--border);
+  }
+  td{
+    padding:11px 12px;
+    border-bottom:1px solid var(--border);
+    color:var(--text-900);
+  }
+  tr:last-child td{border-bottom:none;}
+  .badge{
+    display:inline-block;
+    padding:4px 10px;
+    border-radius:4px;
+    font-size:11px;
+    font-weight:700;
+    color:#fff;
+  }
+  .badge.low{background:var(--green);}
+  .badge.moderate{background:var(--yellow);}
+  .badge.high{background:var(--orange);}
+  .badge.veryhigh{background:var(--red);}
+  .badge.published{background:var(--blue-600);}
+  .edit-link{color:var(--blue-600);font-size:12px;font-weight:600;}
+
+  .admin-two-col{
+    display:grid;
+    grid-template-columns:1.3fr 1fr;
+    gap:16px;
+    align-items:start;
+  }
+
+  footer{
+    max-width:1180px;
+    margin:10px auto 40px;
+    padding:0 24px;
+    font-size:12px;
+    color:var(--text-400);
+  }
+
+  /* --- Fix: username input icon overlap (higher specificity + !important
+   so it wins over the generic .field input[type=text] rule) --- */
+.admin-login-wrap .input-icon-wrap input[type="text"],
+.admin-login-wrap .input-icon-wrap input[type="password"] {
+  width: 100% !important;
+  padding: 10px 36px 10px 34px !important;
+}
+
+/* --- Fix: login screen fills the viewport, no extra scroll space --- */
+html, body {
+  height: 100%;
+}
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+.portal {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+#admin.page.active {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-height: 0;
+}
+.admin-login-outer {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 0;
+  padding: 16px 20px;
+}
+
+  @media (max-width:860px){
+    .select-row,.queue-grid,.quick-actions,.info-grid,.stat-grid,.admin-shell,.admin-two-col,.form-row{
+      grid-template-columns:1fr;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header class="top-navbar">
+  <div class="top-navbar-inner">
+    <div class="nav-spacer"></div>
+
+    <div class="brand-center">
+      <div class="emblem-lg" aria-hidden="true">
+        <img src="https://edlvrs.bagamati.gov.np/edl/assets/img/nepal.png" alt="Government of Nepal emblem">
+      </div>
+      <div class="brand-text">
+        <h1>District Administration Office</h1>
+        <p class="subtitle">Ministry of Home Affairs, Government of Nepal</p>
+        <span class="pill-badge">e-Queue Portal</span>
+      </div>
+    </div>
+
+    <div class="nav-controls-right">
+      <button class="lang-pill" id="langToggle">
+        <span id="langLabel">EN</span>
+        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <button class="icon-circle-btn" id="themeToggle" aria-label="Toggle dark mode">
+        <svg id="themeIcon" viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round"><path d="M12 4V2m0 20v-2M4 12H2m20 0h-2M5.6 5.6L4.2 4.2m15.6 15.6l-1.4-1.4M18.4 5.6l1.4-1.4M4.2 19.8l1.4-1.4M12 7a5 5 0 100 10 5 5 0 000-10z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+<nav class="main-nav">
+  <div class="main-nav-inner">
+    <a href="#">Home</a>
+    <a href="#">Introduction of Office</a>
+    <a href="#">Citizen Charter</a>
+    <a href="#">Notices</a>
+    <a href="#">Download</a>
+    <a href="#">Gallery</a>
+    <a href="#">Contact</a>
+  </div>
+</nav>
+
+<main class="portal">
+  <div class="portal-intro">
+    <div>
+      <h2>e-Queue Portal</h2>
+      <p>Check requirements, live queue status and crowd levels before visiting the office.</p>
+    </div>
+    <div class="portal-switch" role="tablist">
+      <button class="switch-btn active" data-target="citizen">Citizen Portal</button>
+      <button class="switch-btn" data-target="admin">Admin Portal</button>
+    </div>
+  </div>
+
+  <!-- ============ CITIZEN PORTAL ============ -->
+  <section id="citizen" class="page active">
+
+    <div class="select-row">
+      <div class="field">
+        <label>Office</label>
+        <select><option>District Administration Office — Kathmandu</option></select>
+      </div>
+      <div class="field">
+        <label>Service</label>
+        <select><option>Citizenship Service</option><option>National Identity Card</option><option>Firearms Renewal</option></select>
+      </div>
+      <div class="field">
+        <label>Category</label>
+        <select>
+          <option>By Descent</option>
+          <option>Naturalized</option>
+          <option>Marriage-based</option>
+          <option>Non-Resident Nepali</option>
+          <option>Honorary</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="queue-grid">
+      <div class="card queue-main">
+        <div class="section-bar">Citizenship Service — Live Status</div>
+        <div class="section-body">
+          <div class="queue-num">
+            <div class="label-sm">CURRENTLY SERVING</div>
+            <div class="num">A-118</div>
+          </div>
+          <div class="queue-num">
+            <div class="label-sm">LATEST TOKEN</div>
+            <div class="num">A-125</div>
+          </div>
+          <div class="status-pill">HIGH</div>
+        </div>
+      </div>
+      <div class="card legend">
+        <div class="section-bar">Crowd Level</div>
+        <div class="section-body">
+          <div class="legend-item low">Low</div>
+          <div class="legend-item moderate">Moderate</div>
+          <div class="legend-item high">High</div>
+          <div class="legend-item veryhigh">Very High</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="notice-bar">
+      <div>
+        <strong>High visitor volume expected after SEE examination results.</strong>
+        <div class="notice-sub">Queue information supports planning; actual waiting time may vary.</div>
+      </div>
+    </div>
+
+    <div class="quick-actions">
+      <div class="qa-btn">Required Documents</div>
+      <div class="qa-btn">Current Token</div>
+      <div class="qa-btn">Crowd Status</div>
+      <div class="qa-btn">NID Requirements</div>
+    </div>
+
+    <div class="card">
+      <div class="section-bar">Document Checklist by Category</div>
+      <div class="section-body">
+        <div class="cat-list" id="catList">
+          <div class="cat-item">
+            <button class="cat-head" data-cat="1"><span class="cat-num"><span class="n">1</span>By Descent</span><span class="chev">＋</span></button>
+            <div class="cat-body">
+              <ul>
+                <li>Original and copy of applicant's birth certificate</li>
+                <li>Parents' citizenship certificates (original + copy)</li>
+                <li>Ward recommendation letter</li>
+                <li>Two passport-size photos</li>
+              </ul>
+            </div>
+          </div>
+          <div class="cat-item">
+            <button class="cat-head" data-cat="2"><span class="cat-num"><span class="n">2</span>Naturalized</span><span class="chev">＋</span></button>
+            <div class="cat-body">
+              <ul>
+                <li>Proof of residency (minimum period as required by law)</li>
+                <li>Renunciation of prior citizenship, if applicable</li>
+                <li>Ward recommendation letter</li>
+                <li>Two passport-size photos</li>
+              </ul>
+            </div>
+          </div>
+          <div class="cat-item">
+            <button class="cat-head" data-cat="3"><span class="cat-num"><span class="n">3</span>Marriage-based</span><span class="chev">＋</span></button>
+            <div class="cat-body">
+              <ul>
+                <li>Marriage registration certificate</li>
+                <li>Spouse's citizenship certificate (original + copy)</li>
+                <li>Ward recommendation letter</li>
+                <li>Two passport-size photos</li>
+              </ul>
+            </div>
+          </div>
+          <div class="cat-item">
+            <button class="cat-head" data-cat="4"><span class="cat-num"><span class="n">4</span>Non-Resident Nepali</span><span class="chev">＋</span></button>
+            <div class="cat-body">
+              <ul>
+                <li>Proof of Nepali origin (parent/grandparent citizenship record)</li>
+                <li>Valid foreign passport and residency proof</li>
+                <li>Ward recommendation letter</li>
+                <li>Two passport-size photos</li>
+              </ul>
+            </div>
+          </div>
+          <div class="cat-item">
+            <button class="cat-head" data-cat="5"><span class="cat-num"><span class="n">5</span>Honorary</span><span class="chev">＋</span></button>
+            <div class="cat-body">
+              <ul>
+                <li>Government decision letter / recommendation</li>
+                <li>Valid passport and supporting identity documents</li>
+                <li>Two passport-size photos</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-grid">
+      <div class="card">
+        <div class="section-bar">Office Information</div>
+        <div class="section-body">
+          <strong>District Administration Office, Kathmandu</strong><br>
+          Babarmahal, Kathmandu, Nepal<br><br>
+          <strong>Office Hours:</strong> 09:00 AM – 5:00 PM (Sunday to Friday)<br>
+          <strong>Citizenship record enquiries:</strong> 015971880
+        </div>
+      </div>
+      <div class="card">
+        <div class="section-bar">Frequently Asked Questions</div>
+        <div class="section-body">
+          <strong>Do I need an appointment?</strong> No, tokens are issued on a walk-in basis.<br><br>
+          <strong>What if I'm missing a document?</strong> Incomplete applications may require a repeat visit — check the checklist above before travelling.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ ADMIN PORTAL ============ -->
+  <section id="admin" class="page">
+
+    <!-- Login gate -->
+    <div class="admin-login-outer" id="adminLoginOuter">
+      <div class="card admin-login-wrap" id="adminLogin">
+        <div class="section-body">
+          <div class="admin-login-logo">
+            <img src="https://edlvrs.bagamati.gov.np/edl/assets/img/nepal.png" alt="Government of Nepal emblem">
+          </div>
+          <div class="admin-login-title">Admin Portal</div>
+          <div class="admin-login-office">District Administration Office, Kathmandu — e-Queue Portal</div>
+
+          <div class="admin-login-error" id="loginError">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16h.01"/></svg>
+            Incorrect username or password.
+          </div>
+
+          <form id="adminLoginForm">
+            <div class="field">
+              <label>Username</label>
+              <div class="input-icon-wrap">
+                <svg class="leading" viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c1.2-4 4-6 7-6s5.8 2 7 6"/></svg>
+                <input type="text" id="adminUser" autocomplete="username" placeholder=" Enter username">
+              </div>
+            </div>
+            <div class="field">
+              <label>Password</label>
+              <div class="input-icon-wrap">
+                <svg class="leading" viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="1.5"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>
+                <input type="password" id="adminPass" autocomplete="current-password" placeholder="Enter password">
+                <button type="button" class="pw-toggle" id="pwToggle" aria-label="Show password">
+                  <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <div class="admin-login-row">
+              <label><input type="checkbox" id="rememberMe"> Remember me</label>
+              <a href="#">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="btn-primary">Sign In</button>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dashboard (shown after sign in) -->
+    <div class="admin-shell" id="adminDashboard" style="display:none;">
+      <aside class="admin-side">
+        <div class="admin-user">
+          <div class="name">Khimraj Bhusal</div>
+          <div class="role">Information Officer</div>
+        </div>
+        <nav class="admin-nav">
+          <a href="#" class="active">Dashboard</a>
+          <a href="#">Queue Management</a>
+          <a href="#">Requirements</a>
+          <a href="#">Announcements</a>
+          <a href="#">Statistics</a>
+          <a href="#" class="logout-link" id="adminLogout">Log Out</a>
+        </nav>
+      </aside>
+
+      <div>
+        <div class="stat-grid">
+          <div class="stat-card">
+            <div class="label-sm">CURRENTLY SERVING</div>
+            <div class="val">A-118</div>
+            <div class="sub">Citizenship Service</div>
+          </div>
+          <div class="stat-card">
+            <div class="label-sm">LATEST TOKEN</div>
+            <div class="val">A-125</div>
+            <div class="sub">7 waiting</div>
+          </div>
+          <div class="stat-card">
+            <div class="label-sm">TOKENS ISSUED TODAY</div>
+            <div class="val">142</div>
+            <div class="sub">as of 12:18 PM</div>
+          </div>
+          <div class="stat-card">
+            <div class="label-sm">CURRENT CROWD LEVEL</div>
+            <div class="val" style="color:var(--orange);">High</div>
+            <div class="sub">Updated 6 min ago</div>
+          </div>
+        </div>
+
+        <div class="admin-two-col">
+          <div class="card">
+            <div class="section-bar">Update Queue Status — Citizenship Service</div>
+            <div class="section-body">
+              <div class="form-row">
+                <div class="field">
+                  <label>Currently Serving Token</label>
+                  <input type="text" value="A-118">
+                </div>
+                <div class="field">
+                  <label>Latest Token Issued</label>
+                  <input type="text" value="A-125">
+                </div>
+              </div>
+              <div class="field" style="margin-bottom:10px;">
+                <label>Crowd Level</label>
+              </div>
+              <div class="level-btn-row" id="levelRow">
+                <div class="level-btn low" data-level="low">Low</div>
+                <div class="level-btn moderate" data-level="moderate">Moderate</div>
+                <div class="level-btn high sel" data-level="high">High</div>
+                <div class="level-btn veryhigh" data-level="veryhigh">Very High</div>
+              </div>
+              <button class="btn-primary">Save Update</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="section-bar">Publish Announcement</div>
+            <div class="section-body">
+              <div class="form-row full">
+                <div class="field">
+                  <label>Notice</label>
+                  <textarea placeholder="e.g. High visitor volume expected after SEE examination results.">High visitor volume expected after SEE examination results.</textarea>
+                </div>
+              </div>
+              <button class="btn-primary">Publish</button>
+              <button class="btn-secondary" style="margin-left:8px;">Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px;">
+          <div class="section-bar">Category Requirement Management</div>
+          <div class="section-body" style="padding:0;">
+            <table>
+              <thead>
+                <tr><th>Category</th><th>Documents Listed</th><th>Last Updated</th><th></th></tr>
+              </thead>
+              <tbody>
+                <tr><td>By Descent</td><td>4</td><td>2083-05-10</td><td><a class="edit-link" href="#">Edit</a></td></tr>
+                <tr><td>Naturalized</td><td>4</td><td>2083-04-28</td><td><a class="edit-link" href="#">Edit</a></td></tr>
+                <tr><td>Marriage-based</td><td>4</td><td>2083-04-28</td><td><a class="edit-link" href="#">Edit</a></td></tr>
+                <tr><td>Non-Resident Nepali</td><td>4</td><td>2083-03-15</td><td><a class="edit-link" href="#">Edit</a></td></tr>
+                <tr><td>Honorary</td><td>3</td><td>2083-03-15</td><td><a class="edit-link" href="#">Edit</a></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px;">
+          <div class="section-bar">Recent Activity</div>
+          <div class="section-body" style="padding:0;">
+            <table>
+              <thead>
+                <tr><th>Time</th><th>Action</th><th>Officer</th><th>Status</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>12:12 PM</td><td>Crowd level set to High</td><td>K. Bhusal</td><td><span class="badge high">High</span></td></tr>
+                <tr><td>11:40 AM</td><td>Latest token updated to A-125</td><td>K. Bhusal</td><td><span class="badge published">Saved</span></td></tr>
+                <tr><td>09:05 AM</td><td>Announcement published</td><td>M. Rijal</td><td><span class="badge published">Live</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  © District Administration Office, Kathmandu — e-Queue Portal 
+</footer>
+
+<!-- Floating accessibility tools -->
+<button class="a11y-fab" id="a11yFab" aria-label="Open accessibility tools">
+  <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10.5"/>
+    <circle cx="12" cy="7.2" r="1.6" fill="#fff" stroke="none"/>
+    <path d="M6.5 10.2c3.6 1 7.4 1 11 0"/>
+    <path d="M12 10.8v4.4M12 15.2l-3 4.4M12 15.2l3 4.4"/>
+  </svg>
+</button>
+
+<div class="a11y-panel" id="a11yPanel">
+  <div class="a11y-panel-head">
+    <h3>Accessibility Tools</h3>
+    <div class="a11y-head-icons">
+      <button id="a11yReset" aria-label="Reset"><svg viewBox="0 0 24 24"><path d="M17.65 6.35A8 8 0 106.35 17.65 8 8 0 0017.65 6.35zM12 4a8 8 0 016.34 3.14L15 10h6V4l-2.35 2.35A9.98 9.98 0 0012 2v2z"/></svg></button>
+      <button id="a11yClose" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M18.3 5.7L12 12l6.3 6.3-1.4 1.4L10.6 13.4 4.3 19.7l-1.4-1.4L9.2 12 2.9 5.7l1.4-1.4L10.6 10.6l6.3-6.3z"/></svg></button>
+    </div>
+  </div>
+  <div class="a11y-lang">
+    <select>
+      <option>English</option>
+      <option>नेपाली</option>
+    </select>
+  </div>
+  <div class="a11y-grid" id="a11yGrid">
+    <div class="a11y-tool" data-tool="textsize"><div class="ic">T T</div><div class="lb">Text Size</div><div class="bars"><span></span><span></span><span></span></div></div>
+    <div class="a11y-tool" data-tool="contrast"><div class="ic">◐</div><div class="lb">High Contrast</div><div class="bars"><span></span><span></span><span></span></div></div>
+    <div class="a11y-tool" data-tool="align"><div class="ic">☰</div><div class="lb">Text Align</div><div class="bars"><span></span><span></span><span></span></div></div>
+    <div class="a11y-tool" data-tool="colorfilter"><div class="ic">◑</div><div class="lb">Color Filter</div><div class="bars"><span></span><span></span><span></span></div></div>
+    <div class="a11y-tool" data-tool="spacing"><div class="ic">AV</div><div class="lb">Text spacing</div><div class="bars"><span></span><span></span><span></span></div></div>
+    <div class="a11y-tool" data-tool="lineheight"><div class="ic">≡</div><div class="lb">Line Height</div><div class="bars"><span></span><span></span><span></span></div></div>
+    <div class="a11y-tool" data-tool="font"><div class="ic">Aa</div><div class="lb">Font section</div><div class="bars"><span></span><span></span><span></span></div></div>
+    <div class="a11y-tool" data-tool="saturate"><div class="ic">●●●</div><div class="lb">Saturation</div><div class="bars"><span></span><span></span><span></span></div></div>
+    <div class="a11y-tool" data-tool="dyslexia"><div class="ic">Df</div><div class="lb">Dyslexia Frendly</div><div class="bars"><span></span><span></span><span></span></div></div>
+    <div class="a11y-tool" data-tool="cursor"><div class="ic">↖</div><div class="lb">Bigger Cursor</div><div class="bars"><span></span><span></span><span></span></div></div>
+    <div class="a11y-tool" data-tool="hideimages"><div class="ic">◎</div><div class="lb">Hide Images</div><div class="bars"><span></span><span></span><span></span></div></div>
+    <div class="a11y-tool" data-tool="noanim"><div class="ic">❙❙</div><div class="lb">Pause Animations</div><div class="bars"><span></span><span></span><span></span></div></div>
+    <div class="a11y-tool" data-tool="reader"><div class="ic">🔊</div><div class="lb">Screen Reader</div><div class="bars"><span></span><span></span><span></span></div></div>
+    <div class="a11y-tool" data-tool="voice"><div class="ic">🎙</div><div class="lb">Voice Command</div><div class="bars"><span></span><span></span><span></span></div></div>
+  </div>
+</div>
+
+<script>
+  // Portal switch (Citizen / Admin) — two pages within one embeddable module
+  document.querySelectorAll('.switch-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.switch-btn').forEach(function(b){b.classList.remove('active');});
+      document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+      btn.classList.add('active');
+      document.getElementById(btn.dataset.target).classList.add('active');
+    });
+  });
+
+  // Citizen: document checklist accordion
+  document.querySelectorAll('.cat-head').forEach(function(head){
+    head.addEventListener('click', function(){
+      var body = head.nextElementSibling;
+      var chev = head.querySelector('.chev');
+      var open = body.classList.toggle('open');
+      chev.textContent = open ? '−' : '＋';
+    });
+  });
+
+  // Admin: crowd level selector
+  document.querySelectorAll('#levelRow .level-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('#levelRow .level-btn').forEach(function(b){b.classList.remove('sel');});
+      btn.classList.add('sel');
+    });
+  });
+
+  // ---- Theme toggle ----
+  var html = document.documentElement;
+  var themeBtn = document.getElementById('themeToggle');
+  themeBtn.addEventListener('click', function(){
+    var dark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', dark ? 'light' : 'dark');
+    themeBtn.setAttribute('aria-label', dark ? 'Switch to dark mode' : 'Switch to light mode');
+  });
+
+  // ---- Language toggle (label only — no translation logic in this prototype) ----
+  var langLabel = document.getElementById('langLabel');
+  document.getElementById('langToggle').addEventListener('click', function(){
+    langLabel.textContent = langLabel.textContent === 'EN' ? 'NE' : 'EN';
+  });
+
+  // ---- Accessibility Tools panel ----
+  var fab = document.getElementById('a11yFab');
+  var panel = document.getElementById('a11yPanel');
+  fab.addEventListener('click', function(){ panel.classList.toggle('open'); });
+  document.getElementById('a11yClose').addEventListener('click', function(){ panel.classList.remove('open'); });
+
+  var textSizeStep = 0;
+  document.getElementById('a11yReset').addEventListener('click', function(){
+    ['a11y-contrast','a11y-grayscale','a11y-saturate','a11y-justify','a11y-spacing',
+     'a11y-lineheight','a11y-dyslexia','a11y-cursor','a11y-noanim','a11y-hideimages']
+     .forEach(function(c){ html.classList.remove(c); });
+    html.style.fontSize = '';
+    textSizeStep = 0;
+    document.querySelectorAll('.a11y-tool').forEach(function(t){ t.classList.remove('sel'); });
+  });
+
+  document.querySelectorAll('.a11y-tool').forEach(function(tool){
+    tool.addEventListener('click', function(){
+      var kind = tool.dataset.tool;
+      var classMap = {
+        contrast:'a11y-contrast', colorfilter:'a11y-grayscale', saturate:'a11y-saturate',
+        align:'a11y-justify', spacing:'a11y-spacing', lineheight:'a11y-lineheight',
+        dyslexia:'a11y-dyslexia', cursor:'a11y-cursor', noanim:'a11y-noanim',
+        hideimages:'a11y-hideimages'
+      };
+      if(kind === 'textsize'){
+        textSizeStep = (textSizeStep + 1) % 3;
+        html.style.fontSize = ['100%','112%','125%'][textSizeStep];
+        tool.classList.toggle('sel', textSizeStep !== 0);
+        return;
+      }
+      if(kind === 'font'){
+        document.body.style.fontFamily = document.body.style.fontFamily
+          ? '' : "'Georgia','Noto Sans',serif";
+        tool.classList.toggle('sel');
+        return;
+      }
+      if(classMap[kind]){
+        html.classList.toggle(classMap[kind]);
+        tool.classList.toggle('sel');
+        return;
+      }
+      // Screen reader / voice command — demo selection state only
+      tool.classList.toggle('sel');
+    });
+  });
+
+  // ---- Admin login gate ----
+  var loginForm = document.getElementById('adminLoginForm');
+  var loginOuter = document.getElementById('adminLoginOuter');
+  var dashboard = document.getElementById('adminDashboard');
+  var loginError = document.getElementById('loginError');
+
+  loginForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    var user = document.getElementById('adminUser').value.trim();
+    var pass = document.getElementById('adminPass').value;
+    if(user === 'admin' && pass === 'admin'){
+      loginError.classList.remove('show');
+      loginOuter.style.display = 'none';
+      dashboard.style.display = 'grid';
+    } else {
+      loginError.classList.add('show');
+    }
+  });
+
+  document.getElementById('adminLogout').addEventListener('click', function(e){
+    e.preventDefault();
+    dashboard.style.display = 'none';
+    loginForm.reset();
+    loginError.classList.remove('show');
+    loginOuter.style.display = 'block';
+  });
+
+  // Password visibility toggle
+  var pwInput = document.getElementById('adminPass');
+  document.getElementById('pwToggle').addEventListener('click', function(){
+    var showing = pwInput.type === 'text';
+    pwInput.type = showing ? 'password' : 'text';
+    this.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+  });
+</script>
+
+</body>
+</html>
