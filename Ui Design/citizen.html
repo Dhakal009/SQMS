@@ -18,18 +18,17 @@
     --text-600:#5a6478;
     --text-400:#8b93a4;
     --green:#1f9d55;
-    --green-bg:#e7f6ed;
     --yellow:#c9970f;
-    --yellow-bg:#fbf1dc;
     --orange:#d9721f;
-    --orange-bg:#fbebdb;
     --red:#c9333f;
-    --red-bg:#f9e3e4;
     --radius:6px;
     --font: 'Noto Sans', 'Segoe UI', Arial, sans-serif;
+    --page-gutter: 14px;
+    --fab-size: 52px;
+    --fab-gap: 14px;
+    --fab-right: 24px;
+    --fab-bottom: 24px;
   }
-  /* Dark theme: overriding the surface/text tokens is enough since every
-     component below is built on these variables (navy bars stay navy). */
   html[data-theme="dark"]{
     --bg:#0e1320;
     --surface:#171d2c;
@@ -41,179 +40,408 @@
   }
   html[data-theme="dark"] .top-navbar{background:#070b15;}
   html[data-theme="dark"] .main-nav{background:#0b1120;}
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    font-family:var(--font);
-    background:var(--bg);
-    color:var(--text-900);
-    -webkit-font-smoothing:antialiased;
+  html[data-theme="dark"] .checklist-note{background:#161f33;border-left-color:var(--blue-600);}
+  html[data-theme="dark"] .doc-list li::before{background:#1e2a44;color:#8fb0f5;}
+  html[data-theme="dark"] .queue-main .section-body{
+    background:linear-gradient(180deg, #1b2338 0%, #141a2a 100%);
   }
-  a{color:inherit;text-decoration:none;}
-  button{font-family:var(--font);cursor:pointer;}
+  html[data-theme="dark"] .queue-num .num,
+  html[data-theme="dark"] .portal-intro h2,
+  html[data-theme="dark"] .chat-bubble.bot strong,
+  html[data-theme="dark"] .query-item p,
+  html[data-theme="dark"] .query-meta strong{
+    color:var(--text-900);
+  }
+  html[data-theme="dark"] .status-pill{color:#fff;}
+  html[data-theme="dark"] .query-item{background:#141a2a;border-color:#2a3244;}
+  html[data-theme="dark"] .query-item.answer{background:#131d33;border-color:#1e2a44;}
+  html[data-theme="dark"] .query-form{background:#141a2a;}
+  html[data-theme="dark"] .chat-body{background:#111726;}
+  html[data-theme="dark"] .chat-bubble.bot{background:#1c2438;color:#edf0f7;border-color:#2a3244;}
+  html[data-theme="dark"] .chat-bubble.user{background:var(--blue-600);color:#fff;}
+  html[data-theme="dark"] .chat-typing{background:#1c2438;border-color:#2a3244;}
+  html[data-theme="dark"] .chat-typing span{background:#5a6478;}
+  html[data-theme="dark"] .chip{background:#1c2438;color:#c9d3ea;border-color:#2a3244;}
+  html[data-theme="dark"] .chip:hover{background:var(--blue-600);color:#fff;border-color:var(--blue-600);}
+  html[data-theme="dark"] .chat-input-row{background:var(--surface);border-top-color:var(--border);}
+  html[data-theme="dark"] .chat-input-row input{background:#1c2438;color:#edf0f7;border-color:#2a3244;}
+  html[data-theme="dark"] .ai-chat-head{background:linear-gradient(135deg,#070b15 0%,#0f1a38 100%);}
+  html[data-theme="dark"] .ai-fab{background:#1c2438;border-color:#2a3244;box-shadow:0 4px 14px rgba(0,0,0,.5);}
+  html[data-theme="dark"] .ai-fab:hover{background:#232d45;}
+  html[data-theme="dark"] .ai-chat-panel{background:var(--surface);}
+  html[data-theme="dark"] .notice-bar{background:#2a1f11;color:#e8b478;border-color:#3d2c14;}
+  html[data-theme="dark"] .field select,
+  html[data-theme="dark"] .field input[type=text],
+  html[data-theme="dark"] .field textarea{background:var(--surface);color:var(--text-900);}
+  html[data-theme="dark"] .query-form input[type=text],
+  html[data-theme="dark"] .query-form textarea{background:var(--surface);color:var(--text-900);}
+  html[data-theme="dark"] footer{color:var(--text-400);}
 
-  /* Accessibility state hooks (functional demo effects for the tools panel) */
+  /* ---------- Accessibility hooks ---------- */
+  html.a11y-contrast,
   html.a11y-contrast body{background:#000 !important;color:#fff !important;}
   html.a11y-contrast .card,
-  html.a11y-contrast .stat-card{background:#000 !important;border-color:#fff !important;color:#fff !important;}
-  html.a11y-contrast a{color:#ffe600 !important;}
+  html.a11y-contrast .section-bar,
+  html.a11y-contrast .section-body,
+  html.a11y-contrast .top-navbar,
+  html.a11y-contrast .main-nav,
+  html.a11y-contrast .chat-body,
+  html.a11y-contrast .chat-bubble.bot,
+  html.a11y-contrast .chat-input-row,
+  html.a11y-contrast .query-item,
+  html.a11y-contrast .query-item.answer,
+  html.a11y-contrast .query-form,
+  html.a11y-contrast .ai-chat-panel,
+  html.a11y-contrast .ai-chat-head,
+  html.a11y-contrast .a11y-panel,
+  html.a11y-contrast .notice-bar{
+    background:#000 !important;
+    color:#fff !important;
+    border-color:#fff !important;
+  }
+  html.a11y-contrast a,
+  html.a11y-contrast .chat-bubble.bot strong,
+  html.a11y-contrast .queue-num .num,
+  html.a11y-contrast h2,
+  html.a11y-contrast .label-sm,
+  html.a11y-contrast .crowd-label{color:#ffe600 !important;}
+  html.a11y-contrast .status-pill{border:2px solid #fff;}
   html.a11y-grayscale{filter:grayscale(1);}
   html.a11y-saturate{filter:saturate(1.8);}
   html.a11y-justify body{text-align:justify;}
   html.a11y-spacing body{letter-spacing:.06em;word-spacing:.15em;}
   html.a11y-lineheight body{line-height:1.9;}
   html.a11y-dyslexia body{font-family:'Comic Sans MS','Segoe UI',sans-serif;letter-spacing:.03em;}
-  html.a11y-cursor body{cursor:crosshair;}
+  html.a11y-cursor,
+  html.a11y-cursor *{
+    cursor:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'><path d='M8 3 L8 34 L15 27 L22 38 L26 36 L19 25 L28 25 Z' fill='black' stroke='white' stroke-width='2' stroke-linejoin='round'/></svg>") 8 3, auto !important;
+  }
   html.a11y-noanim *{transition:none !important;animation:none !important;}
   html.a11y-hideimages img,
   html.a11y-hideimages svg.illustration{display:none !important;}
 
-  /* ---------- Context chrome: mimics the existing site so the portal reads as an embedded section ---------- */
-  .top-navbar{
-    background:var(--navy-900);
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    font-family:var(--font);
+    background:var(--bg);
+    color:var(--text-900);
+    font-size:15px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
   }
+  a{color:inherit;text-decoration:none;}
+  button{font-family:var(--font);cursor:pointer;}
+
+  /* ================= STICKY HEADER ================= */
+  .site-header{
+    position:sticky;top:0;z-index:80;
+    box-shadow:0 2px 8px rgba(11,31,69,.06);
+  }
+  html[data-theme="dark"] .site-header{box-shadow:0 2px 10px rgba(0,0,0,.45);}
+
+  .top-navbar{background:var(--navy-900);}
   .top-navbar-inner{
-    max-width:1180px;
-    margin:0 auto;
-    padding:22px 24px;
-    display:grid;
-    grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
-    align-items:center;
-    gap:16px;
+    max-width:1280px;margin:0 auto;
+    padding:14px var(--page-gutter);
+    display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+    align-items:center;gap:16px;
   }
   .nav-spacer{justify-self:start;}
-  .nav-controls-right{
-    justify-self:end;
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
+  .nav-controls-right{justify-self:end;display:flex;align-items:center;gap:10px;}
   .icon-circle-btn{
-    width:40px;height:40px;
-    border-radius:50%;
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.18);
+    width:38px;height:38px;border-radius:50%;
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
     display:flex;align-items:center;justify-content:center;
   }
   .icon-circle-btn:hover{background:rgba(255,255,255,.16);}
-  .icon-circle-btn svg{width:18px;height:18px;stroke:#fff;fill:none;}
+  .icon-circle-btn svg{width:17px;height:17px;stroke:#fff;fill:none;}
 
-  .brand-center{
-    justify-self:center;
-    display:flex;
-    align-items:center;
-    gap:14px;
-  }
+  .brand-center{justify-self:center;display:flex;align-items:center;gap:13px;}
   .emblem-lg{
-    width:58px;height:58px;flex:none;
-    border-radius:50%;
-    background:#fff;
+    width:52px;height:52px;flex:none;border-radius:50%;background:#fff;
     display:flex;align-items:center;justify-content:center;
-    box-shadow:0 0 0 1px rgba(255,255,255,.5);
-    overflow:hidden;
+    box-shadow:0 0 0 1px rgba(255,255,255,.5);overflow:hidden;
   }
   .emblem-lg img{max-width:82%;max-height:82%;object-fit:contain;}
-  .brand-text h1{
-    margin:0;
-    font-size:19px;
-    font-weight:700;
-    color:#fff;
-  }
-  .brand-text .subtitle{
-    margin:2px 0 8px;
-    font-size:13px;
-    color:#aab4cf;
-  }
+  .brand-text h1{margin:0;font-size:19px;font-weight:700;color:#fff;}
+  .brand-text .subtitle{margin:1px 0 7px;font-size:13px;color:#aab4cf;}
   .pill-badge{
-    display:inline-block;
-    border:1px solid rgba(255,255,255,.32);
-    background:rgba(255,255,255,.05);
-    border-radius:20px;
-    padding:5px 14px;
-    font-size:11px;
-    font-weight:700;
-    letter-spacing:.2px;
-    color:#fff;
+    display:inline-block;border:1px solid rgba(255,255,255,.32);
+    background:rgba(255,255,255,.05);border-radius:20px;
+    padding:4px 12px;font-size:11px;font-weight:700;letter-spacing:.2px;color:#fff;
   }
-
   .lang-pill{
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
-    background:rgba(255,255,255,.08);
-    border:1px solid rgba(255,255,255,.18);
-    border-radius:20px;
-    padding:9px 14px;
-    font-size:13px;
-    font-weight:700;
-    color:#fff;
+    display:inline-flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);
+    border-radius:20px;padding:8px 14px;
+    font-size:12.5px;font-weight:700;color:#fff;
+    letter-spacing:.6px;min-width:56px;
   }
   .lang-pill:hover{background:rgba(255,255,255,.16);}
-  .lang-pill svg{width:12px;height:12px;stroke:#fff;fill:none;}
 
-
-  /* Secondary navigation row, styled after the provincial-portal
-     convention: solid navy bar, white links, directly under the brand bar. */
-  .main-nav{
-    background:var(--navy-800);
-    border-top:1px solid rgba(255,255,255,.08);
-  }
+  .main-nav{background:var(--navy-800);border-top:1px solid rgba(255,255,255,.08);}
   .main-nav-inner{
-    max-width:1180px;
-    margin:0 auto;
-    padding:0 24px;
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
+    max-width:1280px;margin:0 auto;padding:0 var(--page-gutter);
+    display:flex;flex-wrap:wrap;justify-content:center;
   }
   .main-nav a{
-    color:#e4eaf8;
-    font-size:13px;
-    font-weight:600;
-    padding:12px 16px;
-    display:inline-block;
+    color:#e4eaf8;font-size:13px;font-weight:600;
+    padding:11px 15px;display:inline-block;
   }
   .main-nav a:hover{background:rgba(255,255,255,.06);}
 
-  /* ---------- Floating accessibility widget ---------- */
+  /* ============================================================
+     FLOATING BUTTONS — bottom-right column
+     ============================================================ */
+  .ai-fab{
+    position:fixed;
+    right:var(--fab-right);
+    bottom:calc(var(--fab-bottom) + var(--fab-size) + var(--fab-gap));
+    width:var(--fab-size);
+    height:var(--fab-size);
+    border-radius:14px;
+    background:#ffffff;
+    border:1px solid #dbe1ec;
+    padding:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 4px 14px rgba(0,0,0,.12);
+    z-index:61;
+    transition:transform .15s ease, box-shadow .2s ease;
+  }
+  .ai-fab:hover{
+    transform:translateY(-2px);
+    box-shadow:0 6px 18px rgba(0,0,0,.18);
+  }
+  .ai-fab:active{transform:translateY(0);}
+  .ai-fab-icon{
+    width:32px;height:32px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .ai-fab-icon svg{width:100%;height:100%;}
+  .ai-fab-ping{
+    position:absolute;top:-2px;right:-2px;
+    width:12px;height:12px;border-radius:50%;
+    background:#ef4444;
+    border:2px solid var(--bg);
+    box-shadow:0 0 0 2px rgba(239,68,68,.25);
+    animation:aiPing 1.8s ease-in-out infinite;
+  }
+  .ai-fab-ping.hidden{display:none;}
+  @keyframes aiPing{
+    0%,100%{transform:scale(1);box-shadow:0 0 0 2px rgba(239,68,68,.25);}
+    50%{transform:scale(1.18);box-shadow:0 0 0 6px rgba(239,68,68,.05);}
+  }
+
   .a11y-fab{
     position:fixed;
-    right:24px;
-    bottom:24px;
+    right:var(--fab-right);
+    bottom:var(--fab-bottom);
     width:56px;height:56px;
-    border-radius:50%;
-    background:#0a0a0a;
-    border:3px solid #e7e7ea;
+    border-radius:50%;background:#0a0a0a;border:3px solid #e7e7ea;
     box-shadow:0 4px 14px rgba(0,0,0,.35);
-    display:flex;align-items:center;justify-content:center;
-    z-index:60;
+    display:flex;align-items:center;justify-content:center;z-index:60;
   }
   .a11y-fab:hover{background:#1a1a1a;}
   .a11y-fab svg{width:26px;height:26px;}
 
+  /* ============================================================
+     PANELS — both open to the LEFT of the FAB column,
+     bottom-aligned at the same position
+     ============================================================ */
+  .ai-chat-panel{
+    position:fixed;
+    right:calc(var(--fab-right) + var(--fab-size) + 14px);
+    bottom:var(--fab-bottom);
+    width:340px;
+    max-height:calc(100vh - 48px);
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:12px;
+    box-shadow:0 14px 40px rgba(11,31,69,.24), 0 4px 12px rgba(11,31,69,.1);
+    display:none;
+    flex-direction:column;
+    overflow:hidden;
+    z-index:62;
+    transform-origin:bottom right;
+    animation:panelIn .2s ease-out;
+  }
+  .ai-chat-panel.open{display:flex;}
+  @keyframes panelIn{
+    from{opacity:0;transform:translateY(8px) scale(.97);}
+    to{opacity:1;transform:translateY(0) scale(1);}
+  }
+  html[data-theme="dark"] .ai-chat-panel{
+    box-shadow:0 14px 40px rgba(0,0,0,.6), 0 4px 12px rgba(0,0,0,.3);
+  }
+
   .a11y-panel{
     position:fixed;
-    right:24px;
-    bottom:88px;
-    width:320px;
-    max-height:70vh;
+    right:calc(var(--fab-right) + var(--fab-size) + 14px);
+    bottom:var(--fab-bottom);
+    width:340px;
+    max-height:calc(100vh - 48px);
     overflow-y:auto;
     background:var(--surface);
     border:1px solid var(--border);
-    border-radius:10px;
-    box-shadow:0 8px 28px rgba(0,0,0,.28);
-    z-index:60;
+    border-radius:12px;
+    box-shadow:0 14px 40px rgba(11,31,69,.24), 0 4px 12px rgba(11,31,69,.1);
+    z-index:62;
     display:none;
+    transform-origin:bottom right;
+    animation:panelIn .2s ease-out;
   }
   .a11y-panel.open{display:block;}
-  .a11y-panel-head{
-    background:var(--blue-600);
+  html[data-theme="dark"] .a11y-panel{
+    box-shadow:0 14px 40px rgba(0,0,0,.6), 0 4px 12px rgba(0,0,0,.3);
+  }
+
+  .ai-chat-head{
+    display:flex;align-items:center;gap:10px;
+    padding:11px 14px;
+    background:linear-gradient(135deg, var(--navy-900) 0%, #16264e 100%);
     color:#fff;
-    padding:14px 16px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    border-radius:10px 10px 0 0;
+  }
+  .ai-chat-head .ai-fab-icon{
+    width:28px;height:28px;
+    background:#ffffff;
+    border-radius:8px;
+    padding:2px;
+    flex:none;
+  }
+  .ai-chat-head-title{
+    font-weight:700;font-size:13.5px;
+    display:flex;flex-direction:column;line-height:1.15;
+  }
+  .ai-chat-head-title small{
+    font-size:10.5px;font-weight:500;color:#9fb0d6;margin-top:2px;
+  }
+  .ai-chat-close{
+    margin-left:auto;
+    width:28px;height:28px;border-radius:50%;
+    background:rgba(255,255,255,.1);border:none;
+    display:flex;align-items:center;justify-content:center;
+    transition:background .15s ease;
+  }
+  .ai-chat-close:hover{background:rgba(255,255,255,.2);}
+  .ai-chat-close svg{width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;}
+
+  .chat-body{
+    height:280px;
+    background:#f7f9fd;
+    padding:12px 12px 10px;
+    overflow-y:auto;
+    display:flex;flex-direction:column;gap:9px;
+    scroll-behavior:smooth;
+  }
+  .chat-body::-webkit-scrollbar{width:6px;}
+  .chat-body::-webkit-scrollbar-thumb{background:#cbd5e6;border-radius:3px;}
+  html[data-theme="dark"] .chat-body::-webkit-scrollbar-thumb{background:#2f3a53;}
+
+  .chat-msg{display:flex;align-items:flex-end;gap:7px;max-width:94%;}
+  .chat-msg.user{align-self:flex-end;flex-direction:row-reverse;}
+  .chat-avatar{
+    width:22px;height:22px;border-radius:50%;
+    flex:none;display:flex;align-items:center;justify-content:center;
+    font-size:9.5px;font-weight:800;
+    background:var(--navy-900);color:#fff;letter-spacing:.2px;
+  }
+  .chat-msg.user .chat-avatar{background:var(--blue-600);}
+
+  .chat-bubble{
+    padding:8px 11px;border-radius:11px;
+    font-size:13px;line-height:1.5;word-wrap:break-word;
+  }
+  .chat-bubble.bot{
+    background:#ffffff;color:var(--text-900);
+    border:1px solid var(--border);
+    border-bottom-left-radius:3px;
+  }
+  .chat-bubble.bot strong{color:var(--navy-900);}
+  .chat-bubble.user{
+    background:var(--blue-600);color:#fff;
+    border-bottom-right-radius:3px;
+  }
+  .chat-bubble ul{margin:5px 0 2px;padding-left:16px;}
+  .chat-bubble li{margin-bottom:2px;font-size:12.5px;}
+
+  .chat-typing{
+    display:inline-flex;gap:4px;
+    padding:9px 12px;
+    background:#ffffff;border:1px solid var(--border);
+    border-bottom-left-radius:3px;border-radius:11px;
+  }
+  .chat-typing span{
+    width:5px;height:5px;border-radius:50%;
+    background:#9aa4bb;
+    animation:typingDot 1.2s infinite ease-in-out;
+  }
+  .chat-typing span:nth-child(2){animation-delay:.18s;}
+  .chat-typing span:nth-child(3){animation-delay:.36s;}
+  @keyframes typingDot{
+    0%,80%,100%{opacity:.35;transform:translateY(0);}
+    40%{opacity:1;transform:translateY(-3px);}
+  }
+
+  .chat-chips{
+    display:flex;gap:6px;padding:8px 12px;
+    background:var(--surface);border-top:1px solid var(--border);
+    overflow-x:auto;scrollbar-width:none;
+  }
+  .chat-chips::-webkit-scrollbar{display:none;}
+  .chip{
+    flex:none;background:var(--blue-50);
+    border:1px solid #c9dbfb;color:var(--blue-700);
+    border-radius:20px;padding:5px 11px;
+    font-size:11.5px;font-weight:600;white-space:nowrap;
+    transition:background .15s ease, color .15s ease;
+  }
+  .chip:hover{background:var(--blue-600);color:#fff;border-color:var(--blue-600);}
+
+  .chat-input-row{
+    display:flex;gap:7px;padding:9px 11px;
+    background:var(--surface);border-top:1px solid var(--border);
+  }
+  .chat-input-row input{
+    flex:1;border:1px solid var(--border);
+    border-radius:20px;padding:8px 14px;
+    font-size:13px;font-family:var(--font);
+    color:var(--text-900);background:var(--bg);outline:none;
+  }
+  .chat-input-row input:focus{
+    border-color:var(--blue-600);
+    box-shadow:0 0 0 3px rgba(26,86,219,.1);
+    background:var(--surface);
+  }
+  .chat-send{
+    width:36px;height:36px;flex:none;border-radius:50%;
+    background:var(--blue-600);border:1px solid var(--blue-700);
+    display:flex;align-items:center;justify-content:center;
+    transition:background .15s ease;
+  }
+  .chat-send:hover{background:var(--blue-700);}
+  .chat-send svg{
+    width:17px;height:17px;
+    stroke:#fff;fill:none;
+    stroke-width:2.4;
+    stroke-linejoin:round;
+    stroke-linecap:round;
+  }
+
+  .fwd-note{
+    display:block;margin-top:7px;padding-top:7px;
+    border-top:1px dashed var(--border);
+    font-size:11.5px;color:var(--text-400);font-style:italic;
+  }
+  .fwd-note strong{color:var(--blue-600);font-weight:700;font-style:normal;}
+
+  /* A11y panel inner */
+  .a11y-panel-head{
+    background:var(--blue-600);color:#fff;padding:14px 16px;
+    display:flex;align-items:center;justify-content:space-between;
+    border-radius:12px 12px 0 0;
   }
   .a11y-panel-head h3{margin:0;font-size:15px;font-weight:700;}
   .a11y-head-icons{display:flex;gap:12px;}
@@ -221,26 +449,13 @@
   .a11y-head-icons svg{width:16px;height:16px;fill:#fff;}
   .a11y-lang{padding:12px 16px 4px;}
   .a11y-lang select{
-    width:100%;
-    border:1px solid var(--border);
-    border-radius:6px;
-    padding:8px 10px;
-    font-size:13px;
-    color:var(--text-900);
-    background:var(--surface);
+    width:100%;border:1px solid var(--border);border-radius:6px;
+    padding:8px 10px;font-size:13px;color:var(--text-900);background:var(--surface);
   }
-  .a11y-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-    padding:14px 16px 18px;
-  }
+  .a11y-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 16px 18px;}
   .a11y-tool{
-    border:1.5px solid var(--border);
-    background:var(--bg);
-    border-radius:8px;
-    padding:12px 8px 10px;
-    text-align:center;
+    border:1.5px solid var(--border);background:var(--bg);border-radius:8px;
+    padding:12px 8px 10px;text-align:center;
   }
   .a11y-tool.sel{border-color:var(--blue-600);background:var(--blue-50);}
   .a11y-tool .ic{font-size:16px;font-weight:700;color:var(--text-900);margin-bottom:6px;}
@@ -249,554 +464,262 @@
   .a11y-tool .bars span{width:12px;height:3px;background:var(--border);border-radius:2px;}
 
   /* ---------- Portal shell ---------- */
-  .portal{
-    max-width:1180px;
-    margin:0 auto;
-    padding:28px 24px 60px;
-  }
+  .portal{max-width:1280px;margin:0 auto;padding:24px var(--page-gutter) 56px;}
   .portal-intro{
-    display:flex;
-    align-items:flex-end;
-    justify-content:space-between;
-    gap:16px;
-    margin-bottom:18px;
-    flex-wrap:wrap;
+    display:flex;align-items:flex-end;justify-content:space-between;
+    gap:16px;margin-bottom:16px;flex-wrap:wrap;
   }
-  .portal-intro h2{
-    margin:0 0 4px;
-    font-size:24px;
-    font-weight:700;
-    color:var(--navy-900);
-  }
-  .portal-intro p{
-    margin:0;
-    font-size:14px;
-    color:var(--text-600);
-    max-width:520px;
-  }
+  .portal-intro h2{margin:0 0 4px;font-size:26px;font-weight:700;color:var(--navy-900);}
+  .portal-intro p{margin:0;font-size:15px;color:var(--text-600);max-width:560px;}
 
-  .portal-switch{
-    display:inline-flex;
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    overflow:hidden;
-    background:var(--surface);
-  }
-  .switch-btn{
-    border:none;
-    background:var(--surface);
-    color:var(--text-600);
-    font-size:13px;
-    font-weight:600;
-    padding:9px 18px;
-  }
-  .switch-btn + .switch-btn{border-left:1px solid var(--border);}
-  .switch-btn.active{
-    background:var(--navy-900);
-    color:#fff;
-  }
+  .page{display:block;}
 
-  .page{display:none; margin-top:22px;}
-  .page.active{display:block;}
-
-  /* ---------- Shared card / section primitives ---------- */
-  .card{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-  }
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);}
   .section-bar{
-    background:var(--navy-900);
-    color:#fff;
-    font-size:13px;
-    font-weight:600;
-    padding:11px 18px;
-    border-radius:var(--radius) var(--radius) 0 0;
+    background:var(--navy-900);color:#fff;font-size:14px;font-weight:600;
+    padding:11px 18px;border-radius:var(--radius) var(--radius) 0 0;
   }
-  .section-body{padding:20px;}
+  .section-body{padding:18px;}
   .label-sm{
-    font-size:11px;
-    font-weight:700;
-    color:var(--blue-600);
-    letter-spacing:.3px;
-    margin-bottom:6px;
+    font-size:12px;font-weight:700;color:var(--blue-600);
+    letter-spacing:.3px;margin-bottom:6px;
   }
 
   /* ================= CITIZEN PORTAL ================= */
   .select-row{
-    display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    gap:14px;
-    margin-bottom:18px;
+    display:grid;grid-template-columns:1fr 1fr 1fr;
+    gap:12px;margin-bottom:18px;
   }
   .field{display:flex;flex-direction:column;gap:6px;}
-  .field label{font-size:12px;color:var(--text-600);font-weight:600;}
+  .field label{font-size:13px;color:var(--text-600);font-weight:600;}
   .field select{
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    padding:9px 10px;
-    font-size:13px;
-    color:var(--text-900);
-    background:var(--surface);
+    border:1px solid var(--border);border-radius:var(--radius);
+    padding:10px 10px;font-size:14px;font-family:var(--font);
+    color:var(--text-900);background:var(--surface);
   }
-  .field select:disabled{
-    background:var(--bg);
-    color:var(--text-400);
-    cursor:not-allowed;
-  }
+  .field select:disabled{background:var(--bg);color:var(--text-400);cursor:not-allowed;}
 
-  .queue-grid{
-    display:grid;
-    grid-template-columns:1.6fr 1fr;
-    gap:16px;
-    margin-bottom:16px;
+  .queue-main{
+    margin-bottom:16px;position:relative;overflow:hidden;
+    box-shadow:0 4px 16px rgba(11,31,69,.08);
+  }
+  .queue-main .section-bar{
+    display:flex;align-items:center;gap:10px;
+    padding:13px 22px;font-size:14.5px;letter-spacing:.2px;
   }
   .queue-main .section-body{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    flex-wrap:wrap;
-    gap:20px;
+    display:grid;grid-template-columns:1fr 1fr auto;
+    align-items:center;gap:28px;padding:26px 24px;
+    background:linear-gradient(180deg, #ffffff 0%, #f7f9fd 100%);
   }
-  .queue-num{}
-  .queue-num .label-sm{margin-bottom:4px;}
-  .queue-num .num{font-size:34px;font-weight:700;color:var(--navy-900);}
+  .queue-num .label-sm{margin-bottom:8px;}
+  .queue-num .num{
+    font-size:48px;font-weight:800;color:var(--navy-900);
+    line-height:1;letter-spacing:-.8px;font-variant-numeric:tabular-nums;
+  }
+  .crowd-block{
+    justify-self:end;display:flex;flex-direction:column;align-items:center;gap:10px;
+  }
+  .crowd-block .crowd-label{
+    font-size:11.5px;font-weight:800;color:var(--text-600);
+    letter-spacing:1.2px;text-transform:uppercase;
+  }
   .status-pill{
-    padding:10px 20px;
-    border-radius:var(--radius);
-    font-weight:700;
-    font-size:13px;
-    color:#fff;
-    background:var(--orange);
+    padding:16px 30px;border-radius:8px;
+    font-weight:800;font-size:16px;letter-spacing:1px;
+    color:#fff;background:var(--orange);white-space:nowrap;
+    min-width:132px;text-align:center;
+    box-shadow:0 4px 12px rgba(0,0,0,.14);
+    transition:background .25s ease, box-shadow .25s ease;
   }
-  .status-pill.low{background:var(--green);}
-  .status-pill.moderate{background:var(--yellow);}
-  .status-pill.high{background:var(--orange);}
-  .status-pill.veryhigh{background:var(--red);}
-  .legend{display:flex;flex-direction:column;gap:8px;}
-  .legend .section-body{padding:16px;display:flex;flex-direction:column;gap:8px;}
-  .legend-item{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:8px 12px;
-    border-radius:4px;
-    font-size:12px;
-    font-weight:700;
-    color:#fff;
-  }
-  .legend-item.low{background:var(--green);}
-  .legend-item.moderate{background:var(--yellow);}
-  .legend-item.high{background:var(--orange);}
-  .legend-item.veryhigh{background:var(--red);}
+  .status-pill.low{background:var(--green);box-shadow:0 4px 12px rgba(31,157,85,.3);}
+  .status-pill.moderate{background:var(--yellow);box-shadow:0 4px 12px rgba(201,151,15,.3);}
+  .status-pill.high{background:var(--orange);box-shadow:0 4px 12px rgba(217,114,31,.3);}
+  .status-pill.veryhigh{background:var(--red);box-shadow:0 4px 12px rgba(201,51,63,.3);}
 
   .notice-bar{
-    display:flex;
-    gap:10px;
-    align-items:flex-start;
-    background:var(--orange-bg);
-    border:1px solid #f0cfa8;
-    color:#7a4713;
-    border-radius:var(--radius);
-    padding:12px 16px;
-    font-size:13px;
-    margin-bottom:20px;
+    display:flex;gap:10px;align-items:flex-start;
+    background:#fbebdb;border:1px solid #f0cfa8;
+    color:#7a4713;border-radius:var(--radius);
+    padding:12px 16px;font-size:14px;margin-bottom:16px;
   }
   .notice-bar strong{font-weight:700;}
-  .notice-sub{font-size:12px;color:var(--text-400);margin-top:2px;}
+  .notice-sub{font-size:12.5px;color:var(--text-400);margin-top:2px;}
 
-  .quick-actions{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:12px;
-    margin-bottom:24px;
+  .checklist-note{
+    font-size:13px;color:var(--text-600);
+    background:var(--blue-50);border-left:3px solid var(--blue-600);
+    border-radius:0 4px 4px 0;padding:10px 12px;margin-bottom:14px;
   }
-  .qa-btn{
-    border:1px solid var(--blue-700);
-    background:var(--blue-600);
-    color:#fff;
-    border-radius:var(--radius);
-    padding:14px 12px;
-    font-size:13px;
-    font-weight:600;
-    text-align:center;
+  .doc-list{list-style:none;margin:0;padding:0;counter-reset:doc;}
+  .doc-list li{
+    counter-increment:doc;position:relative;
+    padding:10px 0 10px 36px;
+    font-size:14.5px;color:var(--text-900);
+    border-bottom:1px dashed var(--border);
   }
-  .qa-btn:hover{background:var(--blue-700);}
-
-  .cat-list{display:flex;flex-direction:column;gap:10px;}
-  .cat-item{
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    overflow:hidden;
-  }
-  .cat-head{
-    width:100%;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    background:var(--surface);
-    border:none;
-    padding:13px 16px;
-    font-size:13px;
-    font-weight:600;
-    color:var(--text-900);
-  }
-  .cat-head:hover{background:var(--blue-50);}
-  .cat-num{
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-  }
-  .cat-num span.n{
-    width:22px;height:22px;
-    border-radius:50%;
-    background:var(--blue-50);
-    color:var(--blue-600);
-    font-size:11px;
-    font-weight:700;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-  }
-  .chev{color:var(--text-400);font-size:12px;}
-  .cat-body{
-    display:none;
-    padding:4px 16px 16px 48px;
-    font-size:13px;
-    color:var(--text-600);
-  }
-  .cat-body.open{display:block;}
-  .cat-body ul{margin:6px 0 0;padding-left:18px;}
-  .cat-body li{margin-bottom:5px;}
-
-  .info-grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:16px;
-    margin-top:24px;
-  }
-  .info-grid .section-body{font-size:13px;color:var(--text-600);line-height:1.7;}
-  .info-grid .section-body strong{color:var(--text-900);}
-
-  /* ================= ADMIN PORTAL ================= */
-  .admin-shell{
-    display:grid;
-    grid-template-columns:220px 1fr;
-    gap:16px;
-  }
-  .admin-side{
-    background:var(--navy-900);
-    border-radius:var(--radius);
-    padding:14px 0;
-    height:fit-content;
-  }
-  .admin-user{
-    padding:0 16px 14px;
-    border-bottom:1px solid rgba(255,255,255,.12);
-    margin-bottom:8px;
-  }
-  .admin-user .name{color:#fff;font-size:13px;font-weight:700;}
-  .admin-user .role{color:#9fb0d6;font-size:11px;margin-top:2px;}
-  .admin-nav a{
-    display:block;
-    padding:10px 16px;
-    font-size:13px;
-    color:#c6d2ee;
-  }
-  .admin-nav a.active{
-    background:rgba(255,255,255,.08);
-    color:#fff;
-    font-weight:600;
-    border-left:3px solid #4d7bf3;
-  }
-  .admin-nav a:hover{color:#fff;}
-  .admin-nav .logout-link{
-    margin-top:8px;
-    padding-top:10px;
-    border-top:1px solid rgba(255,255,255,.12);
-    color:#e79a9a;
-  }
-  .admin-nav .logout-link:hover{color:#fff;}
-
-  /* Admin login gate */
-  .admin-login-outer{
-    background:var(--blue-50);
-    border-radius:10px;
-    padding:48px 20px;
-  }
-  .admin-login-wrap{
-    max-width:380px;
-    margin:0 auto;
-    box-shadow:0 10px 30px rgba(11,31,69,.08);
-  }
-  .admin-login-wrap .section-bar{display:none;}
-  .admin-login-wrap .section-body{padding:30px 28px 26px;}
-
-  .admin-login-logo{
-    width:56px;height:56px;
-    border-radius:50%;
-    background:#fff;
-    border:1px solid var(--border);
+  .doc-list li:last-child{border-bottom:none;padding-bottom:2px;}
+  .doc-list li::before{
+    content:counter(doc);position:absolute;left:0;top:10px;
+    width:23px;height:23px;border-radius:50%;
+    background:var(--blue-50);color:var(--blue-600);
+    font-size:12px;font-weight:700;
     display:flex;align-items:center;justify-content:center;
-    margin:0 auto 16px;
-    overflow:hidden;
   }
-  .admin-login-logo img{max-width:78%;max-height:78%;object-fit:contain;}
-
-  .admin-login-title{
-    text-align:center;
-    font-size:16px;
-    font-weight:700;
-    color:var(--navy-900);
-    margin-bottom:3px;
-  }
-  .admin-login-office{
-    text-align:center;
-    font-size:12px;
-    color:var(--text-600);
-    margin-bottom:22px;
+  .checklist-foot{
+    margin-top:14px;padding-top:10px;border-top:1px solid var(--border);
+    font-size:12.5px;color:var(--text-400);
   }
 
-  .admin-login-wrap .field{margin-bottom:16px;}
-  .admin-login-wrap .field label{
-    font-size:12px;
-    font-weight:700;
-    color:var(--text-900);
-    margin-bottom:7px;
+  /* ============================================================
+     ASK-A-QUESTION — single minimal card
+     ============================================================ */
+  .query-card{margin-top:16px;}
+  .query-intro{
+    font-size:13px;color:var(--text-600);
+    margin:0 0 12px;line-height:1.55;
   }
-  .input-icon-wrap{position:relative;display:flex;align-items:center;}
-  .input-icon-wrap svg.leading{
-    position:absolute;left:11px;
-    width:15px;height:15px;
-    stroke:var(--text-400);fill:none;
-    pointer-events:none;
+  .query-form{
+    background:var(--bg);border:1px solid var(--border);
+    border-radius:var(--radius);padding:12px;margin-bottom:16px;
   }
-  .input-icon-wrap input{
-    width:100%;
-    padding:10px 12px 10px 34px;
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    font-size:13px;
-    font-family:var(--font);
-    color:var(--text-900);
-    background:var(--surface);
+  .query-form .query-row{
+    display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;
   }
-  .input-icon-wrap input:focus{
-    outline:none;
-    border-color:var(--blue-600);
+  .query-form .field{gap:4px;margin-bottom:0;}
+  .query-form .field label{font-size:12px;}
+  .query-form input[type=text],
+  .query-form textarea{
+    border:1px solid var(--border);border-radius:5px;
+    padding:8px 10px;font-size:13px;font-family:var(--font);
+    color:var(--text-900);background:var(--surface);width:100%;
+  }
+  .query-form input[type=text]:focus,
+  .query-form textarea:focus{
+    outline:none;border-color:var(--blue-600);
     box-shadow:0 0 0 3px rgba(26,86,219,.12);
   }
-  .pw-toggle{
-    position:absolute;right:9px;
-    background:none;border:none;padding:4px;
-    display:flex;align-items:center;justify-content:center;
+  .query-form textarea{resize:vertical;min-height:60px;line-height:1.5;margin-top:4px;}
+  .query-submit-row{
+    display:flex;align-items:center;gap:12px;margin-top:10px;
   }
-  .pw-toggle svg{width:16px;height:16px;stroke:var(--text-400);fill:none;}
-  .pw-toggle:hover svg{stroke:var(--text-600);}
-
-  .admin-login-row{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin:2px 0 18px;
-    font-size:12px;
-    color:var(--text-600);
-  }
-  .admin-login-row label{display:flex;align-items:center;gap:7px;cursor:pointer;}
-  .admin-login-row input[type=checkbox]{
-    width:14px;height:14px;
-    accent-color:var(--blue-600);
-  }
-
-  .admin-login-wrap .btn-primary{width:100%;text-align:center;padding:11px;font-size:13px;}
-  .admin-login-error{
-    display:none;
-    align-items:center;
-    gap:8px;
-    font-size:12px;
-    color:var(--red);
-    background:var(--red-bg);
-    border:1px solid #f0c2c6;
-    border-radius:6px;
-    padding:9px 11px;
-    margin-bottom:16px;
-  }
-  .admin-login-error.show{display:flex;}
-  .admin-login-error svg{width:14px;height:14px;stroke:var(--red);fill:none;flex:none;}
-
-  .admin-login-divider{
-    border-top:1px solid var(--border);
-    margin:20px 0 14px;
-  }
-  .admin-login-hint{
-    text-align:center;
-    font-size:11px;
-    color:var(--text-400);
-    margin-top:16px;
-  }
-
-  .stat-grid{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:12px;
-    margin-bottom:20px;
-  }
-  .stat-card{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    padding:16px;
-  }
-  .stat-card .label-sm{margin-bottom:8px;}
-  .stat-card .val{font-size:26px;font-weight:700;color:var(--navy-900);}
-  .stat-card .sub{font-size:12px;color:var(--text-400);margin-top:2px;}
-
-  .form-row{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:14px;
-    margin-bottom:14px;
-  }
-  .form-row.full{grid-template-columns:1fr;}
-  .field input[type=text], .field input[type=number], .field textarea{
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    padding:9px 10px;
-    font-size:13px;
-    font-family:var(--font);
-    color:var(--text-900);
-  }
-  .field textarea{resize:vertical;min-height:70px;}
-
-  .level-btn-row{display:flex;gap:8px;margin-bottom:16px;}
-  .level-btn{
-    flex:1;
-    border:1.5px solid var(--border);
-    background:#fff;
-    border-radius:var(--radius);
-    padding:10px;
-    font-size:12px;
-    font-weight:700;
-    color:var(--text-600);
-    text-align:center;
-  }
-  .level-btn.low.sel{background:var(--green);border-color:var(--green);color:#fff;}
-  .level-btn.moderate.sel{background:var(--yellow);border-color:var(--yellow);color:#fff;}
-  .level-btn.high.sel{background:var(--orange);border-color:var(--orange);color:#fff;}
-  .level-btn.veryhigh.sel{background:var(--red);border-color:var(--red);color:#fff;}
+  .query-hint{font-size:11.5px;color:var(--text-400);}
 
   .btn-primary{
-    background:var(--blue-600);
-    color:#fff;
+    background:var(--blue-600);color:#fff;
     border:1px solid var(--blue-700);
     border-radius:var(--radius);
-    padding:10px 18px;
-    font-size:13px;
-    font-weight:600;
+    padding:8px 18px;font-size:13px;font-weight:600;
+    transition:background .15s ease;
   }
   .btn-primary:hover{background:var(--blue-700);}
-  .btn-secondary{
-    background:#fff;
-    color:var(--text-600);
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    padding:10px 18px;
-    font-size:13px;
-    font-weight:600;
-  }
 
-  table{width:100%;border-collapse:collapse;font-size:13px;}
-  th{
-    text-align:left;
-    font-size:11px;
-    text-transform:none;
-    color:var(--text-400);
-    font-weight:700;
-    padding:10px 12px;
-    border-bottom:1px solid var(--border);
+  .query-thread-label{
+    font-size:11px;font-weight:800;color:var(--text-400);
+    letter-spacing:.6px;text-transform:uppercase;margin-bottom:8px;
   }
-  td{
-    padding:11px 12px;
-    border-bottom:1px solid var(--border);
-    color:var(--text-900);
+  .query-list{
+    display:grid;grid-template-columns:1fr 1fr;gap:10px;
   }
-  tr:last-child td{border-bottom:none;}
-  .badge{
-    display:inline-block;
-    padding:4px 10px;
-    border-radius:4px;
-    font-size:11px;
-    font-weight:700;
-    color:#fff;
-  }
-  .badge.low{background:var(--green);}
-  .badge.moderate{background:var(--yellow);}
-  .badge.high{background:var(--orange);}
-  .badge.veryhigh{background:var(--red);}
-  .badge.published{background:var(--blue-600);}
-  .edit-link{color:var(--blue-600);font-size:12px;font-weight:600;}
+  .query-list > div{display:flex;flex-direction:column;gap:0;}
 
-  .admin-two-col{
-    display:grid;
-    grid-template-columns:1.3fr 1fr;
-    gap:16px;
-    align-items:start;
+  .query-item{
+    background:#fafbfe;border:1px solid var(--border);
+    border-radius:5px;padding:10px 12px;
   }
+  .query-item.answer{
+    background:#f3f7ff;border-color:#d6e2fb;
+    margin-top:-4px;margin-left:12px;
+  }
+  .query-item .query-head{
+    display:flex;align-items:center;gap:7px;margin-bottom:4px;
+  }
+  .query-tag{
+    width:20px;height:20px;border-radius:50%;
+    background:var(--navy-900);color:#fff;
+    font-size:10px;font-weight:800;
+    display:flex;align-items:center;justify-content:center;flex:none;
+  }
+  .query-tag.answer{background:var(--blue-600);}
+  .query-meta{font-size:10.5px;color:var(--text-400);}
+  .query-meta strong{color:var(--text-900);font-weight:700;}
+  .query-item p{margin:0;font-size:13px;color:var(--text-900);line-height:1.5;}
+  .query-item.answer p{color:var(--text-600);}
+
+  /* ---------- Office info at bottom ---------- */
+  .office-card{margin-top:16px;}
 
   footer{
-    max-width:1180px;
-    margin:10px auto 40px;
-    padding:0 24px;
-    font-size:12px;
-    color:var(--text-400);
+    max-width:1280px;margin:10px auto 40px;
+    padding:0 var(--page-gutter);
+    font-size:12.5px;color:var(--text-400);
   }
 
   @media (max-width:860px){
-    .select-row,.queue-grid,.quick-actions,.info-grid,.stat-grid,.admin-shell,.admin-two-col,.form-row{
-      grid-template-columns:1fr;
+    .select-row,.query-form .query-row,.query-list{grid-template-columns:1fr;}
+    .queue-main .section-body{
+      grid-template-columns:1fr 1fr;gap:18px;padding:22px 18px;
     }
+    .crowd-block{
+      grid-column:1 / -1;justify-self:start;align-items:flex-start;
+    }
+    .queue-num .num{font-size:40px;}
+  }
+  @media (max-width:520px){
+    .ai-chat-panel,
+    .a11y-panel{
+      right:12px;
+      left:12px;
+      width:auto;
+      bottom:calc(var(--fab-bottom) + 70px);
+      max-height:calc(100vh - 100px);
+    }
+    .ai-fab{right:16px;}
+    .a11y-fab{right:16px;}
   }
 </style>
 </head>
 <body>
 
-<header class="top-navbar">
-  <div class="top-navbar-inner">
-    <div class="nav-spacer"></div>
+<!-- ================= STICKY HEADER ================= -->
+<div class="site-header" id="siteHeader">
+  <header class="top-navbar">
+    <div class="top-navbar-inner">
+      <div class="nav-spacer"></div>
 
-    <div class="brand-center">
-      <div class="emblem-lg" aria-hidden="true">
-        <img src="https://edlvrs.bagamati.gov.np/edl/assets/img/nepal.png" alt="Government of Nepal emblem">
+      <div class="brand-center">
+        <div class="emblem-lg" aria-hidden="true">
+          <img src="https://edlvrs.bagamati.gov.np/edl/assets/img/nepal.png" alt="Government of Nepal emblem">
+        </div>
+        <div class="brand-text">
+          <h1>District Administration Office</h1>
+          <p class="subtitle">Ministry of Home Affairs, Government of Nepal</p>
+          <span class="pill-badge">e-Queue Portal</span>
+        </div>
       </div>
-      <div class="brand-text">
-        <h1>District Administration Office</h1>
-        <p class="subtitle">Ministry of Home Affairs, Government of Nepal</p>
-        <span class="pill-badge">e-Queue Portal</span>
+
+      <div class="nav-controls-right">
+        <button class="lang-pill" id="langToggle" aria-label="Switch language">
+          <span id="langLabel">ENG</span>
+        </button>
+        <button class="icon-circle-btn" id="themeToggle" aria-label="Toggle dark mode">
+          <svg id="themeIcon" viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round"><path d="M12 4V2m0 20v-2M4 12H2m20 0h-2M5.6 5.6L4.2 4.2m15.6 15.6l-1.4-1.4M18.4 5.6l1.4-1.4M4.2 19.8l1.4-1.4M12 7a5 5 0 100 10 5 5 0 000-10z"/></svg>
+        </button>
       </div>
     </div>
-
-    <div class="nav-controls-right">
-      <button class="lang-pill" id="langToggle">
-        <span id="langLabel">EN</span>
-        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-      </button>
-      <button class="icon-circle-btn" id="themeToggle" aria-label="Toggle dark mode">
-        <svg id="themeIcon" viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round"><path d="M12 4V2m0 20v-2M4 12H2m20 0h-2M5.6 5.6L4.2 4.2m15.6 15.6l-1.4-1.4M18.4 5.6l1.4-1.4M4.2 19.8l1.4-1.4M12 7a5 5 0 100 10 5 5 0 000-10z"/></svg>
-      </button>
+  </header>
+  <nav class="main-nav">
+    <div class="main-nav-inner">
+      <a href="#">Home</a>
+      <a href="#">Introduction of Office</a>
+      <a href="#">Citizen Charter</a>
+      <a href="#">Notices</a>
+      <a href="#">Download</a>
+      <a href="#">Gallery</a>
+      <a href="#">Contact</a>
     </div>
-  </div>
-</header>
-<nav class="main-nav">
-  <div class="main-nav-inner">
-    <a href="#">Home</a>
-    <a href="#">Introduction of Office</a>
-    <a href="#">Citizen Charter</a>
-    <a href="#">Notices</a>
-    <a href="#">Download</a>
-    <a href="#">Gallery</a>
-    <a href="#">Contact</a>
-  </div>
-</nav>
+  </nav>
+</div>
 
 <main class="portal">
   <div class="portal-intro">
@@ -806,7 +729,6 @@
     </div>
   </div>
 
-  <!-- ============ CITIZEN PORTAL ============ -->
   <section id="citizen" class="page active">
 
     <div class="select-row">
@@ -824,34 +746,30 @@
       <div class="field">
         <label>Category</label>
         <select id="categorySelect">
-          <option value="6">New</option>
-          <option value="7">Duplicate (Lost Certificate)</option>
+          <option value="bydescent">By Descent</option>
+          <option value="naturalized">Naturalized</option>
+          <option value="marriage">Marriage-based</option>
+          <option value="nrn">Non-Resident Nepali</option>
+          <option value="honorary">Honorary</option>
+          <option value="duplicate">Duplicate (Lost Certificate)</option>
         </select>
       </div>
     </div>
 
-    <div class="queue-grid">
-      <div class="card queue-main">
-        <div class="section-bar" id="queueTitle">Citizenship Service — New — Live Status</div>
-        <div class="section-body">
-          <div class="queue-num">
-            <div class="label-sm">CURRENTLY SERVING</div>
-            <div class="num" id="servingNum">C-175</div>
-          </div>
-          <div class="queue-num">
-            <div class="label-sm">LATEST TOKEN</div>
-            <div class="num" id="latestNum">C-189</div>
-          </div>
-          <div class="status-pill veryhigh" id="statusPill">VERY HIGH</div>
+    <div class="card queue-main" id="queueCard">
+      <div class="section-bar" id="queueTitle">Citizenship Service — By Descent — Live Status</div>
+      <div class="section-body">
+        <div class="queue-num">
+          <div class="label-sm">CURRENTLY SERVING</div>
+          <div class="num" id="servingNum">C-118</div>
         </div>
-      </div>
-      <div class="card legend">
-        <div class="section-bar">Crowd Level</div>
-        <div class="section-body">
-          <div class="legend-item low">Low</div>
-          <div class="legend-item moderate">Moderate</div>
-          <div class="legend-item high">High</div>
-          <div class="legend-item veryhigh">Very High</div>
+        <div class="queue-num">
+          <div class="label-sm">LATEST TOKEN</div>
+          <div class="num" id="latestNum">C-125</div>
+        </div>
+        <div class="crowd-block">
+          <div class="crowd-label" id="crowdLabel">Crowd Level</div>
+          <div class="status-pill high" id="statusPill">HIGH</div>
         </div>
       </div>
     </div>
@@ -863,119 +781,102 @@
       </div>
     </div>
 
-    <div class="quick-actions">
-      <div class="qa-btn" id="qaDocs">Required Documents</div>
-      <div class="qa-btn" id="qaToken">Current Token</div>
-      <div class="qa-btn" id="qaCrowd">Crowd Status</div>
-      <div class="qa-btn" id="qaNid">NID Requirements</div>
-    </div>
-
     <div class="card" id="checklistCard">
-      <div class="section-bar">Document Checklist by Category</div>
+      <div class="section-bar" id="checklistBar">Document Checklist — By Descent</div>
       <div class="section-body">
-        <div class="notice-sub" id="checklistPlaceholder" style="display:none;margin-bottom:4px;">
-          A category-wise document checklist isn't published for this service yet. Please check the Required Documents quick action or contact the office directly.
+        <div class="checklist-note" id="checklistNote">
+          Carry originals plus one photocopy set of every document. Files without the ward
+          recommendation are returned at the counter.
         </div>
-        <div class="cat-list" id="catList">
-          <div class="cat-item">
-            <button class="cat-head" data-cat="6"><span class="cat-num"><span class="n">1</span>New</span><span class="chev">＋</span></button>
-            <div class="cat-body">
-              <ul>
-                <li>Original and copy of applicant's birth certificate</li>
-                <li>Parents' citizenship certificates (original + copy)</li>
-                <li>Ward recommendation letter</li>
-                <li>Two passport-size photos</li>
-              </ul>
-            </div>
-          </div>
-          <div class="cat-item">
-            <button class="cat-head" data-cat="1"><span class="cat-num"><span class="n">2</span>By Descent</span><span class="chev">＋</span></button>
-            <div class="cat-body">
-              <ul>
-                <li>Original and copy of applicant's birth certificate</li>
-                <li>Parents' citizenship certificates (original + copy)</li>
-                <li>Ward recommendation letter</li>
-                <li>Two passport-size photos</li>
-              </ul>
-            </div>
-          </div>
-          <div class="cat-item">
-            <button class="cat-head" data-cat="2"><span class="cat-num"><span class="n">3</span>Naturalized</span><span class="chev">＋</span></button>
-            <div class="cat-body">
-              <ul>
-                <li>Proof of residency (minimum period as required by law)</li>
-                <li>Renunciation of prior citizenship, if applicable</li>
-                <li>Ward recommendation letter</li>
-                <li>Two passport-size photos</li>
-              </ul>
-            </div>
-          </div>
-          <div class="cat-item">
-            <button class="cat-head" data-cat="3"><span class="cat-num"><span class="n">4</span>Marriage-based</span><span class="chev">＋</span></button>
-            <div class="cat-body">
-              <ul>
-                <li>Marriage registration certificate</li>
-                <li>Spouse's citizenship certificate (original + copy)</li>
-                <li>Ward recommendation letter</li>
-                <li>Two passport-size photos</li>
-              </ul>
-            </div>
-          </div>
-          <div class="cat-item">
-            <button class="cat-head" data-cat="4"><span class="cat-num"><span class="n">5</span>Non-Resident Nepali</span><span class="chev">＋</span></button>
-            <div class="cat-body">
-              <ul>
-                <li>Proof of Nepali origin (parent/grandparent citizenship record)</li>
-                <li>Valid foreign passport and residency proof</li>
-                <li>Ward recommendation letter</li>
-                <li>Two passport-size photos</li>
-              </ul>
-            </div>
-          </div>
-          <div class="cat-item">
-            <button class="cat-head" data-cat="5"><span class="cat-num"><span class="n">6</span>Honorary</span><span class="chev">＋</span></button>
-            <div class="cat-body">
-              <ul>
-                <li>Government decision letter / recommendation</li>
-                <li>Valid passport and supporting identity documents</li>
-                <li>Two passport-size photos</li>
-              </ul>
-            </div>
-          </div>
-          <div class="cat-item">
-            <button class="cat-head" data-cat="7"><span class="cat-num"><span class="n">7</span>Duplicate (Lost Certificate)</span><span class="chev">＋</span></button>
-            <div class="cat-body">
-              <ul>
-                <li>Police report (FIR) confirming the certificate was lost</li>
-                <li>Original citizenship certificate number, if known</li>
-                <li>Photocopy of the lost certificate, if available</li>
-                <li>Ward recommendation letter</li>
-                <li>Two passport-size photos</li>
-              </ul>
-            </div>
-          </div>
+        <ol class="doc-list" id="docList"></ol>
+        <div class="checklist-foot" id="checklistFoot">
+          List last revised: 2082-04-12 · Citizenship section, counter 1–3
         </div>
       </div>
     </div>
 
-    <div class="info-grid">
-      <div class="card">
-        <div class="section-bar">Office Information</div>
-        <div class="section-body">
-          <strong>District Administration Office, Kathmandu</strong><br>
-          Babarmahal, Kathmandu, Nepal<br><br>
-          <strong>Office Hours:</strong> 09:00 AM – 5:00 PM (Sunday to Friday)<br>
-          <strong>Citizenship record enquiries:</strong> 015971880
-        </div>
-      </div>
-      <div class="card">
-        <div class="section-bar">Frequently Asked Questions</div>
-        <div class="section-body">
-          <strong>Do I need an appointment?</strong> No, tokens are issued on a walk-in basis.<br><br>
-          <strong>What if I'm missing a document?</strong> Incomplete applications may require a repeat visit — check the checklist above before travelling.
+    <!-- ============ ASK A QUESTION — single minimal card ============ -->
+    <div class="card query-card">
+      <div class="section-bar">Ask a Question</div>
+      <div class="section-body">
+        <p class="query-intro">
+          Post your question and the information desk will reply within one working day.
+          For instant help, tap the AI icon at the bottom-right.
+        </p>
+
+        <form class="query-form" id="queryForm">
+          <div class="query-row">
+            <div class="field">
+              <label for="queryName">Your Name</label>
+              <input type="text" id="queryName" placeholder="e.g. Sita Sharma">
+            </div>
+            <div class="field">
+              <label for="queryContact">Email / Phone (optional)</label>
+              <input type="text" id="queryContact" placeholder="To notify you of the reply">
+            </div>
+          </div>
+          <div class="field">
+            <label for="queryText">Your Question</label>
+            <textarea id="queryText" placeholder="Type your question…"></textarea>
+          </div>
+          <div class="query-submit-row">
+            <button class="btn-primary" type="submit">Post Question</button>
+            <span class="query-hint">Replies appear publicly in the thread.</span>
+          </div>
+        </form>
+
+        <div class="query-thread-label">Recent Questions</div>
+        <div class="query-list" id="queryList">
+
+          <div>
+            <div class="query-item">
+              <div class="query-head">
+                <span class="query-tag">Q</span>
+                <div class="query-meta"><strong>Sita Sharma</strong> · 2 days ago</div>
+              </div>
+              <p>My father's citizenship photocopy is faded — will it be accepted at the counter?</p>
+            </div>
+            <div class="query-item answer">
+              <div class="query-head">
+                <span class="query-tag answer">A</span>
+                <div class="query-meta"><strong>Information Officer</strong> · 1 day ago</div>
+              </div>
+              <p>As long as the certificate number and photograph are legible, a faded photocopy is accepted. If either is unclear, bring the original.</p>
+            </div>
+          </div>
+
+          <div>
+            <div class="query-item">
+              <div class="query-head">
+                <span class="query-tag">Q</span>
+                <div class="query-meta"><strong>Bikash Tamang</strong> · 3 days ago</div>
+              </div>
+              <p>If I arrive at 2 PM, will I still get a token for the NID desk?</p>
+            </div>
+            <div class="query-item answer">
+              <div class="query-head">
+                <span class="query-tag answer">A</span>
+                <div class="query-meta"><strong>Information Officer</strong> · 3 days ago</div>
+              </div>
+              <p>Tokens for NID are issued until 3:00 PM, but on busy days the counter may stop accepting new tokens earlier. Try to arrive before 1 PM.</p>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
+
+    <!-- ============ OFFICE INFORMATION — moved to bottom ============ -->
+    <div class="card office-card">
+      <div class="section-bar">Office Information</div>
+      <div class="section-body">
+        <strong>District Administration Office, Kathmandu</strong><br>
+        Babarmahal, Kathmandu, Nepal<br><br>
+        <strong>Office Hours:</strong> 09:00 AM – 5:00 PM (Sunday to Friday)<br>
+        <strong>Citizenship record enquiries:</strong> 015971880
+      </div>
+    </div>
+
   </section>
 
 </main>
@@ -984,7 +885,72 @@
   © District Administration Office, Kathmandu — e-Queue Portal (prototype interface, sample data shown for design purposes only)
 </footer>
 
-<!-- Floating accessibility tools -->
+<!-- ============ FLOATING AI CHATBOT ============ -->
+<button class="ai-fab" id="aiFab" aria-label="Open AI assistant" aria-expanded="false">
+  <span class="ai-fab-icon" aria-hidden="true">
+    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6 15 A 10 10 0 0 1 26 15" stroke="#2c3e50" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <rect x="3" y="13" width="6" height="8" rx="2" fill="#2c3e50"/>
+      <rect x="23" y="13" width="6" height="8" rx="2" fill="#2c3e50"/>
+      <path d="M26 21 Q 26 28 17 28" stroke="#2c3e50" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <circle cx="16" cy="28" r="2.5" fill="#2c3e50"/>
+      <circle cx="17" cy="14" r="8.5" fill="#e74c3c"/>
+      <path d="M23 15 L 28 20 L 21 20 Z" fill="#e74c3c"/>
+      <circle cx="14" cy="14" r="1.4" fill="#ffffff"/>
+      <circle cx="17" cy="14" r="1.4" fill="#ffffff"/>
+      <circle cx="20" cy="14" r="1.4" fill="#ffffff"/>
+    </svg>
+  </span>
+  <span class="ai-fab-ping" id="aiFabPing" aria-hidden="true"></span>
+</button>
+
+<div class="ai-chat-panel" id="aiChatPanel" role="dialog" aria-label="e-Queue AI Assistant">
+  <div class="ai-chat-head">
+    <span class="ai-fab-icon" aria-hidden="true">
+      <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+        <path d="M6 15 A 10 10 0 0 1 26 15" stroke="#2c3e50" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+        <rect x="3" y="13" width="6" height="8" rx="2" fill="#2c3e50"/>
+        <rect x="23" y="13" width="6" height="8" rx="2" fill="#2c3e50"/>
+        <path d="M26 21 Q 26 28 17 28" stroke="#2c3e50" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <circle cx="16" cy="28" r="2.5" fill="#2c3e50"/>
+        <circle cx="17" cy="14" r="8.5" fill="#e74c3c"/>
+        <path d="M23 15 L 28 20 L 21 20 Z" fill="#e74c3c"/>
+        <circle cx="14" cy="14" r="1.4" fill="#ffffff"/>
+        <circle cx="17" cy="14" r="1.4" fill="#ffffff"/>
+        <circle cx="20" cy="14" r="1.4" fill="#ffffff"/>
+      </svg>
+    </span>
+    <div class="ai-chat-head-title">
+      <span id="chatTitle">e-Queue AI Assistant</span>
+      <small id="chatSubtitle">Online · replies instantly</small>
+    </div>
+    <button class="ai-chat-close" id="aiChatClose" aria-label="Close chat">
+      <svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+
+  <div class="chat-body" id="chatBody" aria-live="polite"></div>
+
+  <div class="chat-chips" id="chatChips">
+    <button class="chip" data-q="What documents do I need?">Required documents</button>
+    <button class="chip" data-q="What are your office hours?">Office hours</button>
+    <button class="chip" data-q="How do I get a token?">Token &amp; queue</button>
+    <button class="chip" data-q="I lost my citizenship certificate, what do I do?">Lost certificate</button>
+    <button class="chip" data-q="What do I need for NID enrolment?">NID enrolment</button>
+    <button class="chip" data-q="What is the fee?">Fees</button>
+  </div>
+
+  <form class="chat-input-row" id="chatForm" autocomplete="off">
+    <input type="text" id="chatInput" placeholder="Ask a question…" aria-label="Ask the AI assistant">
+    <button class="chat-send" type="submit" aria-label="Send">
+      <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M5 4 L20 12 L5 20 L8 12 Z"/>
+      </svg>
+    </button>
+  </form>
+</div>
+
+<!-- ============ ACCESSIBILITY TOOLS ============ -->
 <button class="a11y-fab" id="a11yFab" aria-label="Open accessibility tools">
   <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
     <circle cx="12" cy="12" r="10.5"/>
@@ -1003,93 +969,365 @@
     </div>
   </div>
   <div class="a11y-lang">
-    <select>
-      <option>English</option>
-      <option>नेपाली</option>
+    <select id="a11yLangSelect">
+      <option value="en">English</option>
+      <option value="ne">नेपाली</option>
     </select>
   </div>
   <div class="a11y-grid" id="a11yGrid">
     <div class="a11y-tool" data-tool="textsize"><div class="ic">T T</div><div class="lb">Text Size</div><div class="bars"><span></span><span></span><span></span></div></div>
     <div class="a11y-tool" data-tool="contrast"><div class="ic">◐</div><div class="lb">High Contrast</div><div class="bars"><span></span><span></span><span></span></div></div>
     <div class="a11y-tool" data-tool="align"><div class="ic">☰</div><div class="lb">Text Align</div><div class="bars"><span></span><span></span><span></span></div></div>
-    <div class="a11y-tool" data-tool="colorfilter"><div class="ic">◑</div><div class="lb">Color Filter</div><div class="bars"><span></span><span></span><span></span></div></div>
+    <div class="a11y-tool" data-tool="colorfilter"><div class="ic">◑</div><div class="lb">Grayscale</div><div class="bars"><span></span><span></span><span></span></div></div>
     <div class="a11y-tool" data-tool="spacing"><div class="ic">AV</div><div class="lb">Text spacing</div><div class="bars"><span></span><span></span><span></span></div></div>
     <div class="a11y-tool" data-tool="lineheight"><div class="ic">≡</div><div class="lb">Line Height</div><div class="bars"><span></span><span></span><span></span></div></div>
-    <div class="a11y-tool" data-tool="font"><div class="ic">Aa</div><div class="lb">Font section</div><div class="bars"><span></span><span></span><span></span></div></div>
+    <div class="a11y-tool" data-tool="font"><div class="ic">Aa</div><div class="lb">Serif Font</div><div class="bars"><span></span><span></span><span></span></div></div>
     <div class="a11y-tool" data-tool="saturate"><div class="ic">●●●</div><div class="lb">Saturation</div><div class="bars"><span></span><span></span><span></span></div></div>
-    <div class="a11y-tool" data-tool="dyslexia"><div class="ic">Df</div><div class="lb">Dyslexia Frendly</div><div class="bars"><span></span><span></span><span></span></div></div>
-    <div class="a11y-tool" data-tool="cursor"><div class="ic">↖</div><div class="lb">Bigger Cursor</div><div class="bars"><span></span><span></span><span></span></div></div>
+    <div class="a11y-tool" data-tool="dyslexia"><div class="ic">Df</div><div class="lb">Dyslexia Friendly</div><div class="bars"><span></span><span></span><span></span></div></div>
+    <div class="a11y-tool" data-tool="cursor"><div class="ic">↖</div><div class="lb">Big Cursor</div><div class="bars"><span></span><span></span><span></span></div></div>
     <div class="a11y-tool" data-tool="hideimages"><div class="ic">◎</div><div class="lb">Hide Images</div><div class="bars"><span></span><span></span><span></span></div></div>
     <div class="a11y-tool" data-tool="noanim"><div class="ic">❙❙</div><div class="lb">Pause Animations</div><div class="bars"><span></span><span></span><span></span></div></div>
-    <div class="a11y-tool" data-tool="reader"><div class="ic">🔊</div><div class="lb">Screen Reader</div><div class="bars"><span></span><span></span><span></span></div></div>
-    <div class="a11y-tool" data-tool="voice"><div class="ic">🎙</div><div class="lb">Voice Command</div><div class="bars"><span></span><span></span><span></span></div></div>
+    <div class="a11y-tool" data-tool="reader"><div class="ic">🔊</div><div class="lb">Read Page</div><div class="bars"><span></span><span></span><span></span></div></div>
+    <div class="a11y-tool" data-tool="voice"><div class="ic">🎙</div><div class="lb">Voice Input</div><div class="bars"><span></span><span></span><span></span></div></div>
   </div>
 </div>
 
 <script>
-  // Citizen: document checklist accordion
-  function openCategory(catId, focusScroll){
-    document.querySelectorAll('.cat-item').forEach(function(item){
-      var head = item.querySelector('.cat-head');
-      var body = item.querySelector('.cat-body');
-      var chev = item.querySelector('.chev');
-      var isMatch = head.dataset.cat === String(catId);
-      body.classList.toggle('open', isMatch);
-      chev.textContent = isMatch ? '−' : '＋';
+  /* =========================================================
+     1. NEPALI TRANSLATION DICTIONARY
+     ========================================================= */
+  var NE = {
+    "District Administration Office": "जिल्ला प्रशासन कार्यालय",
+    "Ministry of Home Affairs, Government of Nepal": "गृह मन्त्रालय, नेपाल सरकार",
+    "e-Queue Portal": "ई-क्यू पोर्टल",
+    "Home": "गृहपृष्ठ",
+    "Introduction of Office": "कार्यालयको परिचय",
+    "Citizen Charter": "नागरिक बडापत्र",
+    "Notices": "सूचनाहरू",
+    "Download": "डाउनलोड",
+    "Gallery": "ग्यालरी",
+    "Contact": "सम्पर्क",
+
+    "Check requirements, live queue status and crowd levels before visiting the office.":
+      "कार्यालय जानु अघि आवश्यक कागजात, प्रत्यक्ष लाइन स्थिति र भीड स्तर जाँच्नुहोस्।",
+
+    "Office": "कार्यालय",
+    "District Administration Office — Kathmandu": "जिल्ला प्रशासन कार्यालय — काठमाडौं",
+    "Service": "सेवा",
+    "Citizenship Service": "नागरिकता सेवा",
+    "National Identity Card": "राष्ट्रिय परिचयपत्र",
+    "Category": "श्रेणी",
+    "By Descent": "वंशजद्वारा",
+    "Naturalized": "अङ्गीकृत",
+    "Marriage-based": "विवाहमा आधारित",
+    "Non-Resident Nepali": "गैरआवासीय नेपाली",
+    "Honorary": "मानार्थ",
+    "Duplicate (Lost Certificate)": "प्रतिलिपि (हराएको प्रमाणपत्र)",
+
+    "CURRENTLY SERVING": "हाल सेवा दिइँदै",
+    "LATEST TOKEN": "पछिल्लो टोकन",
+    "Crowd Level": "भीड स्तर",
+    "HIGH": "उच्च",
+    "MODERATE": "मध्यम",
+    "LOW": "कम",
+    "VERY HIGH": "अति उच्च",
+
+    "High visitor volume expected after SEE examination results.":
+      "एसईई परीक्षाको नतिजा पछि उच्च आगन्तुक चाप अपेक्षित।",
+    "Queue information supports planning; actual waiting time may vary.":
+      "लाइन जानकारी योजना बनाउन सहयोगी हुन्छ; वास्तविक प्रतीक्षा समय फरक पर्न सक्छ।",
+
+    "List last revised: 2082-04-12 · Citizenship section, counter 1–3":
+      "सूची अन्तिम संशोधन: २०८२-०४-१२ · नागरिकता शाखा, काउन्टर १–३",
+    "List last revised: 2082-04-20 · NID section, counter 4–5":
+      "सूची अन्तिम संशोधन: २०८२-०४-२० · एनआईडी शाखा, काउन्टर ४–५",
+
+    "Office Information": "कार्यालय जानकारी",
+    "District Administration Office, Kathmandu": "जिल्ला प्रशासन कार्यालय, काठमाडौं",
+    "Babarmahal, Kathmandu, Nepal": "बबरमहल, काठमाडौं, नेपाल",
+    "Office Hours:": "कार्यालय समय:",
+    "09:00 AM – 5:00 PM (Sunday to Friday)": "बिहान ०९:०० – साँझ ५:०० (आइतबार–शुक्रबार)",
+    "Citizenship record enquiries:": "नागरिकता अभिलेख सोधपुछ:",
+
+    "Ask a Question": "प्रश्न सोध्नुहोस्",
+    "Post your question and the information desk will reply within one working day. For instant help, tap the AI icon at the bottom-right.":
+      "आफ्नो प्रश्न पोस्ट गर्नुहोस्, सूचना डेस्कले एक कार्यदिनभित्र जवाफ दिनेछ। तुरुन्त सहयोगका लागि तल दायाँको एआई आइकन थिच्नुहोस्।",
+    "Your Name": "तपाईंको नाम",
+    "Email / Phone (optional)": "इमेल / फोन (वैकल्पिक)",
+    "To notify you of the reply": "जवाफ जानकारी दिन",
+    "Your Question": "तपाईंको प्रश्न",
+    "Type your question…": "आफ्नो प्रश्न लेख्नुहोस्…",
+    "Post Question": "प्रश्न पोस्ट गर्नुहोस्",
+    "Replies appear publicly in the thread.": "जवाफहरू सार्वजनिक रूपमा देखिन्छन्।",
+    "Recent Questions": "हालैका प्रश्नहरू",
+    "Information Officer": "सूचना अधिकृत",
+    "2 days ago": "२ दिन अघि",
+    "3 days ago": "३ दिन अघि",
+    "1 day ago": "१ दिन अघि",
+    "just now": "भर्खरै",
+    "awaiting reply": "जवाफ प्रतीक्षामा",
+
+    "© District Administration Office, Kathmandu — e-Queue Portal (prototype interface, sample data shown for design purposes only)":
+      "© जिल्ला प्रशासन कार्यालय, काठमाडौं — ई-क्यू पोर्टल (नमुना अन्तरमुख, डिजाइन प्रयोजनका लागि मात्र नमुना डाटा)",
+
+    "e-Queue AI Assistant": "ई-क्यू एआई सहायक",
+    "Online · replies instantly": "अनलाइन · तुरुन्त जवाफ",
+    "Ask a question…": "प्रश्न सोध्नुहोस्…",
+    "Required documents": "आवश्यक कागजात",
+    "Office hours": "कार्यालय समय",
+    "Token & queue": "टोकन र लाइन",
+    "Lost certificate": "हराएको प्रमाणपत्र",
+    "NID enrolment": "एनआईडी दर्ता",
+    "Fees": "शुल्क"
+  };
+
+  /* =========================================================
+     2. LANGUAGE STATE
+     ========================================================= */
+  var currentLang = 'en';
+
+  function L(en, ne){ return currentLang === 'ne' ? ne : en; }
+
+  var textRecords = [];
+  var placeholderRecords = [];
+  var optionRecords = [];
+
+  function collectTranslatables(){
+    var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+      acceptNode: function(node){
+        if(!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        var p = node.parentElement;
+        if(!p) return NodeFilter.FILTER_REJECT;
+        var tag = p.tagName;
+        if(tag === 'SCRIPT' || tag === 'STYLE' || tag === 'NOSCRIPT') return NodeFilter.FILTER_REJECT;
+        if(p.closest('[data-no-i18n]')) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
     });
-    if(focusScroll){
-      var target = document.querySelector('.cat-head[data-cat="' + catId + '"]');
-      if(target){ target.scrollIntoView({block:'center'}); }
+    var n;
+    while((n = walker.nextNode())){
+      textRecords.push({ node: n, original: n.nodeValue });
     }
+
+    document.querySelectorAll('input[placeholder], textarea[placeholder]').forEach(function(el){
+      if(el.closest('[data-no-i18n]')) return;
+      placeholderRecords.push({ el: el, original: el.placeholder });
+    });
+
+    document.querySelectorAll('select option').forEach(function(opt){
+      optionRecords.push({ el: opt, original: opt.textContent });
+    });
+  }
+  collectTranslatables();
+
+  function applyLanguage(lang){
+    currentLang = (lang === 'ne') ? 'ne' : 'en';
+    var map = (currentLang === 'ne') ? NE : null;
+
+    textRecords.forEach(function(rec){
+      var original = rec.original;
+      var trimmed = original.trim();
+      var translated = map ? map[trimmed] : null;
+      if(translated){
+        var lead = original.match(/^\s*/)[0];
+        var trail = original.match(/\s*$/)[0];
+        rec.node.nodeValue = lead + translated + trail;
+      } else {
+        rec.node.nodeValue = original;
+      }
+    });
+
+    placeholderRecords.forEach(function(rec){
+      var t = map ? map[rec.original.trim()] : null;
+      rec.el.placeholder = t ? t : rec.original;
+    });
+
+    optionRecords.forEach(function(rec){
+      var t = map ? map[rec.original.trim()] : null;
+      rec.el.textContent = t ? t : rec.original;
+    });
+
+    var langLabel = document.getElementById('langLabel');
+    if(langLabel) langLabel.textContent = (currentLang === 'ne') ? 'NEP' : 'ENG';
+
+    var a11yLangSelect = document.getElementById('a11yLangSelect');
+    if(a11yLangSelect) a11yLangSelect.value = currentLang;
+
+    renderQueueAndChecklist();
+    seedChatIfNeeded();
+
+    document.documentElement.lang = currentLang;
   }
 
-  document.querySelectorAll('.cat-head').forEach(function(head){
-    head.addEventListener('click', function(){
-      var body = head.nextElementSibling;
-      var chev = head.querySelector('.chev');
-      var open = body.classList.toggle('open');
-      chev.textContent = open ? '−' : '＋';
-    });
-  });
-
-  // ---- Service + Category dropdowns: swap queue numbers, status, notice ----
-  var SERVICES = {
-    citizenship: {
-      title: 'Citizenship Service',
-      notice: 'High visitor volume expected after SEE examination results.',
-      hasChecklist: true
+  /* =========================================================
+     3. DATA
+     ========================================================= */
+  var CHECKLISTS = {
+    bydescent: {
+      title: {en:'By Descent', ne:'वंशजद्वारा'},
+      note: {
+        en:'Carry originals plus one photocopy set of every document. Files without the ward recommendation are returned at the counter.',
+        ne:'सबै कागजातको मूल र एक फोटोकपी सेट ल्याउनुहोस्। वडा सिफारिस नभएका फाइल काउन्टरमै फर्काइन्छ।'
+      },
+      docs: {
+        en: ["Original and copy of applicant's birth certificate",
+             "Citizenship certificate of father and mother (original + copy)",
+             "Ward recommendation letter",
+             "Two passport-size photographs"],
+        ne: ["आवेदकको जन्मदर्ता प्रमाणपत्रको मूल र प्रतिलिपि",
+             "बाबु र आमाको नागरिकता प्रमाणपत्र (मूल + प्रतिलिपि)",
+             "वडा सिफारिस पत्र",
+             "दुई राहदानी आकारका फोटो"]
+      }
+    },
+    naturalized: {
+      title: {en:'Naturalized', ne:'अङ्गीकृत'},
+      note: {
+        en:'The residency period is counted from the date on the ward recommendation. If you previously held foreign citizenship, the renunciation letter must be brought in original.',
+        ne:'वडा सिफारिसको मितिदेखि निवास अवधि गनिन्छ। पहिले विदेशी नागरिकता भएमा त्यागपत्रको मूल ल्याउनुपर्छ।'
+      },
+      docs: {
+        en: ["Proof of residency for the period required by law",
+             "Renunciation certificate of prior citizenship, if applicable",
+             "Ward recommendation letter",
+             "Two passport-size photographs"],
+        ne: ["कानुनले तोकेको अवधिको निवास प्रमाण",
+             "पूर्व नागरिकता त्यागको प्रमाणपत्र (लागू भएमा)",
+             "वडा सिफारिस पत्र",
+             "दुई राहदानी आकारका फोटो"]
+      }
+    },
+    marriage: {
+      title: {en:'Marriage-based', ne:'विवाहमा आधारित'},
+      note: {
+        en:"Documents of both spouses are checked at the counter, so bring your spouse's papers along.",
+        ne:'दुवै जीवनसाथीका कागजात काउन्टरमा जाँचिन्छ, त्यसैले जीवनसाथीका कागजात पनि ल्याउनुहोस्।'
+      },
+      docs: {
+        en: ["Marriage registration certificate (original + copy)",
+             "Spouse's citizenship certificate (original + copy)",
+             "Ward recommendation letter",
+             "Two passport-size photographs"],
+        ne: ["विवाह दर्ता प्रमाणपत्र (मूल + प्रतिलिपि)",
+             "जीवनसाथीको नागरिकता प्रमाणपत्र (मूल + प्रतिलिपि)",
+             "वडा सिफारिस पत्र",
+             "दुई राहदानी आकारका फोटो"]
+      }
+    },
+    nrn: {
+      title: {en:'Non-Resident Nepali', ne:'गैरआवासीय नेपाली'},
+      note: {
+        en:"Proof of Nepali origin has to be traceable — a certified copy of the parent's or grandparent's citizenship record is accepted.",
+        ne:'नेपाली मूलको प्रमाण खोज्न सकिने हुनुपर्छ — बाबु वा हजुरबुबाको नागरिकता अभिलेखको प्रमाणित प्रतिलिपि स्वीकार गरिन्छ।'
+      },
+      docs: {
+        en: ["Proof of Nepali origin (parent / grandparent citizenship record)",
+             "Valid foreign passport and proof of foreign residency",
+             "Ward recommendation letter",
+             "Two passport-size photographs"],
+        ne: ["नेपाली मूलको प्रमाण (बाबु/हजुरबुबाको नागरिकता अभिलेख)",
+             "वैध विदेशी राहदानी र विदेशी निवासको प्रमाण",
+             "वडा सिफारिस पत्र",
+             "दुई राहदानी आकारका फोटो"]
+      }
+    },
+    honorary: {
+      title: {en:'Honorary', ne:'मानार्थ'},
+      note: {
+        en:'Applications in this category are forwarded by the Ministry. Bring the recommendation letter in original — photocopies are not accepted.',
+        ne:'यो श्रेणीका आवेदन मन्त्रालयबाट पठाइन्छ। सिफारिस पत्रको मूल ल्याउनुहोस् — फोटोकपी स्वीकार गरिँदैन।'
+      },
+      docs: {
+        en: ["Government decision letter / ministerial recommendation",
+             "Valid passport and supporting identity documents",
+             "Two passport-size photographs"],
+        ne: ["सरकारी निर्णय पत्र / मन्त्रालयको सिफारिस",
+             "वैध राहदानी र सहायक परिचय कागजात",
+             "दुई राहदानी आकारका फोटो"]
+      }
+    },
+    duplicate: {
+      title: {en:'Duplicate (Lost Certificate)', ne:'प्रतिलिपि (हराएको प्रमाणपत्र)'},
+      note: {
+        en:'A police report has to be filed before a duplicate certificate can be processed. Bring the FIR copy and, if you have it, the old certificate number.',
+        ne:'प्रतिलिपि प्रमाणपत्र प्रक्रिया गर्नु अघि प्रहरी रिपोर्ट दर्ता गर्नुपर्छ। एफआईआर प्रतिलिपि र पुरानो प्रमाणपत्र नम्बर ल्याउनुहोस्।'
+      },
+      docs: {
+        en: ["Police report (FIR) confirming the certificate was lost",
+             "Old citizenship certificate number, if known",
+             "Photocopy of the lost certificate, if available",
+             "Ward recommendation letter",
+             "Two passport-size photographs"],
+        ne: ["प्रमाणपत्र हराएको पुष्टि गर्ने प्रहरी रिपोर्ट (एफआईआर)",
+             "पुरानो नागरिकता प्रमाणपत्र नम्बर (थाहा भएमा)",
+             "हराएको प्रमाणपत्रको फोटोकपी (भएमा)",
+             "वडा सिफारिस पत्र",
+             "दुई राहदानी आकारका फोटो"]
+      }
     },
     nid: {
-      title: 'National Identity Card — Live Status',
-      serving: 'N-042', latest: 'N-050',
-      level: 'moderate', levelText: 'MODERATE',
-      notice: 'NID enrolment desks close at 3:00 PM — please arrive early.',
-      hasChecklist: false
+      title: {en:'National Identity Card', ne:'राष्ट्रिय परिचयपत्र'},
+      note: {
+        en:'The printed pre-enrolment card is checked against the citizenship certificate at the desk. Without both, the biometric enrolment cannot be started.',
+        ne:'प्रिन्ट गरिएको पूर्व-दर्ता कार्ड काउन्टरमा नागरिकता प्रमाणपत्रसँग जाँचिन्छ। दुवै नभए बायोमेट्रिक दर्ता सुरु गर्न सकिँदैन।'
+      },
+      docs: {
+        en: ["NID pre-enrolment printed card",
+             "Original citizenship certificate"],
+        ne: ["एनआईडी पूर्व-दर्ता प्रिन्ट कार्ड",
+             "नागरिकता प्रमाणपत्रको मूल"]
+      }
     }
   };
 
-  // Each citizenship category runs its own token counter and crowd level.
-  // All citizen tokens start with "C" (NID tokens separately start with "N").
-  var CATEGORY_QUEUE = {
-    6: { name: 'New',                          serving: 'C-175', latest: 'C-189', level: 'veryhigh', levelText: 'VERY HIGH' },
-    1: { name: 'By Descent',                   serving: 'C-118', latest: 'C-125', level: 'high',      levelText: 'HIGH' },
-    2: { name: 'Naturalized',                  serving: 'C-242', latest: 'C-247', level: 'moderate',  levelText: 'MODERATE' },
-    3: { name: 'Marriage-based',                serving: 'C-330', latest: 'C-334', level: 'low',       levelText: 'LOW' },
-    4: { name: 'Non-Resident Nepali',          serving: 'C-415', latest: 'C-418', level: 'moderate',  levelText: 'MODERATE' },
-    5: { name: 'Honorary',                     serving: 'C-506', latest: 'C-507', level: 'low',       levelText: 'LOW' },
-    7: { name: 'Duplicate (Lost Certificate)', serving: 'C-621', latest: 'C-625', level: 'moderate',  levelText: 'MODERATE' }
+  var SERVICES = {
+    citizenship: {
+      title: {en:'Citizenship Service', ne:'नागरिकता सेवा'},
+      notice: {
+        en:'High visitor volume expected after SEE examination results.',
+        ne:'एसईई परीक्षाको नतिजा पछि उच्च आगन्तुक चाप अपेक्षित।'
+      },
+      hasCategories: true
+    },
+    nid: {
+      title: {en:'National Identity Card — Live Status', ne:'राष्ट्रिय परिचयपत्र — प्रत्यक्ष स्थिति'},
+      serving: 'N-042', latest: 'N-050',
+      level: 'moderate', levelText: {en:'MODERATE', ne:'मध्यम'},
+      notice: {
+        en:'NID enrolment desks close at 3:00 PM — please arrive early.',
+        ne:'एनआईडी दर्ता डेस्क दिउँसो ३:०० बजे बन्द हुन्छ — चाँडै आउनुहोस्।'
+      },
+      hasCategories: false,
+      checklist: 'nid'
+    }
   };
 
-  var serviceSelect = document.getElementById('serviceSelect');
-  var categorySelect = document.getElementById('categorySelect');
-  var queueTitle = document.getElementById('queueTitle');
-  var servingNum = document.getElementById('servingNum');
-  var latestNum = document.getElementById('latestNum');
-  var statusPill = document.getElementById('statusPill');
-  var noticeText = document.getElementById('noticeText');
-  var checklistCard = document.getElementById('checklistCard');
-  var checklistPlaceholder = document.getElementById('checklistPlaceholder');
-  var catList = document.getElementById('catList');
+  var CATEGORY_QUEUE = {
+    bydescent:   { name:{en:'By Descent', ne:'वंशजद्वारा'},                   serving:'C-118', latest:'C-125', level:'high',     levelText:{en:'HIGH', ne:'उच्च'} },
+    naturalized: { name:{en:'Naturalized', ne:'अङ्गीकृत'},                   serving:'C-242', latest:'C-247', level:'moderate', levelText:{en:'MODERATE', ne:'मध्यम'} },
+    marriage:    { name:{en:'Marriage-based', ne:'विवाहमा आधारित'},          serving:'C-330', latest:'C-334', level:'low',      levelText:{en:'LOW', ne:'कम'} },
+    nrn:         { name:{en:'Non-Resident Nepali', ne:'गैरआवासीय नेपाली'},   serving:'C-415', latest:'C-418', level:'moderate', levelText:{en:'MODERATE', ne:'मध्यम'} },
+    honorary:    { name:{en:'Honorary', ne:'मानार्थ'},                       serving:'C-506', latest:'C-507', level:'low',      levelText:{en:'LOW', ne:'कम'} },
+    duplicate:   { name:{en:'Duplicate (Lost Certificate)', ne:'प्रतिलिपि'}, serving:'C-621', latest:'C-625', level:'moderate', levelText:{en:'MODERATE', ne:'मध्यम'} }
+  };
+
+  /* =========================================================
+     4. RENDER HELPERS
+     ========================================================= */
+  var serviceSelect   = document.getElementById('serviceSelect');
+  var categorySelect  = document.getElementById('categorySelect');
+  var queueTitle      = document.getElementById('queueTitle');
+  var servingNum      = document.getElementById('servingNum');
+  var latestNum       = document.getElementById('latestNum');
+  var statusPill      = document.getElementById('statusPill');
+  var noticeText      = document.getElementById('noticeText');
+  var checklistBar    = document.getElementById('checklistBar');
+  var checklistNote   = document.getElementById('checklistNote');
+  var checklistFoot   = document.getElementById('checklistFoot');
+  var docList         = document.getElementById('docList');
+
+  var currentService  = 'citizenship';
+  var currentCategory = 'bydescent';
 
   function setQueueDisplay(title, serving, latest, level, levelText){
     queueTitle.textContent = title;
@@ -1100,60 +1338,73 @@
     statusPill.classList.add(level);
   }
 
-  function applyService(key){
-    var s = SERVICES[key];
-    if(!s) return;
-    noticeText.textContent = s.notice;
-    catList.style.display = s.hasChecklist ? '' : 'none';
-    checklistPlaceholder.style.display = s.hasChecklist ? 'none' : 'block';
-    categorySelect.disabled = !s.hasChecklist;
+  function renderChecklist(key){
+    var data = CHECKLISTS[key];
+    if(!data) return;
+    checklistBar.textContent = L('Document Checklist — ', 'कागजात जाँचसूची — ') + data.title[currentLang];
+    checklistNote.textContent = data.note[currentLang];
+    checklistFoot.textContent = (key === 'nid')
+      ? L('List last revised: 2082-04-20 · NID section, counter 4–5',
+          'सूची अन्तिम संशोधन: २०८२-०४-२० · एनआईडी शाखा, काउन्टर ४–५')
+      : L('List last revised: 2082-04-12 · Citizenship section, counter 1–3',
+          'सूची अन्तिम संशोधन: २०८२-०४-१२ · नागरिकता शाखा, काउन्टर १–३');
 
-    if(s.hasChecklist){
-      applyCategory(categorySelect.value);
-    } else {
-      setQueueDisplay(s.title, s.serving, s.latest, s.level, s.levelText);
+    var docs = data.docs[currentLang];
+    var html = '';
+    for(var i = 0; i < docs.length; i++){
+      html += '<li>' + docs[i] + '</li>';
     }
+    docList.innerHTML = html;
   }
 
   function applyCategory(catId){
     var c = CATEGORY_QUEUE[catId];
     if(!c) return;
-    setQueueDisplay('Citizenship Service — ' + c.name + ' — Live Status', c.serving, c.latest, c.level, c.levelText);
+    currentService = 'citizenship';
+    currentCategory = catId;
+    setQueueDisplay(
+      L('Citizenship Service — ', 'नागरिकता सेवा — ') + c.name[currentLang] + L(' — Live Status', ' — प्रत्यक्ष स्थिति'),
+      c.serving, c.latest, c.level, c.levelText[currentLang]
+    );
+    renderChecklist(catId);
   }
 
-  serviceSelect.addEventListener('change', function(){
-    applyService(this.value);
-  });
+  function applyService(key){
+    var s = SERVICES[key];
+    if(!s) return;
+    noticeText.textContent = s.notice[currentLang];
+    categorySelect.disabled = !s.hasCategories;
 
+    if(s.hasCategories){
+      applyCategory(categorySelect.value);
+    } else {
+      currentService = 'nid';
+      currentCategory = 'nid';
+      setQueueDisplay(s.title[currentLang], s.serving, s.latest, s.level, s.levelText[currentLang]);
+      renderChecklist(s.checklist);
+    }
+  }
+
+  function renderQueueAndChecklist(){
+    applyService(serviceSelect.value);
+  }
+
+  serviceSelect.addEventListener('change', function(){ applyService(this.value); });
   categorySelect.addEventListener('change', function(){
     if(serviceSelect.value !== 'citizenship') return;
     applyCategory(this.value);
-    openCategory(this.value, true);
   });
 
-  // Quick actions: jump to the relevant section instead of sitting inert
-  document.getElementById('qaDocs').addEventListener('click', function(){
-    serviceSelect.value = 'citizenship';
-    applyService('citizenship');
-    checklistCard.scrollIntoView({block:'start'});
-  });
-  document.getElementById('qaToken').addEventListener('click', function(){
-    document.querySelector('.queue-main').scrollIntoView({block:'center'});
-  });
-  document.getElementById('qaCrowd').addEventListener('click', function(){
-    document.querySelector('.legend').scrollIntoView({block:'center'});
-  });
-  document.getElementById('qaNid').addEventListener('click', function(){
-    serviceSelect.value = 'nid';
-    applyService('nid');
-    document.querySelector('.queue-main').scrollIntoView({block:'center'});
+  /* =========================================================
+     5. LANGUAGE TOGGLE
+     ========================================================= */
+  document.getElementById('langToggle').addEventListener('click', function(){
+    applyLanguage(currentLang === 'en' ? 'ne' : 'en');
   });
 
-  // Sync the displayed queue numbers with the dropdowns' actual default
-  // selection on load (Category defaults to "New", not "By Descent").
-  applyService(serviceSelect.value);
-
-  // ---- Theme toggle ----
+  /* =========================================================
+     6. THEME TOGGLE
+     ========================================================= */
   var html = document.documentElement;
   var themeBtn = document.getElementById('themeToggle');
   themeBtn.addEventListener('click', function(){
@@ -1162,25 +1413,350 @@
     themeBtn.setAttribute('aria-label', dark ? 'Switch to dark mode' : 'Switch to light mode');
   });
 
-  // ---- Language toggle (label only — no translation logic in this prototype) ----
-  var langLabel = document.getElementById('langLabel');
-  document.getElementById('langToggle').addEventListener('click', function(){
-    langLabel.textContent = langLabel.textContent === 'EN' ? 'NE' : 'EN';
+  /* =========================================================
+     7. AI CHATBOT
+     ========================================================= */
+  var aiFab    = document.getElementById('aiFab');
+  var aiPanel  = document.getElementById('aiChatPanel');
+  var aiClose  = document.getElementById('aiChatClose');
+  var aiPing   = document.getElementById('aiFabPing');
+  var chatBody = document.getElementById('chatBody');
+  var chatForm = document.getElementById('chatForm');
+  var chatInput= document.getElementById('chatInput');
+
+  var chatSeeded = false;
+
+  function openChat(){
+    aiPanel.classList.add('open');
+    aiFab.setAttribute('aria-expanded', 'true');
+    aiPing.classList.add('hidden');
+    if(!chatSeeded){ seedChatIfNeeded(); chatSeeded = true; }
+    setTimeout(function(){ chatInput.focus(); }, 120);
+  }
+  function closeChat(){
+    aiPanel.classList.remove('open');
+    aiFab.setAttribute('aria-expanded', 'false');
+  }
+  function toggleChat(){
+    if(aiPanel.classList.contains('open')) closeChat();
+    else openChat();
+  }
+
+  aiFab.addEventListener('click', toggleChat);
+  aiClose.addEventListener('click', closeChat);
+
+  document.addEventListener('mousedown', function(e){
+    if(!aiPanel.classList.contains('open')) return;
+    if(aiPanel.contains(e.target) || aiFab.contains(e.target)) return;
+    closeChat();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape' && aiPanel.classList.contains('open')) closeChat();
   });
 
-  // ---- Accessibility Tools panel ----
+  var ADMIN_INBOX_KEY = 'eq_admin_inbox';
+
+  function forwardToAdmin(question, reason){
+    var entry = {
+      id: 'q_' + Date.now() + '_' + Math.random().toString(36).slice(2,7),
+      question: question,
+      reason: reason || 'no_kb_match',
+      askedAt: new Date().toISOString(),
+      service: currentService,
+      category: currentCategory,
+      source: 'chatbot',
+      lang: currentLang,
+      status: 'pending'
+    };
+    try {
+      var inbox = JSON.parse(localStorage.getItem(ADMIN_INBOX_KEY) || '[]');
+      inbox.unshift(entry);
+      if(inbox.length > 200) inbox.length = 200;
+      localStorage.setItem(ADMIN_INBOX_KEY, JSON.stringify(inbox));
+    } catch(e){ /* storage unavailable */ }
+    return entry;
+  }
+
+  function appendChatMessage(who, html){
+    var wrap = document.createElement('div');
+    wrap.className = 'chat-msg ' + who;
+    var avatar = document.createElement('div');
+    avatar.className = 'chat-avatar';
+    avatar.textContent = who === 'bot' ? 'AI' : 'You';
+    var bubble = document.createElement('div');
+    bubble.className = 'chat-bubble ' + who;
+    bubble.innerHTML = html;
+    if(who === 'bot'){
+      wrap.appendChild(avatar);
+      wrap.appendChild(bubble);
+    } else {
+      wrap.appendChild(bubble);
+      wrap.appendChild(avatar);
+    }
+    chatBody.appendChild(wrap);
+    chatBody.scrollTop = chatBody.scrollHeight;
+    return wrap;
+  }
+
+  function appendTyping(){
+    var wrap = document.createElement('div');
+    wrap.className = 'chat-msg bot';
+    wrap.innerHTML =
+      '<div class="chat-avatar">AI</div>' +
+      '<div class="chat-typing"><span></span><span></span><span></span></div>';
+    chatBody.appendChild(wrap);
+    chatBody.scrollTop = chatBody.scrollHeight;
+    return wrap;
+  }
+
+  function docsHtmlFor(key){
+    var data = CHECKLISTS[key];
+    if(!data) return '';
+    var out = '<strong>' + L('Documents for ', 'कागजात — ') + data.title[currentLang] + ':</strong><ul>';
+    var docs = data.docs[currentLang];
+    for(var i = 0; i < docs.length; i++){
+      out += '<li>' + docs[i] + '</li>';
+    }
+    out += '</ul>';
+    return out;
+  }
+
+  function getGreeting(){
+    return L(
+      "Namaste! I can help with <strong>documents</strong>, <strong>tokens &amp; queue</strong>, " +
+      "<strong>office hours</strong>, <strong>fees</strong>, and <strong>NID enrolment</strong>. " +
+      "What would you like to know?",
+      "नमस्ते! म <strong>कागजात</strong>, <strong>टोकन र लाइन</strong>, " +
+      "<strong>कार्यालय समय</strong>, <strong>शुल्क</strong> र <strong>एनआईडी दर्ता</strong>मा सहयोग गर्न सक्छु। " +
+      "तपाईं के जान्न चाहनुहुन्छ?"
+    );
+  }
+
+  function getForwardedReply(){
+    return L(
+      "I'm not sure about that one. I've forwarded your question to the " +
+      "information desk — they'll reply within a working day." +
+      '<span class="fwd-note">↪ Sent to <strong>Admin Portal → Citizen Queries</strong></span>',
+      "यो प्रश्नको उत्तर मसँग छैन। मैले तपाईंको प्रश्न सूचना डेस्कमा पठाएको छु — " +
+      "उहाँहरूले एक कार्यदिनभित्र जवाफ दिनुहुनेछ।" +
+      '<span class="fwd-note">↪ <strong>प्रशासक पोर्टल → नागरिक प्रश्नहरू</strong>मा पठाइयो</span>'
+    );
+  }
+
+  function seedChatIfNeeded(){
+    if(!chatSeeded && chatBody.children.length === 0){
+      appendChatMessage('bot', getGreeting());
+    }
+  }
+
+  var KB = [
+    { match: /\b(hi|hello|hey|namaste|namaskar|good (morning|evening|afternoon)|नमस्ते|नमस्कार)\b/i,
+      reply: function(){ return getGreeting(); } },
+    { match: /(thank|thanks|dhanyabad|धन्यवाद)/i,
+      reply: function(){ return L("You're welcome. Anything else I can help with?", "स्वागत छ। अरू केही सहयोग चाहिन्छ?"); } },
+    { match: /\b(bye|goodbye|see you|exit|बिदा)\b/i,
+      reply: function(){ return L("Goodbye! Come back any time.", "बिदा! फेरि आउनुहोस्।"); } },
+
+    { match: /(document|documents|kagajat|papers?|require|requirement|what.*need|कागजात|चाहिन्छ)/i,
+      reply: function(){
+        return docsHtmlFor(currentCategory) +
+          L("<br>Bring originals plus one photocopy set.",
+            "<br>मूल र एक फोटोकपी सेट ल्याउनुहोस्।");
+      } },
+    { match: /(by descent|lineage|father|mother|parent|वंशज)/i,
+      reply: function(){ return docsHtmlFor('bydescent'); } },
+    { match: /(naturaliz|angikrit|अङ्गीकृत)/i,
+      reply: function(){ return docsHtmlFor('naturalized'); } },
+    { match: /(marriage|married|bihey|bibaha|spouse|विवाह|श्रीमान|श्रीमती)/i,
+      reply: function(){ return docsHtmlFor('marriage'); } },
+    { match: /(nrn|non.?resident|गैरआवासीय)/i,
+      reply: function(){ return docsHtmlFor('nrn'); } },
+    { match: /(honorary|manartha|मानार्थ)/i,
+      reply: function(){ return docsHtmlFor('honorary'); } },
+    { match: /(lost|duplicate|damage|khoj|haray|हराएको|प्रतिलिपि)/i,
+      reply: function(){
+        return docsHtmlFor('duplicate') +
+          L("<br>You must file a police report (FIR) first.",
+            "<br>पहिले प्रहरी रिपोर्ट (एफआईआर) दर्ता गर्नुपर्छ।");
+      } },
+    { match: /(nid|national id|identity card|biometric|एनआईडी|परिचयपत्र)/i,
+      reply: function(){
+        return docsHtmlFor('nid') +
+          L("<br>NID enrolment closes at <strong>3:00 PM</strong>.",
+            "<br>एनआईडी दर्ता <strong>३:०० बजे</strong> बन्द हुन्छ।");
+      } },
+
+    { match: /(token|queue|line|wait|serial|टोकन|लाइन|प्रतीक्षा)/i,
+      reply: function(){
+        var label = (currentService === 'nid') ? L('NID','एनआईडी') : L('Citizenship','नागरिकता');
+        return L(
+          "Tokens are issued on a walk-in basis — no appointment needed. " +
+          "The live numbers on this page are for the <strong>" + label + "</strong> queue.",
+          "टोकन हिँडेर आउने आधारमा जारी गरिन्छ — अपोइन्टमेन्ट चाहिँदैन। " +
+          "यो पृष्ठका प्रत्यक्ष नम्बरहरू <strong>" + label + "</strong> लाइनका हुन्।"
+        );
+      } },
+    { match: /(appointment|book|reserve|अपोइन्टमेन्ट)/i,
+      reply: function(){
+        return L("No appointment is required. Tokens are first-come, first-served.",
+                 "अपोइन्टमेन्ट चाहिँदैन। टोकन पहिले आउनेलाई पहिले।");
+      } },
+
+    { match: /(hour|time|open|close|timing|समय|खुल्ने|बन्द)/i,
+      reply: function(){
+        return L(
+          "Office hours: <strong>9:00 AM – 5:00 PM, Sunday to Friday</strong>. " +
+          "NID enrolment closes at <strong>3:00 PM</strong>.",
+          "कार्यालय समय: <strong>बिहान ९:०० – साँझ ५:००, आइतबार–शुक्रबार</strong>। " +
+          "एनआईडी दर्ता <strong>३:०० बजे</strong> बन्द हुन्छ।"
+        );
+      } },
+    { match: /(where|location|address|thau|map|कहाँ|ठेगाना)/i,
+      reply: function(){
+        return L("District Administration Office, Kathmandu — <strong>Babarmahal, Kathmandu</strong>.",
+                 "जिल्ला प्रशासन कार्यालय, काठमाडौं — <strong>बबरमहल, काठमाडौं</strong>।");
+      } },
+    { match: /(phone|contact|call|number|helpline|फोन|सम्पर्क)/i,
+      reply: function(){
+        return L("Citizenship record enquiries: <strong>015971880</strong>.",
+                 "नागरिकता अभिलेख सोधपुछ: <strong>०१५९७१८८०</strong>।");
+      } },
+
+    { match: /(fee|cost|price|charge|शुल्क|खर्च)/i,
+      reply: function(){
+        return L("Government service fees apply. Call <strong>015971880</strong> for the current rate.",
+                 "सरकारी सेवा शुल्क लागू हुन्छ। वर्तमान दरका लागि <strong>०१५९७१८८०</strong> मा फोन गर्नुहोस्।");
+      } },
+    { match: /(how long|processing|duration|कति दिन|समय लाग्छ)/i,
+      reply: function(){
+        return L("With complete documents, citizenship is usually same-day or 1–2 working days.",
+                 "पूरा कागजात भएमा नागरिकता सामान्यतया सोही दिन वा १–२ कार्यदिनमा जारी हुन्छ।");
+      } },
+
+    { match: /(ward|recommendation|sifaris|वडा|सिफारिस)/i,
+      reply: function(){
+        return L("A <strong>ward recommendation letter</strong> is mandatory for most categories.",
+                 "<strong>वडा सिफारिस पत्र</strong> अधिकांश श्रेणीका लागि अनिवार्य छ।");
+      } },
+    { match: /(photo|photograph|picture|फोटो)/i,
+      reply: function(){
+        return L("Carry <strong>two recent passport-size photographs</strong>.",
+                 "<strong>दुई हालसालैका राहदानी आकारका फोटो</strong> ल्याउनुहोस्।");
+      } },
+    { match: /(police|fir|report|प्रहरी|एफआईआर)/i,
+      reply: function(){
+        return L("For a lost certificate you must file an <strong>FIR</strong> at any police office.",
+                 "हराएको प्रमाणपत्रका लागि कुनै पनि प्रहरी कार्यालयमा <strong>एफआईआर</strong> दर्ता गर्नुपर्छ।");
+      } },
+    { match: /(birth|janma|जन्म)/i,
+      reply: function(){
+        return L("Your birth certificate is required for by-descent citizenship.",
+                 "वंशज नागरिकताका लागि जन्मदर्ता प्रमाणपत्र चाहिन्छ।");
+      } }
+  ];
+
+  function getBotReply(text){
+    for(var i = 0; i < KB.length; i++){
+      if(KB[i].match.test(text)){
+        return { html: KB[i].reply(text), matched: true };
+      }
+    }
+    return { html: getForwardedReply(), matched: false };
+  }
+
+  function escapeHtml(s){
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+            .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+
+  function sendChatMessage(text){
+    text = (text || '').trim();
+    if(!text) return;
+
+    appendChatMessage('user', escapeHtml(text));
+    chatInput.value = '';
+
+    var typing = appendTyping();
+    var delay = 500 + Math.random() * 400;
+
+    setTimeout(function(){
+      typing.remove();
+      var result = getBotReply(text);
+      if(!result.matched){
+        forwardToAdmin(text, 'no_kb_match');
+      }
+      appendChatMessage('bot', result.html);
+    }, delay);
+  }
+
+  chatForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    sendChatMessage(chatInput.value);
+  });
+
+  document.getElementById('chatChips').addEventListener('click', function(e){
+    var chip = e.target.closest('.chip');
+    if(!chip) return;
+    sendChatMessage(chip.dataset.q);
+  });
+
+  /* =========================================================
+     8. ASK-A-QUESTION
+     ========================================================= */
+  var queryForm = document.getElementById('queryForm');
+  var queryList = document.getElementById('queryList');
+
+  queryForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    var name = document.getElementById('queryName').value.trim() || 'Anonymous';
+    var text = document.getElementById('queryText').value.trim();
+    if(!text) return;
+
+    var entry = forwardToAdmin(text, 'public_form');
+    entry.author = name;
+    try {
+      var inbox = JSON.parse(localStorage.getItem(ADMIN_INBOX_KEY) || '[]');
+      if(inbox[0] && inbox[0].id === entry.id){
+        inbox[0].author = name;
+        localStorage.setItem(ADMIN_INBOX_KEY, JSON.stringify(inbox));
+      }
+    } catch(err){ /* ignore */ }
+
+    var wrap = document.createElement('div');
+    wrap.innerHTML =
+      '<div class="query-item">' +
+        '<div class="query-head">' +
+          '<span class="query-tag">Q</span>' +
+          '<div class="query-meta"><strong></strong> · ' + L('just now','भर्खरै') + ' · ' + L('awaiting reply','जवाफ प्रतीक्षामा') + '</div>' +
+        '</div>' +
+        '<p></p>' +
+      '</div>';
+    wrap.querySelector('strong').textContent = name;
+    wrap.querySelector('p').textContent = text;
+    queryList.insertBefore(wrap, queryList.firstChild);
+
+    queryForm.reset();
+  });
+
+  /* =========================================================
+     9. ACCESSIBILITY TOOLS
+     ========================================================= */
   var fab = document.getElementById('a11yFab');
   var panel = document.getElementById('a11yPanel');
   fab.addEventListener('click', function(){ panel.classList.toggle('open'); });
   document.getElementById('a11yClose').addEventListener('click', function(){ panel.classList.remove('open'); });
 
+  var a11yClasses = ['a11y-contrast','a11y-grayscale','a11y-saturate','a11y-justify','a11y-spacing',
+     'a11y-lineheight','a11y-dyslexia','a11y-cursor','a11y-noanim','a11y-hideimages'];
+
   var textSizeStep = 0;
+
   document.getElementById('a11yReset').addEventListener('click', function(){
-    ['a11y-contrast','a11y-grayscale','a11y-saturate','a11y-justify','a11y-spacing',
-     'a11y-lineheight','a11y-dyslexia','a11y-cursor','a11y-noanim','a11y-hideimages']
-     .forEach(function(c){ html.classList.remove(c); });
+    a11yClasses.forEach(function(c){ html.classList.remove(c); });
     html.style.fontSize = '';
+    document.body.style.fontFamily = '';
     textSizeStep = 0;
+    if(window.speechSynthesis) window.speechSynthesis.cancel();
     document.querySelectorAll('.a11y-tool').forEach(function(t){ t.classList.remove('sel'); });
   });
 
@@ -1188,32 +1764,95 @@
     tool.addEventListener('click', function(){
       var kind = tool.dataset.tool;
       var classMap = {
-        contrast:'a11y-contrast', colorfilter:'a11y-grayscale', saturate:'a11y-saturate',
-        align:'a11y-justify', spacing:'a11y-spacing', lineheight:'a11y-lineheight',
-        dyslexia:'a11y-dyslexia', cursor:'a11y-cursor', noanim:'a11y-noanim',
+        contrast:'a11y-contrast',
+        colorfilter:'a11y-grayscale',
+        saturate:'a11y-saturate',
+        align:'a11y-justify',
+        spacing:'a11y-spacing',
+        lineheight:'a11y-lineheight',
+        dyslexia:'a11y-dyslexia',
+        cursor:'a11y-cursor',
+        noanim:'a11y-noanim',
         hideimages:'a11y-hideimages'
       };
+
       if(kind === 'textsize'){
         textSizeStep = (textSizeStep + 1) % 3;
         html.style.fontSize = ['100%','112%','125%'][textSizeStep];
         tool.classList.toggle('sel', textSizeStep !== 0);
         return;
       }
+
       if(kind === 'font'){
         document.body.style.fontFamily = document.body.style.fontFamily
           ? '' : "'Georgia','Noto Sans',serif";
         tool.classList.toggle('sel');
         return;
       }
-      if(classMap[kind]){
-        html.classList.toggle(classMap[kind]);
-        tool.classList.toggle('sel');
+
+      if(kind === 'reader'){
+        if(!('speechSynthesis' in window)){
+          alert('Screen reader not supported in this browser.');
+          return;
+        }
+        if(window.speechSynthesis.speaking){
+          window.speechSynthesis.cancel();
+          tool.classList.remove('sel');
+          return;
+        }
+        var text = document.querySelector('main') ? document.querySelector('main').innerText : document.body.innerText;
+        if(!text) return;
+        var u = new SpeechSynthesisUtterance(text);
+        u.lang = (currentLang === 'ne') ? 'ne-NP' : 'en-US';
+        u.onend = function(){ tool.classList.remove('sel'); };
+        window.speechSynthesis.speak(u);
+        tool.classList.add('sel');
         return;
       }
-      // Screen reader / voice command — demo selection state only
-      tool.classList.toggle('sel');
+
+      if(kind === 'voice'){
+        var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if(!SR){
+          alert('Voice input is not supported in this browser.');
+          return;
+        }
+        try {
+          var rec = new SR();
+          rec.lang = (currentLang === 'ne') ? 'ne-NP' : 'en-US';
+          rec.interimResults = false;
+          rec.maxAlternatives = 1;
+          tool.classList.add('sel');
+          rec.onresult = function(ev){
+            var spoken = ev.results[0][0].transcript;
+            openChat();
+            sendChatMessage(spoken);
+            tool.classList.remove('sel');
+          };
+          rec.onerror = function(){ tool.classList.remove('sel'); };
+          rec.onend = function(){ tool.classList.remove('sel'); };
+          rec.start();
+        } catch(e){
+          tool.classList.remove('sel');
+        }
+        return;
+      }
+
+      if(classMap[kind]){
+        html.classList.toggle(classMap[kind]);
+        tool.classList.toggle('sel', html.classList.contains(classMap[kind]));
+        return;
+      }
     });
   });
+
+  document.getElementById('a11yLangSelect').addEventListener('change', function(){
+    applyLanguage(this.value);
+  });
+
+  /* =========================================================
+     10. INIT
+     ========================================================= */
+  applyLanguage('en');
 </script>
 
 </body>
